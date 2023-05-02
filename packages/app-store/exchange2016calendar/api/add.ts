@@ -31,6 +31,7 @@ async function postHandler(req: NextApiRequest, res: NextApiResponse) {
 
   const data = {
     type: "exchange2016_calendar",
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     key: symmetricEncrypt(JSON.stringify(body), process.env.CALENDSO_ENCRYPTION_KEY!),
     userId: user.id,
     appId: "exchange2016-calendar",

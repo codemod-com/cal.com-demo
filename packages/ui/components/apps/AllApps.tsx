@@ -146,7 +146,7 @@ export function AllApps({ apps, searchText, categories }: AllAppsPropsType) {
         ? router.query.category
         : null;
     setSelectedCategory(queryCategory);
-  }, [router.query.category]);
+  }, [categories, router.query.category]);
 
   const filteredApps = apps
     .filter((app) =>

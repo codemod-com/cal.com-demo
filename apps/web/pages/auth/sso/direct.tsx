@@ -18,7 +18,7 @@ export default function Page({ samlTenantID, samlProductID }: inferSSRProps<type
     if (HOSTED_CAL_FEATURES) {
       router.push("/auth/login");
     }
-  }, []);
+  }, [router]);
 
   useEffect(() => {
     // Initiate SAML authentication flow
@@ -29,7 +29,7 @@ export default function Page({ samlTenantID, samlProductID }: inferSSRProps<type
       },
       { tenant: samlTenantID, product: samlProductID }
     );
-  }, []);
+  }, [samlProductID, samlTenantID]);
 
   return null;
 }

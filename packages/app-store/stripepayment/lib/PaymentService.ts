@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import type { Booking, Payment, Prisma, PaymentOption } from "@prisma/client";
 import Stripe from "stripe";
 import { v4 as uuidv4 } from "uuid";
@@ -200,7 +201,7 @@ export class PaymentService implements IAbstractPaymentService {
     }
   }
 
-  async chargeCard(payment: Payment): Promise<Payment> {
+  async chargeCard(payment: Payment, bookingId: Booking["id"]): Promise<Payment> {
     try {
       const stripeAppKeys = await prisma?.app.findFirst({
         select: {

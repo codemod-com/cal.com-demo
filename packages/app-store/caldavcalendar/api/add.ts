@@ -24,6 +24,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       type: "caldav_calendar",
       key: symmetricEncrypt(
         JSON.stringify({ username, password, url }),
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         process.env.CALENDSO_ENCRYPTION_KEY!
       ),
       userId: user.id,

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { Dispatch, SetStateAction } from "react";
 import React from "react";
 import type { GroupBase, OptionProps } from "react-select";
@@ -14,13 +15,12 @@ export type Option = {
   label: string;
 };
 
-const InputOption: React.FC<OptionProps<any, boolean, GroupBase<any>>> = ({
+const InputOption: React.FC<OptionProps<unknown, boolean, GroupBase<unknown>>> = ({
   isDisabled,
   isFocused,
   isSelected,
   children,
   innerProps,
-  className,
   ...rest
 }) => {
   const props = {
@@ -52,7 +52,7 @@ type MultiSelectionCheckboxesProps = {
   setValue: (s: Option[]) => unknown;
 };
 
-const MultiValue = ({ index, getValue }: { index: number; getValue: any }) => {
+const MultiValue = ({ index, getValue }: { index: number; getValue: () => any }) => {
   const { t } = useLocale();
 
   return <>{!index && <div>{t("nr_event_type", { count: getValue().length })}</div>}</>;

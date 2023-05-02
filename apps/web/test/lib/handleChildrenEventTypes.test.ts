@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import type { EventType } from "@prisma/client";
 import type { Prisma } from "@prisma/client";
 
@@ -128,8 +129,6 @@ describe("handleChildrenEventTypes", () => {
     });
 
     it("Updates old users", async () => {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
       const { schedulingType, id, teamId, timeZone, locations, parentId, userId, scheduleId, ...evType } =
         mockFindFirstEventType({
           metadata: { managedEventConfig: {} },

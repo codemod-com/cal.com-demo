@@ -151,10 +151,6 @@ const TestData = {
   },
 };
 
-const ctx = {
-  prisma: prismaMock,
-};
-
 type App = {
   slug: string;
   dirName: string;
@@ -494,6 +490,7 @@ describe("getSchedule", () => {
     });
 
     // FIXME: Fix minimumBookingNotice is respected test
+    // eslint-disable-next-line playwright/no-skipped-test
     test.skip("minimumBookingNotice is respected", async () => {
       jest.useFakeTimers().setSystemTime(
         (() => {

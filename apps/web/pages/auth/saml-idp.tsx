@@ -19,7 +19,7 @@ export default function Page() {
       callbackUrl: "/",
       code,
     });
-  }, []);
+  }, [router.isReady, router.query]);
 
   return null;
 }

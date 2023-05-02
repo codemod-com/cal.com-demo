@@ -3,7 +3,7 @@ import DailyIframe from "@daily-co/daily-js";
 import MarkdownIt from "markdown-it";
 import type { GetServerSidePropsContext } from "next";
 import Head from "next/head";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import z from "zod";
 
 import dayjs from "@calcom/dayjs";
@@ -33,6 +33,19 @@ export default function JoinCall(props: JoinCallPageProps) {
   const { t } = useLocale();
   const { meetingUrl, meetingPassword, booking } = props;
   const recordingId = useRef<string | null>(null);
+
+  const onRecordingStopped = useCallback(() => {
+    const data = { recordingId: recordingId.current, bookingUID: booking.uid };
+
+    fetch("/api/recorded-daily-video", {
+      method: "POST",
+      body: JSON.stringify(data),
+    }).catch((err) => {
+      console.log(err);
+    });
+
+    recordingId.current = null;
+  }, [booking.uid]);
 
   useEffect(() => {
     const callFrame = DailyIframe.createFrame({
@@ -64,20 +77,7 @@ export default function JoinCall(props: JoinCallPageProps) {
     return () => {
       callFrame.destroy();
     };
-  }, []);
-
-  const onRecordingStopped = () => {
-    const data = { recordingId: recordingId.current, bookingUID: booking.uid };
-
-    fetch("/api/recorded-daily-video", {
-      method: "POST",
-      body: JSON.stringify(data),
-    }).catch((err) => {
-      console.log(err);
-    });
-
-    recordingId.current = null;
-  };
+  }, [meetingPassword, meetingUrl, onRecordingStopped]);
 
   const onRecordingStarted = (event?: DailyEventObjectRecordingStarted | undefined) => {
     const response = recordingStartedEventResponse.parse(event);
@@ -169,7 +169,7 @@ function ProgressBar(props: ProgressBarProps) {
         intervalRef.current = null;
       }
     };
-  }, []);
+  }, [startingTime]);
 
   const prev = startDuration - duration;
   const percentage = prev * (100 / startDuration);

@@ -34,6 +34,7 @@ const PasswordView = () => {
     onSettled: () => {
       utils.viewer.me.invalidate();
     },
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     onMutate: async ({ metadata }) => {
       await utils.viewer.me.cancel();
       const previousValue = utils.viewer.me.getData();

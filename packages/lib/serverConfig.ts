@@ -9,6 +9,7 @@ function detectTransport(): SendmailTransport.Options | SMTPConnection.Options |
   }
 
   if (process.env.EMAIL_SERVER_HOST) {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const port = parseInt(process.env.EMAIL_SERVER_PORT!);
     const transport = {
       host: process.env.EMAIL_SERVER_HOST,

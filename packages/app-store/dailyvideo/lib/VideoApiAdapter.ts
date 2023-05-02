@@ -77,7 +77,7 @@ export const fetcher = async (endpoint: string, init?: RequestInit | undefined) 
   }).then(handleErrorsJson);
 };
 
-function postToDailyAPI(endpoint: string, body: Record<string, any>) {
+function postToDailyAPI(endpoint: string, body: Record<string, unknown>) {
   return fetcher(endpoint, {
     method: "POST",
     body: JSON.stringify(body),

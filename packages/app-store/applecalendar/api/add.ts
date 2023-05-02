@@ -22,6 +22,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const data = {
       type: "apple_calendar",
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       key: symmetricEncrypt(JSON.stringify({ username, password }), process.env.CALENDSO_ENCRYPTION_KEY!),
       userId: user.id,
       appId: "apple-calendar",

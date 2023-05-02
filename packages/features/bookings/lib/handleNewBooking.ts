@@ -62,6 +62,7 @@ import {
   userMetadata as userMetadataSchema,
 } from "@calcom/prisma/zod-utils";
 import type { BufferedBusyTime } from "@calcom/types/BufferedBusyTime";
+import type { IntervalLimit } from "@calcom/types/Calendar";
 import type { AdditionalInformation, AppsStatus, CalendarEvent, Person } from "@calcom/types/Calendar";
 import type { EventResult, PartialReference } from "@calcom/types/EventManager";
 import type { WorkingHours } from "@calcom/types/schedule";
@@ -703,7 +704,7 @@ async function handler(
 
   if (eventType && eventType.hasOwnProperty("bookingLimits") && eventType?.bookingLimits) {
     const startAsDate = dayjs(reqBody.start).toDate();
-    await checkBookingLimits(eventType.bookingLimits, startAsDate, eventType.id);
+    await checkBookingLimits(eventType.bookingLimits as IntervalLimit, startAsDate, eventType.id);
   }
 
   if (eventType && eventType.hasOwnProperty("durationLimits") && eventType?.durationLimits) {

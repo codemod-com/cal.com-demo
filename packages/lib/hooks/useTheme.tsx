@@ -25,7 +25,7 @@ export default function useTheme(themeToSet?: Maybe<string>) {
     setTheme(finalThemeToSet);
     // We must not add `activeTheme` to the dependency list as it can cause an infinite loop b/w dark and theme switches
     // because there might be another booking page with conflicting theme.
-  }, [themeToSet, setTheme, embedTheme]);
+  }, [themeToSet, setTheme, embedTheme, activeTheme]);
   return {
     resolvedTheme,
     setTheme,

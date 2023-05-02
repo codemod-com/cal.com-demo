@@ -60,7 +60,7 @@ export default function AppListCard(props: AppListCardProps) {
         timeoutRef.current = null;
       }
     };
-  }, []);
+  }, [highlight, router, shouldHighlight]);
 
   return (
     <div className={`${highlight ? "dark:bg-muted bg-yellow-100" : ""}`}>

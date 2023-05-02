@@ -3,7 +3,7 @@ import { loadStripe } from "@stripe/stripe-js/pure";
 
 export type Maybe<T> = T | undefined | null;
 
-const stripePublicKey = process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY!;
+const stripePublicKey = process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY;
 let stripePromise: Promise<Stripe | null>;
 
 /**
@@ -12,7 +12,7 @@ let stripePromise: Promise<Stripe | null>;
 const getStripe = (userPublicKey?: string) => {
   if (!stripePromise) {
     stripePromise = loadStripe(
-      userPublicKey || stripePublicKey /* , {
+      (userPublicKey as string) || (stripePublicKey as string) /* , {
       locale: "es-419" TODO: Handle multiple locales,
     } */
     );

@@ -1,4 +1,5 @@
 import type { Calendar as OfficeCalendar, User } from "@microsoft/microsoft-graph-types-beta";
+import type { DefaultBodyType } from "msw";
 import { z } from "zod";
 
 import dayjs from "@calcom/dayjs";
@@ -32,11 +33,17 @@ interface ISettledResponse {
     "Retry-After": string;
     "Content-Type": string;
   };
-  body: Record<string, any>;
+  body: Record<string, DefaultBodyType>;
 }
 
 interface IBatchResponse {
   responses: ISettledResponse[];
+}
+interface BodyValue {
+  showAs: string;
+  end: { dateTime: string };
+  evt: { showAs: string };
+  start: { dateTime: string };
 }
 
 const refreshTokenResponseSchema = z.object({
@@ -83,7 +90,7 @@ export default class Office365CalendarService implements Calendar {
     }
   }
 
-  async updateEvent(uid: string, event: CalendarEvent): Promise<any> {
+  async updateEvent(uid: string, event: CalendarEvent): Promise<NewCalendarEventType> {
     try {
       const response = await this.fetcher(`/me/calendar/events/${uid}`, {
         method: "PATCH",
@@ -326,7 +333,7 @@ export default class Office365CalendarService implements Calendar {
         alreadySuccess.push(response);
       } else {
         const nextLinkUrl = response.body["@odata.nextLink"]
-          ? response.body["@odata.nextLink"].replace(this.apiGraphUrl, "")
+          ? String(response.body["@odata.nextLink"]).replace(this.apiGraphUrl, "")
           : "";
         if (nextLinkUrl) {
           // Saving link for later use
@@ -413,6 +420,7 @@ export default class Office365CalendarService implements Calendar {
       });
 
       return response;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       throw new Error(error);
     }
@@ -443,7 +451,7 @@ export default class Office365CalendarService implements Calendar {
 
   private processBusyTimes = (responses: ISettledResponse[]) => {
     return responses.reduce(
-      (acc: BufferedBusyTime[], subResponse: { body: { value?: any[]; error?: any[] } }) => {
+      (acc: BufferedBusyTime[], subResponse: { body: { value?: BodyValue[]; error?: Error[] } }) => {
         if (!subResponse.body?.value) return acc;
         return acc.concat(
           subResponse.body.value

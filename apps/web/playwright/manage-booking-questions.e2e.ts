@@ -73,7 +73,8 @@ async function runTestStepsCommonForTeamAndUserEventType(
   webhookReceiver: {
     port: number;
     close: () => import("http").Server;
-    requestList: (import("http").IncomingMessage & { body?: unknown })[];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    requestList: (import("http").IncomingMessage & { body?: any })[];
     url: string;
   },
   bookerVariant: BookerVariants
@@ -163,7 +164,7 @@ async function runTestStepsCommonForTeamAndUserEventType(
 
           const [request] = webhookReceiver.requestList;
 
-          const payload = (request.body as any).payload as any;
+          const payload = request.body.payload;
 
           expect(payload.responses).toMatchObject({
             email: {
@@ -200,7 +201,9 @@ async function runTestStepsCommonForTeamAndUserEventType(
 
   await test.step("Do a reschedule and notice that we can't book without giving a value for rescheduleReason", async () => {
     const page = previewTabPage;
-    await rescheduleFromTheLinkOnPage({ page, bookerVariant });
+    await rescheduleFromTheLinkOnPage({ page });
+    // eslint-disable-next-line playwright/no-page-pause
+    await page.pause();
     await expectErrorToBeThereFor({ page, name: "rescheduleReason" });
   });
 }
@@ -356,7 +359,7 @@ async function rescheduleFromTheLinkOnPage({
   bookerVariant,
 }: {
   page: Page;
-  bookerVariant: BookerVariants;
+  bookerVariant?: BookerVariants;
 }) {
   await page.locator('[data-testid="reschedule-link"]').click();
   await page.waitForLoadState();

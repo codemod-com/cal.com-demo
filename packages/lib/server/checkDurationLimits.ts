@@ -4,7 +4,7 @@ import { HttpError } from "../http-error";
 import { parseDurationLimit } from "../isDurationLimits";
 import { getTotalBookingDuration } from "./queries";
 
-export async function checkDurationLimits(durationLimits: any, eventStartDate: Date, eventId: number) {
+export async function checkDurationLimits(durationLimits: unknown, eventStartDate: Date, eventId: number) {
   const parsedDurationLimits = parseDurationLimit(durationLimits);
   if (!parsedDurationLimits) {
     return false;

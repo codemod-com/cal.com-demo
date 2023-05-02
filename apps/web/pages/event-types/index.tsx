@@ -388,11 +388,13 @@ export const EventTypeList = ({ group, groupIndex, readOnly, types }: EventTypeL
                           className="relative top-1 right-3"
                           size="sm"
                           truncateAfter={4}
-                          items={type.users.map((organizer: { name: any; username: any }) => ({
-                            alt: organizer.name || "",
-                            image: `${WEBAPP_URL}/${organizer.username}/avatar.png`,
-                            title: organizer.name || "",
-                          }))}
+                          items={type.users.map(
+                            (organizer: { name: string | null; username: string | null }) => ({
+                              alt: organizer.name || "",
+                              image: `${WEBAPP_URL}/${organizer.username}/avatar.png`,
+                              title: organizer.name || "",
+                            })
+                          )}
                         />
                       )}
                       {isManagedEventType && (
@@ -752,7 +754,8 @@ const CTA = () => {
   );
 };
 
-const WithQuery = withQuery(trpc.viewer.eventTypes.getByViewer);
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const WithQuery = withQuery(trpc.viewer.eventTypes.getByViewer as any);
 
 const EventTypesPage = () => {
   const { t } = useLocale();
@@ -765,7 +768,7 @@ const EventTypesPage = () => {
     if (query?.openIntercom && query?.openIntercom === "true") {
       open();
     }
-  }, []);
+  }, [open, query?.openIntercom]);
 
   return (
     <div>
@@ -788,22 +791,33 @@ const EventTypesPage = () => {
                   {isMobile ? (
                     <MobileTeamsTab eventTypeGroups={data.eventTypeGroups} />
                   ) : (
-                    data.eventTypeGroups.map((group, index) => (
-                      <div className="flex flex-col" key={group.profile.slug}>
-                        <EventTypeListHeading
-                          profile={group.profile}
-                          membershipCount={group.metadata.membershipCount}
-                          teamId={group.teamId}
-                        />
+                    data.eventTypeGroups.map(
+                      (
+                        group: {
+                          profile: EventTypeGroupProfile;
+                          metadata: { membershipCount: number; readOnly: boolean };
+                          teamId: number | null | undefined;
+                          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                          eventTypes: any[];
+                        },
+                        index: number
+                      ) => (
+                        <div className="flex flex-col" key={group.profile.slug}>
+                          <EventTypeListHeading
+                            profile={group.profile}
+                            membershipCount={group.metadata.membershipCount}
+                            teamId={group.teamId}
+                          />
 
-                        <EventTypeList
-                          types={group.eventTypes}
-                          group={group}
-                          groupIndex={index}
-                          readOnly={group.metadata.readOnly}
-                        />
-                      </div>
-                    ))
+                          <EventTypeList
+                            types={group.eventTypes}
+                            group={group}
+                            groupIndex={index}
+                            readOnly={group.metadata.readOnly}
+                          />
+                        </div>
+                      )
+                    )
                   )}
                 </>
               ) : data.eventTypeGroups.length === 1 ? (

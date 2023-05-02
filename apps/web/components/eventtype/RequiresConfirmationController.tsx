@@ -39,7 +39,7 @@ export default function RequiresConfirmationController({
     if (!requiresConfirmation) {
       formMethods.setValue("metadata.requiresConfirmationThreshold", undefined);
     }
-  }, [requiresConfirmation]);
+  }, [formMethods, requiresConfirmation]);
 
   const { shouldLockDisableProps } = useLockedFieldsManager(
     eventType,
