@@ -325,6 +325,11 @@ const nextConfig = {
         destination: "/event-types?openIntercom=true",
         permanent: true,
       },
+      {
+        source: "/",
+        destination: "/event-types",
+        permanent: true,
+      },
     ];
 
     if (process.env.NEXT_PUBLIC_WEBAPP_URL === "https://app.cal.com") {
@@ -348,6 +353,9 @@ const nextConfig = {
     }
 
     return redirects;
+  },
+  experimental: {
+    appDir: true,
   },
 };
 
