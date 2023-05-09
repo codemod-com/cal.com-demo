@@ -1,7 +1,7 @@
 import { merge } from "lodash";
 import type { NextSeoProps } from "next-seo";
 import { NextSeo } from "next-seo";
-import { useRouter } from "next/router";
+import { usePathname } from "next/navigation";
 
 import type { AppImageProps, MeetingImageProps } from "@calcom/lib/OgImages";
 import { constructAppImage, constructGenericImage, constructMeetingImage } from "@calcom/lib/OgImages";
@@ -78,7 +78,7 @@ export const HeadSeo = (props: HeadSeoProps): JSX.Element => {
   const isCalcom =
     url && (new URL(url).hostname.endsWith("cal.com") || new URL(url).hostname.endsWith("cal.dev"));
   // Get the router's path
-  const path = useRouter().asPath;
+  const path = usePathname();
   // Build the canonical URL using the router's path, without query parameters. Note: on homepage it omits the trailing slash
   const calcomCanonical = `https://cal.com${path === "/" ? "" : path}`.split("?")[0];
   // Set the default URL to either the current URL (if self-hosted) or https://cal.com canonical URL

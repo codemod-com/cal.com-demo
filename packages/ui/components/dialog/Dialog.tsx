@@ -1,5 +1,5 @@
 import * as DialogPrimitive from "@radix-ui/react-dialog";
-import { useRouter } from "next/router";
+import { useRouter, useSearchParams } from "next/navigation";
 import type { ReactNode } from "react";
 import React, { useState } from "react";
 
@@ -16,6 +16,7 @@ export type DialogProps = React.ComponentProps<(typeof DialogPrimitive)["Root"]>
 };
 export function Dialog(props: DialogProps) {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { children, name, ...dialogProps } = props;
   // only used if name is set
   const [open, setOpen] = useState(!!dialogProps.open);
@@ -28,15 +29,15 @@ export function Dialog(props: DialogProps) {
       }
       // toggles "dialog" query param
       if (open) {
-        router.query["dialog"] = name;
+        searchParams.set("dialog", name);
       } else {
-        const query = router.query;
+        const query = searchParams;
         clearQueryParamsOnClose.forEach((queryParam) => {
-          delete query[queryParam];
+          // delete query[queryParam];
         });
         router.push(
           {
-            pathname: router.pathname,
+            pathname: searchParams,
             query,
           },
           undefined,
@@ -46,7 +47,7 @@ export function Dialog(props: DialogProps) {
       setOpen(open);
     };
     // handles initial state
-    if (!open && router.query["dialog"] === name) {
+    if (!open && searchParams.get("dialog") === name) {
       setOpen(true);
     }
     // allow overriding

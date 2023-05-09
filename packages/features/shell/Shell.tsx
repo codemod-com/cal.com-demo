@@ -2,8 +2,8 @@ import type { User } from "@prisma/client";
 import { signOut, useSession } from "next-auth/react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
+import { useRouter, usePathname } from "next/navigation";
 import type { NextRouter } from "next/router";
-import { useRouter } from "next/router";
 import type { Dispatch, ReactNode, SetStateAction } from "react";
 import React, { Fragment, useEffect, useState } from "react";
 import { Toaster } from "react-hot-toast";
@@ -100,12 +100,7 @@ function useRedirectToLoginIfUnauthenticated(isPublic = false) {
     }
 
     if (!loading && !session) {
-      router.replace({
-        pathname: "/auth/login",
-        query: {
-          callbackUrl: `${WEBAPP_URL}${location.pathname}${location.search}`,
-        },
-      });
+      router.replace("/auth/login");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading, session, isPublic]);
@@ -125,9 +120,7 @@ function useRedirectToOnboardingIfNeeded() {
 
   useEffect(() => {
     if (isRedirectingToOnboarding) {
-      router.replace({
-        pathname: "/getting-started",
-      });
+      router.replace("/getting-started");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isRedirectingToOnboarding]);
@@ -299,19 +292,19 @@ function UserDropdown({ small }: { small?: boolean }) {
                 />
               }
               {!user.away && (
-                <div className="absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 border-muted bg-green-500" />
+                <div className="border-muted absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 bg-green-500" />
               )}
               {user.away && (
-                <div className="absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 border-muted bg-yellow-500" />
+                <div className="border-muted absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 bg-yellow-500" />
               )}
             </span>
             {!small && (
               <span className="flex flex-grow items-center truncate">
                 <span className="flex-grow truncate text-sm">
-                  <span className="text-emphasis mb-1 pb-1 block truncate font-medium leading-none">
+                  <span className="text-emphasis mb-1 block truncate pb-1 font-medium leading-none">
                     {user.name || "Nameless User"}
                   </span>
-                  <span className="text-default pb-1 truncate font-normal leading-none">
+                  <span className="text-default truncate pb-1 font-normal leading-none">
                     {user.username
                       ? process.env.NEXT_PUBLIC_WEBSITE_URL === "https://cal.com"
                         ? `cal.com/${user.username}`
@@ -471,8 +464,9 @@ const navigation: NavigationItemType[] = [
     icon: Calendar,
     badge: <UnconfirmedBookingBadge />,
     isCurrent: ({ router }) => {
-      const path = router.asPath.split("?")[0];
-      return path.startsWith("/bookings");
+      return false;
+      // const path = router.asPath.split("?")[0];
+      // return path.startsWith("/bookings");
     },
   },
   {
@@ -492,11 +486,12 @@ const navigation: NavigationItemType[] = [
     href: "/apps",
     icon: Grid,
     isCurrent: ({ router, item }) => {
-      const path = router.asPath.split("?")[0];
-      // During Server rendering path is /v2/apps but on client it becomes /apps(weird..)
-      return (
-        (path.startsWith(item.href) || path.startsWith("/v2" + item.href)) && !path.includes("routing-forms/")
-      );
+      // const path = router.asPath.split("?")[0];
+      // // During Server rendering path is /v2/apps but on client it becomes /apps(weird..)
+      // return (
+      //   (path.startsWith(item.href) || path.startsWith("/v2" + item.href)) && !path.includes("routing-forms/")
+      // );
+      return false;
     },
     child: [
       {
@@ -532,7 +527,7 @@ const navigation: NavigationItemType[] = [
     href: "/apps/routing-forms/forms",
     icon: FileText,
     isCurrent: ({ router }) => {
-      return router.asPath.startsWith("/apps/routing-forms/");
+      return false;
     },
   },
   {
@@ -597,7 +592,7 @@ function useShouldDisplayNavigationItem(item: NavigationItemType) {
 }
 
 const defaultIsCurrent: NavigationItemType["isCurrent"] = ({ isChild, item, router }) => {
-  return isChild ? item.href === router.asPath : router.asPath.startsWith(item.href);
+  return true;
 };
 
 const NavigationItem: React.FC<{
@@ -734,12 +729,13 @@ const MobileNavigationMoreItem: React.FC<{
 function SideBarContainer() {
   const { status } = useSession();
   const router = useRouter();
+  const pathname = usePathname();
 
   // Make sure that Sidebar is rendered optimistically so that a refresh of pages when logged in have SideBar from the beginning.
   // This improves the experience of refresh on app store pages(when logged in) which are SSG.
   // Though when logged out, app store pages would temporarily show SideBar until session status is confirmed.
   if (status !== "loading" && status !== "authenticated") return null;
-  if (router.route.startsWith("/v2/settings/")) return null;
+  if (pathname.startsWith("/v2/settings/")) return null;
   return <SideBar />;
 }
 
