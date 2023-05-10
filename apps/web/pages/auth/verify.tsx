@@ -1,8 +1,7 @@
 import { CheckIcon, MailOpenIcon, ExclamationIcon } from "@heroicons/react/outline";
 import { signIn } from "next-auth/react";
 import Head from "next/head";
-import { usePathname } from "next/navigation";
-import { useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import * as React from "react";
 import { useEffect, useState, useRef } from "react";
@@ -60,7 +59,7 @@ export default function Verify() {
   const pathname = usePathname();
   const router = useRouter();
   const { t, sessionId, stripeCustomerId } = querySchema.parse(
-    ...Object.fromEntries(searchParams ?? new URLSearchParams())
+    Object.fromEntries(searchParams ?? new URLSearchParams())
   );
   const [secondsLeft, setSecondsLeft] = useState(30);
   const { data } = trpc.viewer.public.stripeCheckoutSession.useQuery({
@@ -93,8 +92,7 @@ export default function Verify() {
       return () => clearInterval(interval);
     }
   }, [secondsLeft]);
-
-  if (!true || !data) {
+  if (!searchParams || !data) {
     // Loading state
     return <Loader />;
   }
@@ -161,16 +159,11 @@ export default function Verify() {
                 e.preventDefault();
                 setSecondsLeft(30);
                 // Update query params with t:timestamp, shallow: true doesn't re-render the page
-                router.push(
-                  pathname,
-                  {
-                    query: {
-                      ...Object.fromEntries(searchParams ?? new URLSearchParams()),
-                      t: Date.now(),
-                    },
-                  },
-                  { shallow: true }
-                );
+                const urlSearchParams = new URLSearchParams(searchParams ?? undefined);
+                urlSearchParams.set("t", String(Date.now()));
+
+                router.push(`${pathname}?${urlSearchParams}`);
+
                 return await sendVerificationLogin(customer.email, customer.username);
               }}>
               {secondsLeft > 0 ? `Resend in ${secondsLeft} seconds` : "Send another mail"}

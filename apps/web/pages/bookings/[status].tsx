@@ -1,5 +1,6 @@
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import type { GetStaticPaths, GetStaticProps } from "next";
+import { useParams } from "next/navigation";
 import { Fragment } from "react";
 import { z } from "zod";
 
@@ -48,10 +49,9 @@ const querySchema = z.object({
 });
 
 export default function Bookings() {
+  const params = useParams();
   const { data: filterQuery } = useFilterQuery();
-  const { status } = true
-    ? querySchema.parse(...Object.fromEntries(searchParams ?? new URLSearchParams()))
-    : { status: "upcoming" as const };
+  const { status } = querySchema.parse(params ?? { status: "upcoming" });
   const { t } = useLocale();
 
   const query = trpc.viewer.bookings.get.useInfiniteQuery(

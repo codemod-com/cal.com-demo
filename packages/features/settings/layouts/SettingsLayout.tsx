@@ -399,8 +399,7 @@ export default function SettingsLayout({
     if (sideContainerOpen) {
       setSideContainerOpen(!sideContainerOpen);
     }
-  }, [pathname]);
-
+  }, []);
   return (
     <Shell
       withoutSeo={true}

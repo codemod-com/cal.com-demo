@@ -59,7 +59,7 @@ function getRoute(appName: string, pages: string[]) {
 const AppPage: AppPageType["default"] = function AppPage(props) {
   const searchParams = useSearchParams();
   const appName = props.appName;
-  const pages = searchParams?.get("pages") as string[];
+  const pages = searchParams?.getAll("pages") ?? [];
   const route = getRoute(appName, pages);
 
   const componentProps = {
@@ -72,29 +72,34 @@ const AppPage: AppPageType["default"] = function AppPage(props) {
   }
   return <route.Component {...componentProps} />;
 };
+AppPage.isBookingPage = ({ router, searchParams }) => {
+  // should it come from the searchParams or from the params?
+  const slug = searchParams?.get("slug") ?? "";
+  const pages = searchParams?.getAll("pages") ?? [];
 
-AppPage.isBookingPage = ({ router }) => {
-  const route = getRoute(router.query.slug as string, router.query.pages as string[]);
+  const route = getRoute(slug, pages);
   if (route.notFound) {
     return false;
   }
   const isBookingPage = route.Component.isBookingPage;
   if (typeof isBookingPage === "function") {
-    return isBookingPage({ router });
+    return isBookingPage({ router, searchParams });
   }
 
   return !!isBookingPage;
 };
+AppPage.getLayout = (page, router, searchParams) => {
+  const slug = searchParams?.get("slug") ?? "";
+  const pages = searchParams?.getAll("pages") ?? [];
 
-AppPage.getLayout = (page, router) => {
-  const route = getRoute(router.query.slug as string, router.query.pages as string[]);
+  const route = getRoute(slug, pages);
   if (route.notFound) {
     return null;
   }
   if (!route.Component.getLayout) {
     return page;
   }
-  return route.Component.getLayout(page, router);
+  return route.Component.getLayout(page, router, searchParams);
 };
 
 AppPage.PageWrapper = PageWrapper;

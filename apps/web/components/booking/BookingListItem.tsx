@@ -256,13 +256,12 @@ function BookingListItem(booking: BookingItemProps) {
     .sort((date1: Date, date2: Date) => date1.getTime() - date2.getTime());
 
   const onClickTableData = () => {
-    router.push({
-      pathname: `/booking/${booking.uid}`,
-      query: {
-        allRemainingBookings: isTabRecurring,
-        email: booking.attendees[0] ? booking.attendees[0].email : undefined,
-      },
+    const urlSearchParams = new URLSearchParams({
+      allRemainingBookings: String(isTabRecurring),
+      email: booking.attendees[0] ? booking.attendees[0].email : "",
     });
+
+    router.push(`/booking/${booking.uid}?${urlSearchParams.toString()}`);
   };
 
   const title = booking.title;

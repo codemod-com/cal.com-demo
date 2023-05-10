@@ -5,6 +5,10 @@ import type { SSRConfig } from "next-i18next";
 import { appWithTranslation } from "next-i18next";
 import { ThemeProvider } from "next-themes";
 import type { AppProps as NextAppProps, AppProps as NextJsAppProps } from "next/app";
+import type { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
+import type { ReadonlyURLSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import type { ComponentProps, PropsWithChildren, ReactNode } from "react";
 
 import DynamicHelpscoutProvider from "@calcom/features/ee/support/lib/helpscout/providerDynamic";
@@ -27,23 +31,26 @@ const I18nextAdapter = appWithTranslation<
 
 // Workaround for https://github.com/vercel/next.js/issues/8592
 export type AppProps = Omit<
-  NextAppProps<
-    WithNonceProps & {
-      themeBasis?: string;
-    } & Record<string, unknown>
-  >,
-  "Component"
+  NextAppProps<WithNonceProps & Record<string, unknown>>,
+  "Component" | "router"
 > & {
   Component: NextAppProps["Component"] & {
     requiresLicense?: boolean;
     isThemeSupported?: boolean;
-    isBookingPage?: boolean | ((arg: { router: NextRouter }) => boolean);
-    getLayout?: (page: React.ReactElement, router: NextRouter) => ReactNode;
+    isBookingPage?:
+      | boolean
+      | ((arg: { router: AppRouterInstance; searchParams: ReadonlyURLSearchParams | null }) => boolean);
+    getLayout?: (
+      page: React.ReactElement,
+      router: AppRouterInstance,
+      searchParams: ReadonlyURLSearchParams | null
+    ) => ReactNode;
     PageWrapper?: (props: AppProps) => JSX.Element;
   };
 
   /** Will be defined only is there was an error */
   err?: Error;
+  router: AppRouterInstance;
 };
 
 type AppPropsWithChildren = AppProps & {
@@ -78,14 +85,33 @@ const enum ThemeSupport {
   // Booking Pages(including Routing Forms)
   Booking = "userConfigured",
 }
-
-type CalcomThemeProps = PropsWithChildren<
-  Pick<AppProps["pageProps"], "nonce" | "themeBasis"> &
-    Pick<AppProps["Component"], "isBookingPage" | "isThemeSupported">
->;
-const CalcomThemeProvider = (props: CalcomThemeProps) => {
+const CalcomThemeProvider = (
+  props: PropsWithChildren<
+    WithNonceProps & {
+      isBookingPage?:
+        | boolean
+        | ((arg: { router: AppRouterInstance; searchParams: ReadonlyURLSearchParams | null }) => boolean);
+      isThemeSupported?: boolean;
+    }
+  >
+) => {
+  // We now support the inverse of how we handled it in the past. Setting this to false will disable theme.
+  // undefined or true means we use system theme
   const router = useRouter();
-
+  const searchParams = useSearchParams();
+  const isBookingPage = (() => {
+    if (typeof props.isBookingPage === "function") {
+      return props.isBookingPage({ router, searchParams });
+    }
+    return props.isBookingPage;
+  })();
+  const themeSupport = isBookingPage
+    ? ThemeSupport.Booking
+    : // if isThemeSupported is explicitly false, we don't use theme there
+    props.isThemeSupported === false
+    ? ThemeSupport.None
+    : ThemeSupport.App;
+  const forcedTheme = themeSupport === ThemeSupport.None ? "light" : undefined;
   // Use namespace of embed to ensure same namespaced embed are displayed with same theme. This allows different embeds on the same website to be themed differently
   // One such example is our Embeds Demo and Testing page at http://localhost:3100
   // Having `getEmbedNamespace` defined on window before react initializes the app, ensures that embedNamespace is available on the first mount and can be used as part of storageKey

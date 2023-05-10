@@ -1,5 +1,4 @@
-import { usePathname } from "next/navigation";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { z } from "zod";
 
 import NoSSR from "@calcom/core/components/NoSSR";
@@ -15,8 +14,9 @@ import { userBodySchema } from "../schemas/userBodySchema";
 const userIdSchema = z.object({ id: z.coerce.number() });
 
 const UsersEditPage = () => {
-  const input = userIdSchema.safeParse(...Object.fromEntries(searchParams ?? new URLSearchParams()));
+  const searchParams = useSearchParams();
 
+  const input = userIdSchema.safeParse(Object.fromEntries(searchParams ?? new URLSearchParams()));
   if (!input.success) return <div>Invalid input</div>;
 
   return <UsersEditView userId={input.data.id} />;

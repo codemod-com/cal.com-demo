@@ -1,8 +1,7 @@
 import { StarIcon as StarIconSolid } from "@heroicons/react/solid";
 import classNames from "classnames";
 import { debounce, noop } from "lodash";
-import { usePathname } from "next/navigation";
-import { useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams, useRouter } from "next/navigation";
 import type { RefCallback } from "react";
 import { useEffect, useMemo, useState } from "react";
 
@@ -48,6 +47,7 @@ const obtainNewUsernameChangeCondition = ({
 };
 
 const PremiumTextfield = (props: ICustomUsernameProps) => {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { t } = useLocale();
@@ -223,9 +223,14 @@ const PremiumTextfield = (props: ICustomUsernameProps) => {
             value={inputUsernameValue}
             onChange={(event) => {
               event.preventDefault();
-              // Reset payment status
-              delete searchParams?.get("paymentStatus");
+
               setInputUsernameValue(event.target.value);
+
+              // Reset payment status
+              const urlSearchParams = new URLSearchParams(searchParams ?? undefined);
+              urlSearchParams.delete("paymentStatus");
+
+              router.push(`${pathname}?${urlSearchParams.toString()}`);
             }}
             data-testid="username-input"
           />

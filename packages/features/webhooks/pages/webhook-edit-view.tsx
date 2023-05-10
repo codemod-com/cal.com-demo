@@ -1,4 +1,4 @@
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import z from "zod";
 
 import { APP_NAME } from "@calcom/lib/constants";
@@ -14,6 +14,7 @@ const querySchema = z.object({ id: z.string() });
 
 const EditWebhook = () => {
   const { t } = useLocale();
+  const searchParams = useSearchParams();
   const utils = trpc.useContext();
   const router = useRouter();
 
@@ -90,11 +91,8 @@ const EditWebhook = () => {
       </>
     );
   }
-
-  if (!true) return null;
-
-  const parsed = querySchema.safeParse(...Object.fromEntries(searchParams ?? new URLSearchParams()));
-
+  if (!searchParams) return null;
+  const parsed = querySchema.safeParse(Object.fromEntries(searchParams ?? new URLSearchParams()));
   if (!parsed.success) {
     throw new Error("Invalid query");
   }

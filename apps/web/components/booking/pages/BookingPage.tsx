@@ -276,7 +276,7 @@ const BookingPage = ({
       const { uid } = responseData;
 
       if ("paymentUid" in responseData && !!responseData.paymentUid) {
-        return await router.push(
+        return router.push(
           createPaymentLink({
             paymentUid: responseData.paymentUid,
             date,
@@ -458,12 +458,12 @@ const BookingPage = ({
     // <...url>&metadata[user_id]=123 will be send as a custom input field as the hidden type.
 
     // @TODO: move to metadata
-    const metadata = Object.keys(...Object.fromEntries(searchParams ?? new URLSearchParams()))
+    const metadata = Object.keys(Object.fromEntries(searchParams ?? new URLSearchParams()))
       .filter((key) => key.startsWith("metadata"))
       .reduce(
         (metadata, key) => ({
           ...metadata,
-          [key.substring("metadata[".length, key.length - 1)]: searchParams[key],
+          [key.substring("metadata[".length, key.length - 1)]: searchParams?.get(key),
         }),
         {}
       );
@@ -483,7 +483,7 @@ const BookingPage = ({
         timeZone: timeZone(),
         language: i18n.language,
         rescheduleUid,
-        user: searchParams?.get("user"),
+        user: searchParams?.getAll("user"),
         metadata,
         hasHashedBookingLink,
         hashedLink,
@@ -501,7 +501,7 @@ const BookingPage = ({
         language: i18n.language,
         rescheduleUid,
         bookingUid: (searchParams?.get("bookingUid") as string) || booking?.uid,
-        user: searchParams?.get("user"),
+        user: searchParams?.getAll("user"),
         metadata,
         hasHashedBookingLink,
         hashedLink,
@@ -688,7 +688,8 @@ export default BookingPage;
 
 function ErrorMessage({ error }: { error: unknown }) {
   const { t } = useLocale();
-  const { query: { rescheduleUid } = {} } = useRouter();
+  const searchParams = useSearchParams();
+  const rescheduleUid = searchParams?.get("rescheduleUid");
   const router = useRouter();
 
   return (

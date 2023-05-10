@@ -15,8 +15,7 @@ import { ssgInit } from "@server/lib/ssg";
 export default function Custom404() {
   const pathname = usePathname();
   const { t } = useLocale();
-  const [username] = pathname?.replace("%20", "-").split(/[?#]/);
-
+  const [username] = pathname?.replace("%20", "-").split(/[?#]/) ?? [];
   const links = [
     {
       title: t("documentation"),

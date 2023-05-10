@@ -95,7 +95,7 @@ function WorkflowPage() {
   });
 
   const { workflow: workflowId } = true
-    ? querySchema.parse(...Object.fromEntries(searchParams ?? new URLSearchParams()))
+    ? querySchema.parse(Object.fromEntries(searchParams ?? new URLSearchParams()))
     : { workflow: -1 };
   const utils = trpc.useContext();
 

@@ -1,7 +1,6 @@
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, usePathname } from "next/navigation";
 import type { FC } from "react";
 import { useEffect, useState, useCallback } from "react";
 
@@ -47,8 +46,8 @@ const AvailableTimes: FC<AvailableTimesProps> = ({
   ethSignature,
   duration,
 }) => {
-  const searchParams = useSearchParams();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const reserveSlotMutation = trpc.viewer.public.slots.reserveSlot.useMutation();
   const [slotPickerRef] = useAutoAnimate<HTMLDivElement>();
   const { t, i18n } = useLocale();

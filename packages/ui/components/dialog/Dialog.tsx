@@ -1,6 +1,5 @@
 import * as DialogPrimitive from "@radix-ui/react-dialog";
-import { usePathname } from "next/navigation";
-import { useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import type { ReactNode } from "react";
 import React, { useState } from "react";
@@ -31,26 +30,21 @@ export function Dialog(props: DialogProps) {
         props.onOpenChange(open);
       }
       // toggles "dialog" query param
+      const query = new URLSearchParams(searchParams);
+
       if (open) {
-        searchParams["dialog"] = name;
+        query.set("dialog", name);
       } else {
-        const query = router.query;
         clearQueryParamsOnClose.forEach((queryParam) => {
-          delete query[queryParam];
+          query.delete(queryParam);
         });
-        router.push(
-          {
-            pathname: pathname,
-            query,
-          },
-          undefined,
-          { shallow: true }
-        );
       }
+
+      router.push(`${pathname}?${query.toString()}`);
       setOpen(open);
     };
     // handles initial state
-    if (!open && searchParams["dialog"] === name) {
+    if (!open && searchParams.get("dialog") === name) {
       setOpen(true);
     }
     // allow overriding

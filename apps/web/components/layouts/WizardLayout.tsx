@@ -1,5 +1,4 @@
 import { noop } from "lodash";
-import { usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { Toaster } from "react-hot-toast";
 
@@ -15,7 +14,6 @@ export default function WizardLayout({
   maxSteps?: number;
   currentStep?: number;
 }) {
-  const pathname = usePathname();
   const [meta, setMeta] = useState({ title: "", subtitle: " " });
   const { title, subtitle } = meta;
 
@@ -24,8 +22,7 @@ export default function WizardLayout({
       title: window.document.title,
       subtitle: window.document.querySelector('meta[name="description"]')?.getAttribute("content") || "",
     });
-  }, [pathname]);
-
+  }, []);
   return (
     <div
       className="dark:bg-brand dark:text-brand-contrast text-emphasis min-h-screen"

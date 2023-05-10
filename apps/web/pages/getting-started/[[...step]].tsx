@@ -1,8 +1,7 @@
 import type { GetServerSidePropsContext } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import Head from "next/head";
-import { usePathname } from "next/navigation";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import type { CSSProperties } from "react";
 import { z } from "zod";
 
@@ -48,10 +47,10 @@ const stepRouteSchema = z.object({
 const OnboardingPage = (props: IOnboardingPageProps) => {
   const pathname = usePathname();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { user } = props;
   const { t } = useLocale();
-
-  const result = stepRouteSchema.safeParse(...Object.fromEntries(searchParams ?? new URLSearchParams()));
+  const result = stepRouteSchema.safeParse(Object.fromEntries(searchParams ?? new URLSearchParams()));
   const currentStep = result.success ? result.data.step[0] : INITIAL_STEP;
 
   const headers = [
@@ -95,12 +94,7 @@ const OnboardingPage = (props: IOnboardingPageProps) => {
 
   const goToIndex = (index: number) => {
     const newStep = steps[index];
-    router.push(
-      {
-        pathname: `/getting-started/${stepTransform(newStep)}`,
-      },
-      undefined
-    );
+    router.push(`/getting-started/${stepTransform(newStep)}`);
   };
 
   const currentStepIndex = steps.indexOf(currentStep);

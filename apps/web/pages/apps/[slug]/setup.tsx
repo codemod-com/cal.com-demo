@@ -20,12 +20,11 @@ export default function SetupInformation(props: InferGetStaticPropsType<typeof g
   }
 
   if (status === "unauthenticated") {
-    router.replace({
-      pathname: "/auth/login",
-      query: {
-        callbackUrl: `/apps/${slug}/setup`,
-      },
+    const urlSearchParams = new URLSearchParams({
+      callbackUrl: `/apps/${slug}/setup`,
     });
+
+    router.replace(`/auth/login?${urlSearchParams.toString()}`);
   }
 
   return (

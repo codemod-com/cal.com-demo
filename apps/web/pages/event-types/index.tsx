@@ -2,8 +2,7 @@ import { useAutoAnimate } from "@formkit/auto-animate/react";
 import type { User } from "@prisma/client";
 import { Trans } from "next-i18next";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import type { FC } from "react";
 import { useEffect, useState, memo } from "react";
@@ -289,21 +288,15 @@ export const EventTypeList = ({ group, groupIndex, readOnly, types }: EventTypeL
       ...Object.fromEntries(searchParams ?? new URLSearchParams()),
       dialog: "duplicate",
       title: eventType.title,
-      description: eventType.description,
+      description: eventType.description ?? "",
       slug: eventType.slug,
-      id: eventType.id,
-      length: eventType.length,
-      pageSlug: group.profile.slug,
+      id: String(eventType.id),
+      length: String(eventType.length),
+      pageSlug: group.profile.slug ?? "",
     };
 
-    router.push(
-      {
-        pathname: pathname,
-        query,
-      },
-      undefined,
-      { shallow: true }
-    );
+    const urlSearchParams = new URLSearchParams(query);
+    router.push(`${pathname}?${urlSearchParams.toString()}`);
   };
 
   const deleteMutation = trpc.viewer.eventTypes.delete.useMutation({
@@ -768,17 +761,14 @@ const WithQuery = withQuery(trpc.viewer.eventTypes.getByViewer);
 const EventTypesPage = () => {
   const searchParams = useSearchParams();
   const { t } = useLocale();
-  const router = useRouter();
   const { open } = useIntercom();
-  const { query } = router;
   const isMobile = useMediaQuery("(max-width: 768px)");
 
   useEffect(() => {
-    if (query?.openIntercom && query?.openIntercom === "true") {
+    if (searchParams?.get("openIntercom") === "true") {
       open();
     }
-  }, []);
-
+  }, [searchParams, open]);
   return (
     <div>
       <HeadSeo
