@@ -1,5 +1,5 @@
+import { useSearchParams } from "next/navigation";
 import Head from "next/head";
-import { useRouter } from "next/router";
 
 import { APP_NAME, WEBSITE_URL } from "@calcom/lib/constants";
 import { useLocale } from "@calcom/lib/hooks/useLocale";
@@ -9,14 +9,13 @@ import { Copy } from "@calcom/ui/components/icon";
 import PageWrapper from "@components/PageWrapper";
 
 export default function Error500() {
-  const { t } = useLocale();
-  const router = useRouter();
-
-  return (
-    <div className="bg-subtle flex h-screen">
+    const searchParams = useSearchParams();
+    const { t } = useLocale();
+    
+    return (<div className="bg-subtle flex h-screen">
       <Head>
         <title>Something unexpected occurred | {APP_NAME}</title>
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/favicon.ico"/>
       </Head>
       <div className="rtl: bg-default m-auto rounded-md p-10 text-right ltr:text-left">
         <h1 className="font-cal text-emphasis text-6xl">500</h1>
@@ -25,34 +24,27 @@ export default function Error500() {
           Something went wrong on our end. Get in touch with our support team, and we’ll get it fixed right
           away for you.
         </p>
-        {router.query.error && (
-          <div className="mb-8 flex flex-col">
+        {searchParams?.get("error") && (<div className="mb-8 flex flex-col">
             <p className="text-default mb-4 max-w-2xl text-sm">
               Please provide the following text when contacting support to better help you:
             </p>
             <pre className="bg-emphasis text-emphasis w-full max-w-2xl whitespace-normal break-words rounded-md p-4">
-              {router.query.error}
+              {searchParams?.get("error")}
               <br />
-              <Button
-                color="secondary"
-                className="mt-2 border-0 font-sans font-normal hover:bg-gray-300"
-                StartIcon={Copy}
-                onClick={() => {
-                  navigator.clipboard.writeText(router.query.error as string);
-                  showToast("Link copied!", "success");
-                }}>
+              <Button color="secondary" className="mt-2 border-0 font-sans font-normal hover:bg-gray-300" StartIcon={Copy} onClick={() => {
+                navigator.clipboard.writeText(searchParams?.get("error") as string);
+                showToast("Link copied!", "success");
+            }}>
                 {t("copy")}
               </Button>
             </pre>
-          </div>
-        )}
+          </div>)}
         <Button href={`${WEBSITE_URL}/support`}>{t("contact_support")}</Button>
         <Button color="secondary" href="javascript:history.back()" className="ml-2">
           Go back
         </Button>
       </div>
-    </div>
-  );
+    </div>);
 }
 
 Error500.PageWrapper = PageWrapper;

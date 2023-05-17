@@ -1,31 +1,31 @@
-import { useRouter } from "next/router";
+import { useSearchParams } from "next/navigation";
 import { useMemo } from "react";
 
 export function useToggleQuery(name: string) {
-  const router = useRouter();
-
-  const hrefOff = useMemo(() => {
-    const query = {
-      ...router.query,
-    };
-    delete query[name];
+    const searchParams = useSearchParams();
+    
+    const hrefOff = useMemo(() => {
+        const query = {
+            ...Object.fromEntries(searchParams ?? new URLSearchParams()),
+        };
+        delete query[name];
+        return {
+            query,
+        };
+    }, [searchParams, name]);
+    const hrefOn = useMemo(() => {
+        const query = {
+            ...Object.fromEntries(searchParams ?? new URLSearchParams()),
+            [name]: "1",
+        };
+        return {
+            query,
+        };
+    }, [searchParams, name]);
+    
     return {
-      query,
+        hrefOn,
+        hrefOff,
+        isOn: searchParams[name] === "1",
     };
-  }, [router.query, name]);
-  const hrefOn = useMemo(() => {
-    const query = {
-      ...router.query,
-      [name]: "1",
-    };
-    return {
-      query,
-    };
-  }, [router.query, name]);
-
-  return {
-    hrefOn,
-    hrefOff,
-    isOn: router.query[name] === "1",
-  };
 }
