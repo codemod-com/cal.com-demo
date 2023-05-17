@@ -31,7 +31,7 @@ const I18nextAdapter = appWithTranslation<
 
 // Workaround for https://github.com/vercel/next.js/issues/8592
 export type AppProps = Omit<
-  NextAppProps<WithNonceProps & Record<string, unknown>>,
+  NextAppProps<WithNonceProps & { themeBasis?: string } & Record<string, unknown>>,
   "Component" | "router"
 > & {
   Component: NextAppProps["Component"] & {
@@ -85,16 +85,12 @@ const enum ThemeSupport {
   // Booking Pages(including Routing Forms)
   Booking = "userConfigured",
 }
-const CalcomThemeProvider = (
-  props: PropsWithChildren<
-    WithNonceProps & {
-      isBookingPage?:
-        | boolean
-        | ((arg: { router: AppRouterInstance; searchParams: ReadonlyURLSearchParams | null }) => boolean);
-      isThemeSupported?: boolean;
-    }
-  >
-) => {
+
+type CalcomThemeProps = PropsWithChildren<
+  Pick<AppProps["pageProps"], "nonce" | "themeBasis"> &
+    Pick<AppProps["Component"], "isBookingPage" | "isThemeSupported">
+>;
+const CalcomThemeProvider = (props: CalcomThemeProps) => {
   // We now support the inverse of how we handled it in the past. Setting this to false will disable theme.
   // undefined or true means we use system theme
   const router = useRouter();
@@ -168,14 +164,7 @@ function getThemeProviderProps({
   router,
   searchParams,
 }: {
-  props: PropsWithChildren<
-    WithNonceProps & {
-      isBookingPage?:
-        | boolean
-        | ((arg: { router: AppRouterInstance; searchParams: ReadonlyURLSearchParams | null }) => boolean);
-      isThemeSupported?: boolean;
-    }
-  >;
+  props: Omit<CalcomThemeProps, "children">;
   isEmbedMode: boolean;
   embedNamespace: string | null;
   router: AppRouterInstance;
