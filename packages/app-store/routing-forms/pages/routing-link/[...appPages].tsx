@@ -294,7 +294,7 @@ const usePrefilledResponse = (form: Props["form"]) => {
   // Prefill the form from query params
   form.fields?.forEach((field) => {
     prefillResponse[field.id] = {
-      value: searchParams[getFieldIdentifier(field)] || "",
+      value: searchParams?.get(getFieldIdentifier(field)) || "",
       label: field.label,
     };
   });

@@ -119,7 +119,7 @@ const CalcomThemeProvider = (
   const isEmbedMode = typeof embedNamespace === "string";
 
   return (
-    <ThemeProvider {...getThemeProviderProps({ props, isEmbedMode, embedNamespace, router })}>
+    <ThemeProvider {...getThemeProviderProps({ props, isEmbedMode, embedNamespace, router, searchParams })}>
       {/* Embed Mode can be detected reliably only on client side here as there can be static generated pages as well which can't determine if it's embed mode at backend */}
       {/* color-scheme makes background:transparent not work in iframe which is required by embed. */}
       {typeof window !== "undefined" && !isEmbedMode && (
@@ -166,15 +166,24 @@ function getThemeProviderProps({
   isEmbedMode,
   embedNamespace,
   router,
+  searchParams,
 }: {
-  props: Omit<CalcomThemeProps, "children">;
+  props: PropsWithChildren<
+    WithNonceProps & {
+      isBookingPage?:
+        | boolean
+        | ((arg: { router: AppRouterInstance; searchParams: ReadonlyURLSearchParams | null }) => boolean);
+      isThemeSupported?: boolean;
+    }
+  >;
   isEmbedMode: boolean;
   embedNamespace: string | null;
-  router: NextRouter;
+  router: AppRouterInstance;
+  searchParams: ReadonlyURLSearchParams | null;
 }) {
   const isBookingPage = (() => {
     if (typeof props.isBookingPage === "function") {
-      return props.isBookingPage({ router: router });
+      return props.isBookingPage({ router: router, searchParams });
     }
     return props.isBookingPage;
   })();

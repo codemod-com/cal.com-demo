@@ -10,7 +10,6 @@ import { getLayout } from "../../../settings/layouts/SettingsLayout";
 const BillingView = () => {
   const pathname = usePathname();
   const { t } = useLocale();
-  const pathname = usePathname();
   const returnTo = pathname;
   const billingHref = `/api/integrations/stripepayment/portal?returnTo=${WEBAPP_URL}${returnTo}`;
   return (
