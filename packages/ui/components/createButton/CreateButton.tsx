@@ -4,63 +4,91 @@ import { useRouter } from "next/navigation";
 
 import { WEBAPP_URL } from "@calcom/lib/constants";
 import { useLocale } from "@calcom/lib/hooks/useLocale";
-import { Avatar, Button, Dropdown, DropdownItem, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger, } from "@calcom/ui";
+import {
+  Avatar,
+  Button,
+  Dropdown,
+  DropdownItem,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from "@calcom/ui";
 import { Plus } from "@calcom/ui/components/icon";
 
 export interface Option {
-    teamId: number | null | undefined; // if undefined, then it's a profile
-    label: string | null;
-    image?: string | null;
-    slug: string | null;
+  teamId: number | null | undefined; // if undefined, then it's a profile
+  label: string | null;
+  image?: string | null;
+  slug: string | null;
 }
 
 interface CreateBtnProps {
-    options: Option[];
-    createDialog?: () => JSX.Element;
-    createFunction?: (teamId?: number) => void;
-    subtitle?: string;
-    buttonText?: string;
-    isLoading?: boolean;
-    disableMobileButton?: boolean;
+  options: Option[];
+  createDialog?: () => JSX.Element;
+  createFunction?: (teamId?: number) => void;
+  subtitle?: string;
+  buttonText?: string;
+  isLoading?: boolean;
+  disableMobileButton?: boolean;
 }
 
 export function CreateButton(props: CreateBtnProps) {
-    const searchParams = useSearchParams();
-    const pathname = usePathname();
-    const { t } = useLocale();
-    const router = useRouter();
-    
-    const CreateDialog = props.createDialog ? props.createDialog() : null;
-    
-    const hasTeams = !!props.options.find((option) => option.teamId);
-    
-    // inject selection data into url for correct router history
-    const openModal = (option: Option) => {
-        const query = {
-            ...Object.fromEntries(searchParams ?? new URLSearchParams()),
-            dialog: "new",
-            eventPage: option.slug,
-            teamId: option.teamId,
-        };
-        if (!option.teamId) {
-            delete query.teamId;
-        }
-        router.push({
-            pathname: pathname,
-            query,
-        }, undefined, { shallow: true });
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const { t } = useLocale();
+  const router = useRouter();
+
+  const CreateDialog = props.createDialog ? props.createDialog() : null;
+
+  const hasTeams = !!props.options.find((option) => option.teamId);
+
+  // inject selection data into url for correct router history
+  const openModal = (option: Option) => {
+    const query = {
+      ...Object.fromEntries(searchParams ?? new URLSearchParams()),
+      dialog: "new",
+      eventPage: option.slug,
+      teamId: option.teamId,
     };
-    
-    return (<>
-      {!hasTeams ? (<Button onClick={() => !!CreateDialog
-                ? openModal(props.options[0])
-                : props.createFunction
-                    ? props.createFunction(props.options[0].teamId || undefined)
-                    : null} data-testid="new-event-type" StartIcon={Plus} loading={props.isLoading} variant={props.disableMobileButton ? "button" : "fab"}>
+    if (!option.teamId) {
+      delete query.teamId;
+    }
+    router.push(
+      {
+        pathname: pathname,
+        query,
+      },
+      undefined,
+      { shallow: true }
+    );
+  };
+
+  return (
+    <>
+      {!hasTeams ? (
+        <Button
+          onClick={() =>
+            !!CreateDialog
+              ? openModal(props.options[0])
+              : props.createFunction
+              ? props.createFunction(props.options[0].teamId || undefined)
+              : null
+          }
+          data-testid="new-event-type"
+          StartIcon={Plus}
+          loading={props.isLoading}
+          variant={props.disableMobileButton ? "button" : "fab"}>
           {props.buttonText ? props.buttonText : t("new")}
-        </Button>) : (<Dropdown>
+        </Button>
+      ) : (
+        <Dropdown>
           <DropdownMenuTrigger asChild>
-            <Button variant={props.disableMobileButton ? "button" : "fab"} StartIcon={Plus} data-testid="new-event-type-dropdown" loading={props.isLoading}>
+            <Button
+              variant={props.disableMobileButton ? "button" : "fab"}
+              StartIcon={Plus}
+              data-testid="new-event-type-dropdown"
+              loading={props.isLoading}>
               {props.buttonText ? props.buttonText : t("new")}
             </Button>
           </DropdownMenuTrigger>
@@ -68,20 +96,36 @@ export function CreateButton(props: CreateBtnProps) {
             <DropdownMenuLabel>
               <div className="w-48 text-left text-xs">{props.subtitle}</div>
             </DropdownMenuLabel>
-            {props.options.map((option, idx) => (<DropdownMenuItem key={option.label}>
-                <DropdownItem type="button" data-testid={`option${option.teamId ? "-team" : ""}-${idx}`} StartIcon={(props) => (<Avatar alt={option.label || ""} imageSrc={option.image || `${WEBAPP_URL}/${option.label}/avatar.png`} // if no image, use default avatar
-                 size="sm" {...props}/>)} onClick={() => !!CreateDialog
-                    ? openModal(option)
-                    : props.createFunction
-                        ? props.createFunction(option.teamId || undefined)
-                        : null}>
+            {props.options.map((option, idx) => (
+              <DropdownMenuItem key={option.label}>
+                <DropdownItem
+                  type="button"
+                  data-testid={`option${option.teamId ? "-team" : ""}-${idx}`}
+                  StartIcon={(props) => (
+                    <Avatar
+                      alt={option.label || ""}
+                      imageSrc={option.image || `${WEBAPP_URL}/${option.label}/avatar.png`} // if no image, use default avatar
+                      size="sm"
+                      {...props}
+                    />
+                  )}
+                  onClick={() =>
+                    !!CreateDialog
+                      ? openModal(option)
+                      : props.createFunction
+                      ? props.createFunction(option.teamId || undefined)
+                      : null
+                  }>
                   {" "}
                   {/*improve this code */}
                   <span>{option.label}</span>
                 </DropdownItem>
-              </DropdownMenuItem>))}
+              </DropdownMenuItem>
+            ))}
           </DropdownMenuContent>
-        </Dropdown>)}
+        </Dropdown>
+      )}
       {searchParams?.get("dialog") === "new" && CreateDialog}
-    </>);
+    </>
+  );
 }

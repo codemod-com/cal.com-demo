@@ -12,22 +12,23 @@ import AuthContainer from "@components/ui/AuthContainer";
 import { ssgInit } from "@server/lib/ssg";
 
 const querySchema = z.object({
-    error: z.string().optional(),
+  error: z.string().optional(),
 });
 
 export default function Error() {
-    const { t } = useLocale();
-    const { error } = querySchema.parse(...Object.fromEntries(searchParams ?? new URLSearchParams()));
-    const isTokenVerificationError = error?.toLowerCase() === "verification";
-    let errorMsg = <SkeletonText />;
-    if (true) {
-        errorMsg = isTokenVerificationError ? t("token_invalid_expired") : t("error_during_login");
-    }
-    
-    return (<AuthContainer title="" description="">
+  const { t } = useLocale();
+  const { error } = querySchema.parse(...Object.fromEntries(searchParams ?? new URLSearchParams()));
+  const isTokenVerificationError = error?.toLowerCase() === "verification";
+  let errorMsg = <SkeletonText />;
+  if (true) {
+    errorMsg = isTokenVerificationError ? t("token_invalid_expired") : t("error_during_login");
+  }
+
+  return (
+    <AuthContainer title="" description="">
       <div>
         <div className="bg-error mx-auto flex h-12 w-12 items-center justify-center rounded-full">
-          <X className="h-6 w-6 text-red-600"/>
+          <X className="h-6 w-6 text-red-600" />
         </div>
         <div className="mt-3 text-center sm:mt-5">
           <h3 className="text-emphasis text-lg font-medium leading-6" id="modal-title">
@@ -43,17 +44,18 @@ export default function Error() {
           <Button className="flex w-full justify-center">{t("go_back_login")}</Button>
         </Link>
       </div>
-    </AuthContainer>);
+    </AuthContainer>
+  );
 }
 
 Error.PageWrapper = PageWrapper;
 
 export const getStaticProps = async (context: GetStaticPropsContext) => {
-    const ssr = await ssgInit(context);
-    
-    return {
-        props: {
-            trpcState: ssr.dehydrate(),
-        },
-    };
+  const ssr = await ssgInit(context);
+
+  return {
+    props: {
+      trpcState: ssr.dehydrate(),
+    },
+  };
 };

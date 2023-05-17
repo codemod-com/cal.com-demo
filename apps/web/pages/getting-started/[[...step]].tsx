@@ -1,8 +1,8 @@
-import { usePathname } from "next/navigation";
-import { useRouter } from "next/navigation";
 import type { GetServerSidePropsContext } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import Head from "next/head";
+import { usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 import type { CSSProperties } from "react";
 import { z } from "zod";
 
@@ -25,94 +25,104 @@ export type IOnboardingPageProps = inferSSRProps<typeof getServerSideProps>;
 
 const INITIAL_STEP = "user-settings";
 const steps = [
-    "user-settings",
-    "connected-calendar",
-    "connected-video",
-    "setup-availability",
-    "user-profile",
+  "user-settings",
+  "connected-calendar",
+  "connected-video",
+  "setup-availability",
+  "user-profile",
 ] as const;
 
 const stepTransform = (step: (typeof steps)[number]) => {
-    const stepIndex = steps.indexOf(step);
-    if (stepIndex > -1) {
-        return steps[stepIndex];
-    }
-    return INITIAL_STEP;
+  const stepIndex = steps.indexOf(step);
+  if (stepIndex > -1) {
+    return steps[stepIndex];
+  }
+  return INITIAL_STEP;
 };
 
 const stepRouteSchema = z.object({
-    step: z.array(z.enum(steps)).default([INITIAL_STEP]),
+  step: z.array(z.enum(steps)).default([INITIAL_STEP]),
 });
 
 // TODO: Refactor how steps work to be contained in one array/object. Currently we have steps,initalsteps,headers etc. These can all be in one place
 const OnboardingPage = (props: IOnboardingPageProps) => {
-    const pathname = usePathname();
-    const router = useRouter();
-    const { user } = props;
-    const { t } = useLocale();
-    
-    const result = stepRouteSchema.safeParse(...Object.fromEntries(searchParams ?? new URLSearchParams()));
-    const currentStep = result.success ? result.data.step[0] : INITIAL_STEP;
-    
-    const headers = [
+  const pathname = usePathname();
+  const router = useRouter();
+  const { user } = props;
+  const { t } = useLocale();
+
+  const result = stepRouteSchema.safeParse(...Object.fromEntries(searchParams ?? new URLSearchParams()));
+  const currentStep = result.success ? result.data.step[0] : INITIAL_STEP;
+
+  const headers = [
+    {
+      title: `${t("welcome_to_cal_header", { appName: APP_NAME })}`,
+      subtitle: [`${t("we_just_need_basic_info")}`, `${t("edit_form_later_subtitle")}`],
+    },
+    {
+      title: `${t("connect_your_calendar")}`,
+      subtitle: [`${t("connect_your_calendar_instructions")}`],
+      skipText: `${t("connect_calendar_later")}`,
+    },
+    {
+      title: `${t("connect_your_video_app")}`,
+      subtitle: [`${t("connect_your_video_app_instructions")}`],
+      skipText: `${t("set_up_later")}`,
+    },
+    {
+      title: `${t("set_availability")}`,
+      subtitle: [
+        `${t("set_availability_getting_started_subtitle_1")}`,
+        `${t("set_availability_getting_started_subtitle_2")}`,
+      ],
+    },
+    {
+      title: `${t("nearly_there")}`,
+      subtitle: [`${t("nearly_there_instructions")}`],
+    },
+  ];
+
+  // TODO: Add this in when we have solved the ability to move to tokens accept invite and note invitedto
+  // Ability to accept other pending invites if any (low priority)
+  // if (props.hasPendingInvites) {
+  //   headers.unshift(
+  //     props.hasPendingInvites && {
+  //       title: `${t("email_no_user_invite_heading", { appName: APP_NAME })}`,
+  //       subtitle: [], // TODO: come up with some subtitle text here
+  //     }
+  //   );
+  // }
+
+  const goToIndex = (index: number) => {
+    const newStep = steps[index];
+    router.push(
+      {
+        pathname: `/getting-started/${stepTransform(newStep)}`,
+      },
+      undefined
+    );
+  };
+
+  const currentStepIndex = steps.indexOf(currentStep);
+
+  return (
+    <div
+      className="dark:bg-brand dark:text-brand-contrast text-emphasis min-h-screen"
+      data-testid="onboarding"
+      style={
         {
-            title: `${t("welcome_to_cal_header", { appName: APP_NAME })}`,
-            subtitle: [`${t("we_just_need_basic_info")}`, `${t("edit_form_later_subtitle")}`],
-        },
-        {
-            title: `${t("connect_your_calendar")}`,
-            subtitle: [`${t("connect_your_calendar_instructions")}`],
-            skipText: `${t("connect_calendar_later")}`,
-        },
-        {
-            title: `${t("connect_your_video_app")}`,
-            subtitle: [`${t("connect_your_video_app_instructions")}`],
-            skipText: `${t("set_up_later")}`,
-        },
-        {
-            title: `${t("set_availability")}`,
-            subtitle: [
-                `${t("set_availability_getting_started_subtitle_1")}`,
-                `${t("set_availability_getting_started_subtitle_2")}`,
-            ],
-        },
-        {
-            title: `${t("nearly_there")}`,
-            subtitle: [`${t("nearly_there_instructions")}`],
-        },
-    ];
-    
-    // TODO: Add this in when we have solved the ability to move to tokens accept invite and note invitedto
-    // Ability to accept other pending invites if any (low priority)
-    // if (props.hasPendingInvites) {
-    //   headers.unshift(
-    //     props.hasPendingInvites && {
-    //       title: `${t("email_no_user_invite_heading", { appName: APP_NAME })}`,
-    //       subtitle: [], // TODO: come up with some subtitle text here
-    //     }
-    //   );
-    // }
-    
-    const goToIndex = (index: number) => {
-        const newStep = steps[index];
-        router.push({
-            pathname: `/getting-started/${stepTransform(newStep)}`,
-        }, undefined);
-    };
-    
-    const currentStepIndex = steps.indexOf(currentStep);
-    
-    return (<div className="dark:bg-brand dark:text-brand-contrast text-emphasis min-h-screen" data-testid="onboarding" style={{
-            "--cal-brand": "#111827",
-            "--cal-brand-emphasis": "#101010",
-            "--cal-brand-text": "white",
-            "--cal-brand-subtle": "#9CA3AF",
-        } as CSSProperties} key={pathname}>
+          "--cal-brand": "#111827",
+          "--cal-brand-emphasis": "#101010",
+          "--cal-brand-text": "white",
+          "--cal-brand-subtle": "#9CA3AF",
+        } as CSSProperties
+      }
+      key={pathname}>
       <Head>
         <title>
           {APP_NAME} - {t("getting_started")}
         </title>
-        <link rel="icon" href="/favicon.ico"/>
+        <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <div className="mx-auto px-4 py-6 md:py-24">
@@ -124,103 +134,114 @@ const OnboardingPage = (props: IOnboardingPageProps) => {
                   {headers[currentStepIndex]?.title || "Undefined title"}
                 </p>
 
-                {headers[currentStepIndex]?.subtitle.map((subtitle, index) => (<p className="text-subtle font-sans text-sm font-normal" key={index}>
+                {headers[currentStepIndex]?.subtitle.map((subtitle, index) => (
+                  <p className="text-subtle font-sans text-sm font-normal" key={index}>
                     {subtitle}
-                  </p>))}
+                  </p>
+                ))}
               </header>
-              <Steps maxSteps={steps.length} currentStep={currentStepIndex + 1} navigateToStep={goToIndex}/>
+              <Steps maxSteps={steps.length} currentStep={currentStepIndex + 1} navigateToStep={goToIndex} />
             </div>
             <StepCard>
-              {currentStep === "user-settings" && <UserSettings user={user} nextStep={() => goToIndex(1)}/>}
+              {currentStep === "user-settings" && <UserSettings user={user} nextStep={() => goToIndex(1)} />}
 
-              {currentStep === "connected-calendar" && <ConnectedCalendars nextStep={() => goToIndex(2)}/>}
+              {currentStep === "connected-calendar" && <ConnectedCalendars nextStep={() => goToIndex(2)} />}
 
-              {currentStep === "connected-video" && <ConnectedVideoStep nextStep={() => goToIndex(3)}/>}
+              {currentStep === "connected-video" && <ConnectedVideoStep nextStep={() => goToIndex(3)} />}
 
-              {currentStep === "setup-availability" && (<SetupAvailability nextStep={() => goToIndex(4)} defaultScheduleId={user.defaultScheduleId}/>)}
+              {currentStep === "setup-availability" && (
+                <SetupAvailability nextStep={() => goToIndex(4)} defaultScheduleId={user.defaultScheduleId} />
+              )}
 
-              {currentStep === "user-profile" && <UserProfile user={user}/>}
+              {currentStep === "user-profile" && <UserProfile user={user} />}
             </StepCard>
 
-            {headers[currentStepIndex]?.skipText && (<div className="flex w-full flex-row justify-center">
-                <Button color="minimal" data-testid="skip-step" onClick={(event) => {
-                event.preventDefault();
-                goToIndex(currentStepIndex + 1);
-            }} className="mt-8 cursor-pointer px-4 py-2 font-sans text-sm font-medium">
+            {headers[currentStepIndex]?.skipText && (
+              <div className="flex w-full flex-row justify-center">
+                <Button
+                  color="minimal"
+                  data-testid="skip-step"
+                  onClick={(event) => {
+                    event.preventDefault();
+                    goToIndex(currentStepIndex + 1);
+                  }}
+                  className="mt-8 cursor-pointer px-4 py-2 font-sans text-sm font-medium">
                   {headers[currentStepIndex]?.skipText}
                 </Button>
-              </div>)}
+              </div>
+            )}
           </div>
         </div>
       </div>
-    </div>);
+    </div>
+  );
 };
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
-    const { req, res } = context;
-    
-    const crypto = await import("crypto");
-    const session = await getServerSession({ req, res });
-    
-    if (!session?.user?.id) {
-        return { redirect: { permanent: false, destination: "/auth/login" } };
-    }
-    
-    const user = await prisma.user.findUnique({
-        where: {
-            id: session.user.id,
-        },
+  const { req, res } = context;
+
+  const crypto = await import("crypto");
+  const session = await getServerSession({ req, res });
+
+  if (!session?.user?.id) {
+    return { redirect: { permanent: false, destination: "/auth/login" } };
+  }
+
+  const user = await prisma.user.findUnique({
+    where: {
+      id: session.user.id,
+    },
+    select: {
+      id: true,
+      username: true,
+      name: true,
+      email: true,
+      bio: true,
+      avatar: true,
+      timeZone: true,
+      weekStart: true,
+      hideBranding: true,
+      theme: true,
+      brandColor: true,
+      darkBrandColor: true,
+      metadata: true,
+      timeFormat: true,
+      allowDynamicBooking: true,
+      defaultScheduleId: true,
+      completedOnboarding: true,
+      teams: {
         select: {
-            id: true,
-            username: true,
-            name: true,
-            email: true,
-            bio: true,
-            avatar: true,
-            timeZone: true,
-            weekStart: true,
-            hideBranding: true,
-            theme: true,
-            brandColor: true,
-            darkBrandColor: true,
-            metadata: true,
-            timeFormat: true,
-            allowDynamicBooking: true,
-            defaultScheduleId: true,
-            completedOnboarding: true,
-            teams: {
-                select: {
-                    accepted: true,
-                    team: {
-                        select: {
-                            id: true,
-                            name: true,
-                            logo: true,
-                        },
-                    },
-                },
+          accepted: true,
+          team: {
+            select: {
+              id: true,
+              name: true,
+              logo: true,
             },
+          },
         },
-    });
-    
-    if (!user) {
-        throw new Error("User from session not found");
-    }
-    
-    if (user.completedOnboarding) {
-        return { redirect: { permanent: false, destination: "/event-types" } };
-    }
-    
-    return {
-        props: {
-            ...(await serverSideTranslations(context.locale ?? "", ["common"])),
-            user: {
-                ...user,
-                emailMd5: crypto.createHash("md5").update(user.email).digest("hex"),
-            },
-            hasPendingInvites: user.teams.find((team) => team.accepted === false) ?? false,
-        },
-    };
+      },
+    },
+  });
+
+  if (!user) {
+    throw new Error("User from session not found");
+  }
+
+  if (user.completedOnboarding) {
+    return { redirect: { permanent: false, destination: "/event-types" } };
+  }
+
+  return {
+    props: {
+      ...(await serverSideTranslations(context.locale ?? "", ["common"])),
+      user: {
+        ...user,
+        emailMd5: crypto.createHash("md5").update(user.email).digest("hex"),
+      },
+      hasPendingInvites: user.teams.find((team) => team.accepted === false) ?? false,
+    },
+  };
 };
 
 OnboardingPage.isThemeSupported = false;

@@ -1,5 +1,5 @@
-import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 import { samlProductID, samlTenantID } from "@calcom/features/ee/sso/lib/saml";
@@ -12,31 +12,35 @@ import PageWrapper from "@components/PageWrapper";
 // This page is used to initiate the SAML authentication flow by redirecting to the SAML provider.
 // Accessible only on self-hosted Cal.com instances.
 export default function Page({ samlTenantID, samlProductID }: inferSSRProps<typeof getServerSideProps>) {
-    const router = useRouter();
-    
-    useEffect(() => {
-        if (HOSTED_CAL_FEATURES) {
-            router.push("/auth/login");
-        }
-    }, []);
-    
-    useEffect(() => {
-        // Initiate SAML authentication flow
-        signIn("saml", {
-            callbackUrl: "/",
-        }, { tenant: samlTenantID, product: samlProductID });
-    }, []);
-    
-    return null;
+  const router = useRouter();
+
+  useEffect(() => {
+    if (HOSTED_CAL_FEATURES) {
+      router.push("/auth/login");
+    }
+  }, []);
+
+  useEffect(() => {
+    // Initiate SAML authentication flow
+    signIn(
+      "saml",
+      {
+        callbackUrl: "/",
+      },
+      { tenant: samlTenantID, product: samlProductID }
+    );
+  }, []);
+
+  return null;
 }
 
 Page.PageWrapper = PageWrapper;
 
 export async function getServerSideProps() {
-    return {
-        props: {
-            samlTenantID,
-            samlProductID,
-        },
-    };
+  return {
+    props: {
+      samlTenantID,
+      samlProductID,
+    },
+  };
 }

@@ -15,24 +15,46 @@ import { UsernameTextfield } from "./UsernameTextfield";
 export const UsernameAvailability = IS_SELF_HOSTED ? UsernameTextfield : PremiumTextfield;
 
 interface UsernameAvailabilityFieldProps {
-    onSuccessMutation?: () => void;
-    onErrorMutation?: (error: TRPCClientErrorLike<AppRouter>) => void;
-    user: Pick<User, "username" | "metadata">;
+  onSuccessMutation?: () => void;
+  onErrorMutation?: (error: TRPCClientErrorLike<AppRouter>) => void;
+  user: Pick<User, "username" | "metadata">;
 }
-export const UsernameAvailabilityField = ({ onSuccessMutation, onErrorMutation, user, }: UsernameAvailabilityFieldProps) => {
-    const searchParams = useSearchParams();
-    const [currentUsernameState, setCurrentUsernameState] = useState(user.username || "");
-    const { username: usernameFromQuery, setQuery: setUsernameFromQuery } = useRouterQuery("username");
-    const { username: currentUsername, setQuery: setCurrentUsername } = searchParams["username"] && user.username === null
-        ? { username: usernameFromQuery, setQuery: setUsernameFromQuery }
-        : { username: currentUsernameState || "", setQuery: setCurrentUsernameState };
-    const formMethods = useForm({
-        defaultValues: {
-            username: currentUsername,
-        },
-    });
-    
-    return (<Controller control={formMethods.control} name="username" render={({ field: { ref, onChange, value } }) => {
-            return (<UsernameAvailability currentUsername={currentUsername} setCurrentUsername={setCurrentUsername} inputUsernameValue={value} usernameRef={ref} setInputUsernameValue={onChange} onSuccessMutation={onSuccessMutation} onErrorMutation={onErrorMutation} user={user}/>);
-        }}/>);
+export const UsernameAvailabilityField = ({
+  onSuccessMutation,
+  onErrorMutation,
+  user,
+}: UsernameAvailabilityFieldProps) => {
+  const searchParams = useSearchParams();
+  const [currentUsernameState, setCurrentUsernameState] = useState(user.username || "");
+  const { username: usernameFromQuery, setQuery: setUsernameFromQuery } = useRouterQuery("username");
+  const { username: currentUsername, setQuery: setCurrentUsername } =
+    searchParams["username"] && user.username === null
+      ? { username: usernameFromQuery, setQuery: setUsernameFromQuery }
+      : { username: currentUsernameState || "", setQuery: setCurrentUsernameState };
+  const formMethods = useForm({
+    defaultValues: {
+      username: currentUsername,
+    },
+  });
+
+  return (
+    <Controller
+      control={formMethods.control}
+      name="username"
+      render={({ field: { ref, onChange, value } }) => {
+        return (
+          <UsernameAvailability
+            currentUsername={currentUsername}
+            setCurrentUsername={setCurrentUsername}
+            inputUsernameValue={value}
+            usernameRef={ref}
+            setInputUsernameValue={onChange}
+            onSuccessMutation={onSuccessMutation}
+            onErrorMutation={onErrorMutation}
+            user={user}
+          />
+        );
+      }}
+    />
+  );
 };

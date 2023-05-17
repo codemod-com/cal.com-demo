@@ -9,19 +9,21 @@ import { getLayout } from "../../../settings/layouts/SettingsLayout";
 import SSOConfiguration from "../components/SSOConfiguration";
 
 const SAMLSSO = () => {
-    const { t } = useLocale();
-    const router = useRouter();
-    
-    useEffect(() => {
-        if (HOSTED_CAL_FEATURES) {
-            router.push("/404");
-        }
-    }, []);
-    
-    return (<div className="bg-default w-full sm:mx-0 xl:mt-0">
-      <Meta title={t("sso_configuration")} description={t("sso_configuration_description")}/>
-      <SSOConfiguration teamId={null}/>
-    </div>);
+  const { t } = useLocale();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (HOSTED_CAL_FEATURES) {
+      router.push("/404");
+    }
+  }, []);
+
+  return (
+    <div className="bg-default w-full sm:mx-0 xl:mt-0">
+      <Meta title={t("sso_configuration")} description={t("sso_configuration_description")} />
+      <SSOConfiguration teamId={null} />
+    </div>
+  );
 };
 
 SAMLSSO.getLayout = getLayout;
