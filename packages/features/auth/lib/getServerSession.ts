@@ -1,3 +1,4 @@
+import { parse } from "accept-language-parser";
 import { LRUCache } from "lru-cache";
 import type { GetServerSidePropsContext, NextApiRequest, NextApiResponse } from "next";
 import type { AuthOptions, Session } from "next-auth";
@@ -24,6 +25,25 @@ const CACHE = new LRUCache<string, Session>({ max: 1000 });
  * token has expired (30 days). This should be fine as we call `/auth/session`
  * frequently enough on the client-side to keep the session alive.
  */
+
+export const getLocale = async (req: GetServerSidePropsContext["req"]): Promise<string> => {
+  const token = await getToken({
+    req,
+  });
+
+  const tokenLocale = token?.["locale"];
+
+  if (tokenLocale !== undefined) {
+    return tokenLocale;
+  }
+
+  const acceptLanguage = req.headers["accept-language"];
+
+  const languages = acceptLanguage !== undefined ? parse(acceptLanguage) : [];
+
+  return languages[0]?.code ?? "en";
+};
+
 export async function getServerSession(options: {
   req: NextApiRequest | GetServerSidePropsContext["req"];
   res?: NextApiResponse | GetServerSidePropsContext["res"];
@@ -35,6 +55,8 @@ export async function getServerSession(options: {
     req,
     secret,
   });
+
+  console.log("AAAA", token);
 
   if (!token || !token.email || !token.sub) {
     return null;
