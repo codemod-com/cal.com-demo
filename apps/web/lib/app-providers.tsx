@@ -47,7 +47,6 @@ export type AppProps = Omit<
 
   /** Will be defined only is there was an error */
   err?: Error;
-  newLocale: string;
 };
 
 type AppPropsWithChildren = AppProps & {
@@ -69,8 +68,7 @@ const CustomI18nextProvider = (props: AppPropsWithoutNonce) => {
   /**
    * i18n should never be clubbed with other queries, so that it's caching can be managed independently.
    **/
-  console.log("HERE", "CustomI18nextProvider");
-  const clientViewerI18n = useClientViewerI18n([props.pageProps.newLocale]);
+  const clientViewerI18n = useClientViewerI18n(props.pageProps.newLocale);
   const { i18n, locale } = clientViewerI18n.data || {};
 
   const passedProps = {
