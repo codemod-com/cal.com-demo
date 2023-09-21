@@ -5,7 +5,9 @@ import { CALCOM_VERSION } from "@calcom/lib/constants";
 import { trpc } from "@calcom/trpc/react";
 
 export function useViewerI18n(locale: string) {
-  console.log("HERE", locale);
+  console.log("HERE", "useViewerI18n");
+
+  // fetch("https://example.com");
 
   return trpc.viewer.public.i18n.useQuery(
     { locale, CalComVersion: CALCOM_VERSION },
