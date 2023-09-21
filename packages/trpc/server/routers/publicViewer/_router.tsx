@@ -17,7 +17,6 @@ export const publicViewerRouter = router({
     const handler = await importHandler(namespaced("session"), () => import("./session.handler"));
     return handler(opts);
   }),
-  // here
   i18n: publicProcedure.input(i18nInputSchema).query(async (opts) => {
     const handler = await importHandler(namespaced("i18n"), () => import("./i18n.handler"));
     return handler(opts);

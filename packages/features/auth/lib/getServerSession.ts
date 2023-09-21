@@ -56,8 +56,6 @@ export async function getServerSession(options: {
     secret,
   });
 
-  console.log("AAAA", token);
-
   if (!token || !token.email || !token.sub) {
     return null;
   }

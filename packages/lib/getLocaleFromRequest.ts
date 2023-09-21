@@ -7,7 +7,6 @@ import type { Maybe } from "@calcom/trpc/server";
 
 const { i18n } = require("@calcom/config/next-i18next.config");
 
-// HERE
 export async function getLocaleFromRequest(
   req: NextApiRequest | GetServerSidePropsContext["req"]
 ): Promise<string> {

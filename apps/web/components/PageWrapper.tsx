@@ -27,8 +27,6 @@ const calFont = localFont({
 });
 
 function PageWrapper(props: AppProps) {
-  // console.log("OOOO", props.pageProps);
-
   const { Component, pageProps, err, router } = props;
   let pageStatus = "200";
 
@@ -72,7 +70,6 @@ function PageWrapper(props: AppProps) {
         }
         {...seoConfig.defaultNextSeo}
       />
-      {/* <I18nLanguageHandler locales={[props.pageProps.newLocale ?? ""]} /> */}
       <Script
         nonce={nonce}
         id="page-status"

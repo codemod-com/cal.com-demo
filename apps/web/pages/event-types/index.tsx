@@ -942,24 +942,21 @@ const Main = ({
 };
 
 type Props = Readonly<{
-  locale: string;
   newLocale: string;
 }>;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const locale = await getLocale(context.req);
+  const newLocale = await getLocale(context.req);
 
   return {
     props: {
-      locale,
-      newLocale: locale,
+      newLocale,
     },
   };
 };
 
 const EventTypesPage = (props: Props) => {
-  console.log("AAAAAAA", props.newLocale);
-  useViewerI18n(props.locale);
+  useViewerI18n(props.newLocale);
 
   const { t } = useLocale();
   const searchParams = useSearchParams();
