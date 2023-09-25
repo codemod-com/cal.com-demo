@@ -2,11 +2,11 @@ import type { GetServerSideProps } from "next";
 
 import { getLocale } from "@calcom/features/auth/lib/getServerSession";
 
-export type WithLocaleProps<T extends Record<string, any>> = T & {
+export type WithLocaleProps<T extends Record<string, unknown>> = T & {
   newLocale: string;
 };
 
-export const withLocale = <T extends Record<string, any>>(
+export const withLocale = <T extends Record<string, unknown>>(
   getServerSideProps: GetServerSideProps<T>
 ): GetServerSideProps<WithLocaleProps<T>> => {
   return async (context) => {

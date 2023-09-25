@@ -17,6 +17,7 @@ import { useFlags } from "@calcom/features/flags/hooks";
 import { MetaProvider } from "@calcom/ui";
 
 import useIsBookingPage from "@lib/hooks/useIsBookingPage";
+import type { WithLocaleProps } from "@lib/withLocale";
 import type { WithNonceProps } from "@lib/withNonce";
 
 import { useViewerI18n } from "@components/I18nLanguageHandler";
@@ -30,11 +31,12 @@ const I18nextAdapter = appWithTranslation<
 // Workaround for https://github.com/vercel/next.js/issues/8592
 export type AppProps = Omit<
   NextAppProps<
-    WithNonceProps & {
-      themeBasis?: string;
-      session: Session;
-      newLocale: string;
-    }
+    WithLocaleProps<
+      WithNonceProps<{
+        themeBasis?: string;
+        session: Session;
+      }>
+    >
   >,
   "Component"
 > & {
@@ -233,6 +235,8 @@ const AppProviders = (props: AppPropsWithChildren) => {
   // No need to have intercom on public pages - Good for Page Performance
   const isBookingPage = useIsBookingPage();
   const { pageProps, ...rest } = props;
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { _nonce, ...restPageProps } = pageProps;
   const propsWithoutNonce = {
     pageProps: {
