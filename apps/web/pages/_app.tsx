@@ -1,5 +1,6 @@
 import React from "react";
 
+import { getLocale } from "@calcom/features/auth/lib/getLocale";
 import { trpc } from "@calcom/trpc/react";
 
 import type { AppProps } from "@lib/app-providers";
@@ -13,20 +14,14 @@ function MyApp(props: AppProps) {
   return <Component {...pageProps} newLocale={props.newLocale} />;
 }
 
-const X = trpc.withTRPC(MyApp);
+const WrappedMyApp = trpc.withTRPC(MyApp);
 
-X.getInitialProps = async (ctx) => {
-  console.log(ctx.req);
-  const cookie = ctx.req?.headers["cookie"];
-  const authorization = ctx.req?.headers["authorization"];
-
-  console.log(cookie, authorization);
-
-  const newLocale = "fr";
+WrappedMyApp.getInitialProps = async (ctx) => {
+  const newLocale = await getLocale(ctx.ctx.req);
 
   return {
     newLocale,
   };
 };
 
-export default X;
+export default WrappedMyApp;
