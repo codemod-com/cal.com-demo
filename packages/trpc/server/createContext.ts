@@ -3,7 +3,7 @@ import type { GetServerSidePropsContext, NextApiRequest, NextApiResponse } from 
 import type { Session } from "next-auth";
 import type { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
-import { getLocale } from "@calcom/features/auth/lib/getServerSession";
+import { getLocale } from "@calcom/features/auth/lib/getLocale";
 import prisma from "@calcom/prisma";
 import type { SelectedCalendar, User as PrismaUser } from "@calcom/prisma/client";
 

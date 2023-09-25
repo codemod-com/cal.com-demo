@@ -1,6 +1,6 @@
 import type { GetServerSideProps } from "next";
 
-import { getLocale } from "@calcom/features/auth/lib/getServerSession";
+import { getLocale } from "@calcom/features/auth/lib/getLocale";
 
 export type WithLocaleProps<T extends Record<string, unknown>> = T & {
   newLocale: string;

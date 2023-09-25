@@ -2,7 +2,7 @@ import type { GetServerSidePropsContext } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import superjson from "superjson";
 
-import { getLocale } from "@calcom/features/auth/lib/getServerSession";
+import { getLocale } from "@calcom/features/auth/lib/getLocale";
 import { CALCOM_VERSION } from "@calcom/lib/constants";
 import { createProxySSGHelpers } from "@calcom/trpc/react/ssg";
 import { createContext } from "@calcom/trpc/server/createContext";
