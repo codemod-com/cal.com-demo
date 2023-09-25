@@ -170,7 +170,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       isRequestExpired: !resetPasswordRequest,
       requestId: id,
       csrfToken: await getCsrfToken({ req: context.req }),
-      ...(await serverSideTranslations(locale || "en", ["common"])),
+      ...(await serverSideTranslations(locale, ["common"])),
     },
   };
 }

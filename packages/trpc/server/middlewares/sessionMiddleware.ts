@@ -93,7 +93,7 @@ export async function getUserFromSession(ctx: TRPCContextInner, session: Maybe<S
   // This helps to prevent reaching the 4MB payload limit by avoiding base64 and instead passing the avatar url
 
   let locale = user?.locale;
-  if (locale === null && ctx.req) {
+  if (!locale && ctx.req) {
     locale = await getLocale(ctx.req);
   }
 
