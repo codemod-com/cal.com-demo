@@ -7,7 +7,7 @@ import { appWithTranslation } from "next-i18next";
 import { ThemeProvider } from "next-themes";
 import type { AppProps as NextAppProps, AppProps as NextJsAppProps } from "next/app";
 import type { ParsedUrlQuery } from "querystring";
-import type { ComponentProps, PropsWithChildren, ReactNode } from "react";
+import type { PropsWithChildren, ReactNode } from "react";
 
 import { OrgBrandingProvider } from "@calcom/features/ee/organizations/context/provider";
 import DynamicHelpscoutProvider from "@calcom/features/ee/support/lib/helpscout/providerDynamic";
@@ -19,7 +19,7 @@ import { MetaProvider } from "@calcom/ui";
 import useIsBookingPage from "@lib/hooks/useIsBookingPage";
 import type { WithNonceProps } from "@lib/withNonce";
 
-import { useClientViewerI18n } from "@components/I18nLanguageHandler";
+import { useViewerI18n } from "@components/I18nLanguageHandler";
 
 const I18nextAdapter = appWithTranslation<
   NextJsAppProps<SSRConfig> & {
@@ -33,7 +33,8 @@ export type AppProps = Omit<
     WithNonceProps & {
       themeBasis?: string;
       session: Session;
-    } & Record<string, unknown>
+      newLocale: string;
+    }
   >,
   "Component"
 > & {
@@ -68,8 +69,8 @@ const CustomI18nextProvider = (props: AppPropsWithoutNonce) => {
   /**
    * i18n should never be clubbed with other queries, so that it's caching can be managed independently.
    **/
-  const clientViewerI18n = useClientViewerI18n(props.pageProps.newLocale);
-  const { i18n, locale } = clientViewerI18n.data || {};
+  const clientViewerI18n = useViewerI18n(props.pageProps.newLocale);
+  const i18n = clientViewerI18n.data?.i18n;
 
   const passedProps = {
     ...props,
@@ -77,8 +78,7 @@ const CustomI18nextProvider = (props: AppPropsWithoutNonce) => {
       ...props.pageProps,
       ...i18n,
     },
-    router: locale ? { locale } : props.router,
-  } as unknown as ComponentProps<typeof I18nextAdapter>;
+  };
 
   return <I18nextAdapter {...passedProps} />;
 };

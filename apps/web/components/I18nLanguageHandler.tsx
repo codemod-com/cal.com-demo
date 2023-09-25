@@ -14,7 +14,3 @@ export function useViewerI18n(locale: string) {
     }
   );
 }
-
-export function useClientViewerI18n(locale: string) {
-  return useViewerI18n(locale);
-}

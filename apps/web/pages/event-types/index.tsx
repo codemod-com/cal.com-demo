@@ -73,7 +73,6 @@ import {
 
 import useMeQuery from "@lib/hooks/useMeQuery";
 
-import { useViewerI18n } from "@components/I18nLanguageHandler";
 import PageWrapper from "@components/PageWrapper";
 import SkeletonLoader from "@components/eventtype/SkeletonLoader";
 
@@ -945,7 +944,7 @@ type Props = Readonly<{
   newLocale: string;
 }>;
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps<Props> = async (context) => {
   const newLocale = await getLocale(context.req);
 
   return {
@@ -955,9 +954,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   };
 };
 
-const EventTypesPage = (props: Props) => {
-  useViewerI18n(props.newLocale);
-
+const EventTypesPage = () => {
   const { t } = useLocale();
   const searchParams = useSearchParams();
   const { open } = useIntercom();
