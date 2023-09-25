@@ -47,7 +47,6 @@ export type AppProps = Omit<
     getLayout?: (page: React.ReactElement, router: NextAppProps["router"]) => ReactNode;
     PageWrapper?: (props: AppProps) => JSX.Element;
   };
-  newLocale: string;
   /** Will be defined only is there was an error */
   err?: Error;
 };
@@ -71,7 +70,7 @@ const CustomI18nextProvider = (props: AppPropsWithoutNonce) => {
   /**
    * i18n should never be clubbed with other queries, so that it's caching can be managed independently.
    **/
-  const clientViewerI18n = useViewerI18n(props.newLocale);
+  const clientViewerI18n = useViewerI18n(props.pageProps.newLocale);
   const i18n = clientViewerI18n.data?.i18n;
 
   const passedProps = {
