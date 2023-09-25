@@ -18,9 +18,22 @@ function MyApp(props: AppProps) {
 MyApp.getInitialProps = async (ctx: AppContextType) => {
   const { req } = ctx.ctx;
 
-  console.log("AAAA", Boolean(req), Boolean(ctx.ctx.res));
+  let newLocale = "en";
 
-  const newLocale = req ? await getLocale(req) : "en";
+  if (req) {
+    newLocale = await getLocale(req);
+  } else if (typeof window !== "undefined") {
+    const cookies = window.document.cookie.split(";");
+
+    for (const cookie of cookies) {
+      const [name, value] = cookie.split("=");
+
+      if (name.trim() === "x-cal-locale") {
+        newLocale = value.trim();
+        break;
+      }
+    }
+  }
 
   return {
     pageProps: {
