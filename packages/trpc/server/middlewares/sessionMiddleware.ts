@@ -1,5 +1,6 @@
 import type { Session } from "next-auth";
 
+import { getLocale } from "@calcom/features/auth/lib/getServerSession";
 import { WEBAPP_URL } from "@calcom/lib/constants";
 import logger from "@calcom/lib/logger";
 import { MembershipRole } from "@calcom/prisma/enums";
@@ -91,7 +92,10 @@ export async function getUserFromSession(ctx: TRPCContextInner, session: Maybe<S
   const orgMetadata = teamMetadataSchema.parse(user.organization?.metadata || {});
   // This helps to prevent reaching the 4MB payload limit by avoiding base64 and instead passing the avatar url
 
-  const locale = user?.locale || ctx.locale;
+  let locale = user?.locale;
+  if (!locale && ctx.req) {
+    locale = await getLocale(ctx.req);
+  }
 
   const isOrgAdmin = !!user.organization?.members.length;
   // Want to reduce the amount of data being sent
