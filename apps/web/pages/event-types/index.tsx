@@ -1,6 +1,5 @@
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import type { User } from "@prisma/client";
-import type { GetServerSideProps } from "next";
 import { Trans } from "next-i18next";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -9,7 +8,6 @@ import { memo, useEffect, useState } from "react";
 import { z } from "zod";
 
 import { getLayout } from "@calcom/features/MainLayout";
-import { getLocale } from "@calcom/features/auth/lib/getServerSession";
 import { useOrgBranding } from "@calcom/features/ee/organizations/context/provider";
 import useIntercom from "@calcom/features/ee/support/lib/intercom/useIntercom";
 import { EventTypeEmbedButton, EventTypeEmbedDialog } from "@calcom/features/embed/EventTypeEmbed";
@@ -72,6 +70,7 @@ import {
 } from "@calcom/ui/components/icon";
 
 import useMeQuery from "@lib/hooks/useMeQuery";
+import { withLocale } from "@lib/withLocale";
 
 import PageWrapper from "@components/PageWrapper";
 import SkeletonLoader from "@components/eventtype/SkeletonLoader";
@@ -940,20 +939,6 @@ const Main = ({
   );
 };
 
-type Props = Readonly<{
-  newLocale: string;
-}>;
-
-export const getServerSideProps: GetServerSideProps<Props> = async (context) => {
-  const newLocale = await getLocale(context.req);
-
-  return {
-    props: {
-      newLocale,
-    },
-  };
-};
-
 const EventTypesPage = () => {
   const { t } = useLocale();
   const searchParams = useSearchParams();
@@ -1011,5 +996,11 @@ const EventTypesPage = () => {
 EventTypesPage.getLayout = getLayout;
 
 EventTypesPage.PageWrapper = PageWrapper;
+
+export const getServerSideProps = withLocale(async () => {
+  return {
+    props: {},
+  };
+});
 
 export default EventTypesPage;
