@@ -1,7 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
-import { getLocale } from "@calcom/features/auth/lib/getServerSession";
-
 import type { WithLocale } from "../../createContext";
 import type { I18nInputSchema } from "./i18n.schema";
 
@@ -13,8 +11,8 @@ type I18nOptions = {
   input: I18nInputSchema;
 };
 
-export const i18nHandler = async ({ ctx }: I18nOptions) => {
-  const locale = await getLocale(ctx.req);
+export const i18nHandler = async ({ ctx, input }: I18nOptions) => {
+  const { locale } = input;
   const { serverSideTranslations } = await import("next-i18next/serverSideTranslations");
   const i18n = await serverSideTranslations(locale, ["common", "vital"]);
 

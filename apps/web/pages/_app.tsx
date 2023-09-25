@@ -18,6 +18,8 @@ function MyApp(props: AppProps) {
 MyApp.getInitialProps = async (ctx: AppContextType) => {
   const { req } = ctx.ctx;
 
+  console.log("AAAA", Boolean(req), Boolean(ctx.ctx.res));
+
   const newLocale = req ? await getLocale(req) : "en";
 
   return {
