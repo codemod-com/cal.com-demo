@@ -24,7 +24,6 @@ import { Alert, Button, EmailField, PasswordField } from "@calcom/ui";
 import { ArrowLeft, Lock } from "@calcom/ui/components/icon";
 
 import type { inferSSRProps } from "@lib/types/inferSSRProps";
-import { withLocale } from "@lib/withLocale";
 import type { WithNonceProps } from "@lib/withNonce";
 import withNonce from "@lib/withNonce";
 
@@ -342,4 +341,4 @@ const _getServerSideProps = async function getServerSideProps(context: GetServer
 Login.isThemeSupported = false;
 Login.PageWrapper = PageWrapper;
 
-export const getServerSideProps = withLocale(withNonce(_getServerSideProps));
+export const getServerSideProps = withNonce(_getServerSideProps);

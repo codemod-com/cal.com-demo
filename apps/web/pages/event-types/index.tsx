@@ -70,7 +70,6 @@ import {
 } from "@calcom/ui/components/icon";
 
 import useMeQuery from "@lib/hooks/useMeQuery";
-import { withLocale } from "@lib/withLocale";
 
 import PageWrapper from "@components/PageWrapper";
 import SkeletonLoader from "@components/eventtype/SkeletonLoader";
@@ -996,11 +995,5 @@ const EventTypesPage = () => {
 EventTypesPage.getLayout = getLayout;
 
 EventTypesPage.PageWrapper = PageWrapper;
-
-export const getServerSideProps = withLocale(async () => {
-  return {
-    props: {},
-  };
-});
 
 export default EventTypesPage;
