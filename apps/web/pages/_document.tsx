@@ -82,12 +82,4 @@ class MyDocument extends Document<Props> {
   }
 }
 
-export const getServerSideProps = async () => {
-  return {
-    props: {
-      a: 1,
-    },
-  };
-};
-
 export default MyDocument;
