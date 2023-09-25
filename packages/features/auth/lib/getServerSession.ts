@@ -1,7 +1,7 @@
+import { decodeRawToken, getRawToken } from "auth/lib/getToken";
 import { LRUCache } from "lru-cache";
 import type { GetServerSidePropsContext, NextApiRequest, NextApiResponse } from "next";
 import type { AuthOptions, Session } from "next-auth";
-import { getToken } from "next-auth/jwt";
 
 import checkLicense from "@calcom/features/ee/common/server/checkLicense";
 import { CAL_URL } from "@calcom/lib/constants";
@@ -20,12 +20,16 @@ export async function getServerSession(options: {
 }) {
   const { req, authOptions: { secret } = {} } = options;
 
-  const token = await getToken({
+  const _token = getRawToken({
     req,
-    secret,
   });
+  if (_token === null) {
+    return null;
+  }
 
-  if (!token || !token.email || !token.sub) {
+  const token = await decodeRawToken(_token, null, secret);
+
+  if (token === null || !token.email || !token.sub) {
     return null;
   }
 

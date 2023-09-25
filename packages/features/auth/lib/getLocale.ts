@@ -1,6 +1,6 @@
 import { parse } from "accept-language-parser";
+import { decodeRawToken, getRawToken } from "auth/lib/getToken";
 import type { GetTokenParams } from "next-auth/jwt";
-import { getToken } from "next-auth/jwt";
 
 /**
  * This is a slimmed down version of the `getServerSession` function from
@@ -14,9 +14,15 @@ import { getToken } from "next-auth/jwt";
  * frequently enough on the client-side to keep the session alive.
  */
 export const getLocale = async (req: GetTokenParams["req"]): Promise<string> => {
-  const token = await getToken({
+  const _token = getRawToken({
     req,
   });
+
+  if (_token === null) {
+    return "en";
+  }
+
+  const token = await decodeRawToken(_token, null, null);
 
   const tokenLocale = token?.["locale"];
 
