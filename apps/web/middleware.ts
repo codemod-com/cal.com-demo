@@ -3,7 +3,6 @@ import { collectEvents } from "next-collect/server";
 import type { NextMiddleware } from "next/server";
 import { NextResponse } from "next/server";
 
-import { getLocale } from "@calcom/features/auth/lib/getLocale";
 import { extendEventData, nextCollectBasicSettings } from "@calcom/lib/telemetry";
 
 const middleware: NextMiddleware = async (req) => {
@@ -46,17 +45,11 @@ const middleware: NextMiddleware = async (req) => {
     requestHeaders.set("x-csp-enforce", "true");
   }
 
-  const response = NextResponse.next({
+  return NextResponse.next({
     request: {
       headers: requestHeaders,
     },
   });
-
-  const locale = await getLocale(req);
-
-  response.cookies.set("x-cal-locale", locale, { httpOnly: false });
-
-  return response;
 };
 
 const routingForms = {
