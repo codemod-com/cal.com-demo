@@ -27,7 +27,8 @@ const calFont = localFont({
 });
 
 function PageWrapper(props: AppProps) {
-  const { Component, pageProps, err, router } = props;
+  console.log("PAGEWRAPPER", props);
+  const { Component, pageProps, err, router, newLocale } = props;
   let pageStatus = "200";
 
   if (router.pathname === "/404") {
