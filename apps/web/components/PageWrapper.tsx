@@ -27,7 +27,6 @@ const calFont = localFont({
 });
 
 function PageWrapper(props: AppProps) {
-  console.log("PAGEWRAPPER", props);
   const { Component, pageProps, err, router } = props;
   let pageStatus = "200";
 

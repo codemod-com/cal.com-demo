@@ -47,6 +47,7 @@ export type AppProps = Omit<
     getLayout?: (page: React.ReactElement, router: NextAppProps["router"]) => ReactNode;
     PageWrapper?: (props: AppProps) => JSX.Element;
   };
+
   /** Will be defined only is there was an error */
   err?: Error;
 };
