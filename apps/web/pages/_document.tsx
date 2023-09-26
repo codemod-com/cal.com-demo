@@ -30,7 +30,7 @@ class MyDocument extends Document<Props> {
 
     const newLocale = ctx.req
       ? await getLocale(ctx.req as IncomingMessage & { cookies: Record<string, any> })
-      : "fr";
+      : "en";
 
     const asPath = ctx.asPath || "";
     // Use a dummy URL as default so that URL parsing works for relative URLs as well. We care about searchParams and pathname only

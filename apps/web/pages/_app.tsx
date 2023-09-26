@@ -25,7 +25,7 @@ declare global {
 MyApp.getInitialProps = async (ctx: AppContextType) => {
   const { req } = ctx.ctx;
 
-  let newLocale = "pl";
+  let newLocale = "en";
 
   if (req) {
     newLocale = await getLocale(req as IncomingMessage & { cookies: Record<string, any> });
