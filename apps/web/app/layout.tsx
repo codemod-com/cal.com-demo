@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import type { ReadonlyURLSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import Script from "next/script";
 
 import { IS_PRODUCTION } from "@calcom/lib/constants";
@@ -36,10 +38,32 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+const getInitialProps = async (pathname: string, searchParams: ReadonlyURLSearchParams) => {
+  // @TODO
+  // const { nonce } = csp(ctx.req || null, ctx.res || null);
+  // if (!process.env.CSP_POLICY) {
+  //   setHeader(ctx, "x-csp", "not-opted-in");
+  // } else if (!ctx.res?.getHeader("x-csp")) {
+  //   // If x-csp not set by gSSP, then it's initialPropsOnly
+  //   setHeader(ctx, "x-csp", "initialPropsOnly");
+  // }
+
+  const isEmbed = pathname.endsWith("/embed") || searchParams.get("embedType") !== null;
+
+  const embedColorScheme = searchParams.get("ui.color-scheme");
+  // @TODO locale will be implemented during i18n migration
+  return { isEmbed, embedColorScheme, nonce: "", locale: "en" };
+};
+
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+
+  const { locale, embedColorScheme, nonce } = await getInitialProps(pathname, searchParams);
+
   return (
-    <html>
-      <head>
+    <html lang={locale} style={embedColorScheme ? { colorScheme: embedColorScheme as string } : undefined}>
+      <head nonce={nonce}>
         {!IS_PRODUCTION && process.env.VERCEL_ENV === "preview" && (
           // eslint-disable-next-line @next/next/no-sync-scripts
           <Script
