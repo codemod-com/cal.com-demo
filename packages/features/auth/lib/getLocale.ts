@@ -18,11 +18,11 @@ export const getLocale = async (req: GetTokenParams["req"]): Promise<string> => 
     req,
   });
 
-  if (_token === null) {
+  if (_token === null || !process.env.NEXTAUTH_SECRET) {
     return "en";
   }
 
-  const token = await decodeRawToken(_token, null, null);
+  const token = await decodeRawToken(_token, process.env.NEXTAUTH_SECRET);
 
   const tokenLocale = token?.["locale"];
 

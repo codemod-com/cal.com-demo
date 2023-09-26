@@ -23,11 +23,11 @@ export async function getServerSession(options: {
   const _token = getRawToken({
     req,
   });
-  if (_token === null) {
+  if (_token === null || !secret) {
     return null;
   }
 
-  const token = await decodeRawToken(_token, null, secret);
+  const token = await decodeRawToken(_token, secret);
 
   if (token === null || !token.email || !token.sub) {
     return null;

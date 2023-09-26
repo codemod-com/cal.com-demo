@@ -1,6 +1,6 @@
 import { SessionStore } from "next-auth/core/lib/cookie";
-import type { GetTokenParams, JWT } from "next-auth/jwt";
-import { decode as decodeNextAuth } from "next-auth/jwt";
+import type { GetTokenParams, JWT, JWTDecodeParams } from "next-auth/jwt";
+import { decode } from "next-auth/jwt";
 
 export const getRawToken = (params: GetTokenParams): string | null => {
   if (!params.raw) {
@@ -20,7 +20,7 @@ export const getRawToken = (params: GetTokenParams): string | null => {
 
   const sessionStore = new SessionStore(
     { name: cookieName, options: { secure: secureCookie } },
-    { cookies: req.cookies, headers: req.headers },
+    { cookies: req.cookies },
     logger
   );
 
@@ -39,14 +39,8 @@ export const getRawToken = (params: GetTokenParams): string | null => {
 
 export const decodeRawToken = async (
   token: string,
-  _decode: GetTokenParams["decode"] | null,
-  _secret: GetTokenParams["secret"] | null
+  secret: JWTDecodeParams["secret"]
 ): Promise<JWT | null> => {
-  const secret = _secret ?? process.env.NEXTAUTH_SECRET;
-  if (!secret) {
-    return null;
-  }
-  const decode = _decode ?? decodeNextAuth;
   try {
     return await decode({ token, secret });
   } catch {
