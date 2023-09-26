@@ -1,44 +1,50 @@
-import type { Metadata } from "next";
+"use client";
+
+import type { Session } from "next-auth";
 import type { ReadonlyURLSearchParams } from "next/navigation";
 import { usePathname, useSearchParams } from "next/navigation";
 import Script from "next/script";
+import { pageDefinitions } from "pageDefinitions";
+import React from "react";
 
 import { IS_PRODUCTION } from "@calcom/lib/constants";
 
-export const metadata: Metadata = {
-  icons: {
-    icon: [
-      {
-        sizes: "32x32",
-        url: "/api/logo?type=favicon-32",
-      },
-      {
-        sizes: "16x16",
-        url: "/api/logo?type=favicon-16",
-      },
-    ],
-    apple: {
-      sizes: "180x180",
-      url: "/api/logo?type=apple-touch-icon",
-    },
-    other: [
-      {
-        url: "/safari-pinned-tab.svg",
-        rel: "mask-icon",
-      },
-    ],
-  },
-  manifest: "/site.webmanifest",
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f9fafb" },
-    { media: "(prefers-color-scheme: dark)", color: "#1C1C1C" },
-  ],
-  other: {
-    "msapplication-TileColor": "#000000",
-  },
-};
+import "../styles/globals.css";
 
-const getInitialProps = async (pathname: string, searchParams: ReadonlyURLSearchParams) => {
+// export const metadata: Metadata = {
+//   icons: {
+//     icon: [
+//       {
+//         sizes: "32x32",
+//         url: "/api/logo?type=favicon-32",
+//       },
+//       {
+//         sizes: "16x16",
+//         url: "/api/logo?type=favicon-16",
+//       },
+//     ],
+//     apple: {
+//       sizes: "180x180",
+//       url: "/api/logo?type=apple-touch-icon",
+//     },
+//     other: [
+//       {
+//         url: "/safari-pinned-tab.svg",
+//         rel: "mask-icon",
+//       },
+//     ],
+//   },
+//   manifest: "/site.webmanifest",
+//   themeColor: [
+//     { media: "(prefers-color-scheme: light)", color: "#f9fafb" },
+//     { media: "(prefers-color-scheme: dark)", color: "#1C1C1C" },
+//   ],
+//   other: {
+//     "msapplication-TileColor": "#000000",
+//   },
+// };
+
+const getInitialProps = async (pathname: string, searchParams: ReadonlyURLSearchParams | null) => {
   // @TODO
   // const { nonce } = csp(ctx.req || null, ctx.res || null);
   // if (!process.env.CSP_POLICY) {
@@ -48,9 +54,9 @@ const getInitialProps = async (pathname: string, searchParams: ReadonlyURLSearch
   //   setHeader(ctx, "x-csp", "initialPropsOnly");
   // }
 
-  const isEmbed = pathname.endsWith("/embed") || searchParams.get("embedType") !== null;
+  const isEmbed = pathname.endsWith("/embed") || (searchParams?.get("embedType") ?? null) !== null;
 
-  const embedColorScheme = searchParams.get("ui.color-scheme");
+  const embedColorScheme = searchParams?.get("ui.color-scheme");
   // @TODO locale will be implemented during i18n migration
   return { isEmbed, embedColorScheme, nonce: "", locale: "en" };
 };
@@ -59,7 +65,15 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const searchParams = useSearchParams();
   const pathname = usePathname();
 
-  const { locale, embedColorScheme, nonce } = await getInitialProps(pathname, searchParams);
+  const { locale, embedColorScheme, nonce } = await getInitialProps(pathname ?? "", searchParams);
+
+  // @ts-expect-error expecting first child to be ReactElement
+  const Component = React.Children.toArray(children)[0]?.type;
+
+  const pageDefinition = pathname ? pageDefinitions[pathname] : null;
+
+  Component.getLayout = pageDefinition?.getLayout ?? null;
+  const PageWrapper = pageDefinition?.PageWrapper ?? null;
 
   return (
     <html lang={locale} style={embedColorScheme ? { colorScheme: embedColorScheme as string } : undefined}>
@@ -72,7 +86,17 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           />
         )}
       </head>
-      <body>{children}</body>
+      <body>
+        {PageWrapper ? (
+          <PageWrapper
+            Component={Component}
+            pageProps={{ session: {} as Session, locale, embedColorScheme, nonce }}>
+            {children}
+          </PageWrapper>
+        ) : (
+          children
+        )}
+      </body>
     </html>
   );
 }
