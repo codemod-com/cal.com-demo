@@ -50,6 +50,11 @@ class MyDocument extends Document<Props> {
         lang={newLocale}
         style={embedColorScheme ? { colorScheme: embedColorScheme as string } : undefined}>
         <Head nonce={nonce}>
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `window.calNewLocale = "${newLocale}";`,
+            }}
+          />
           <link rel="apple-touch-icon" sizes="180x180" href="/api/logo?type=apple-touch-icon" />
           <link rel="icon" type="image/png" sizes="32x32" href="/api/logo?type=favicon-32" />
           <link rel="icon" type="image/png" sizes="16x16" href="/api/logo?type=favicon-16" />

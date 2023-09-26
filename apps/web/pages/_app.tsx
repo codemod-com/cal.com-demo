@@ -24,9 +24,7 @@ MyApp.getInitialProps = async (ctx: AppContextType) => {
   if (req) {
     newLocale = await getLocale(req);
   } else if (typeof window !== "undefined") {
-    const lang = window.document.getElementsByTagName("html")[0]?.lang;
-
-    console.log("lang", lang);
+    const lang = window.calNewLocale;
 
     if (lang) {
       newLocale = lang;
