@@ -29,7 +29,7 @@ class MyDocument extends Document<Props> {
 
     const newLocale = ctx.req ? await getLocale(ctx.req) : "fr";
 
-    console.log("ABCD", newLocale);
+    console.log("NEW_LOCALE_GET_INITIAL_PROPS_DOCUMENT", newLocale);
 
     const asPath = ctx.asPath || "";
     // Use a dummy URL as default so that URL parsing works for relative URLs as well. We care about searchParams and pathname only
@@ -37,11 +37,12 @@ class MyDocument extends Document<Props> {
     const isEmbed = parsedUrl.pathname.endsWith("/embed") || parsedUrl.searchParams.get("embedType") !== null;
     const embedColorScheme = parsedUrl.searchParams.get("ui.color-scheme");
     const initialProps = await Document.getInitialProps(ctx);
-    return { isEmbed, embedColorScheme, nonce, newLocale, ...initialProps };
+    return { isEmbed, embedColorScheme, nonce, ...initialProps, newLocale };
   }
 
   render() {
     const { isEmbed, embedColorScheme, newLocale } = this.props;
+    console.log("NEW_LOCALE_RENDER_DOCUMENT", newLocale);
     const nonceParsed = z.string().safeParse(this.props.nonce);
     const nonce = nonceParsed.success ? nonceParsed.data : "";
     return (
