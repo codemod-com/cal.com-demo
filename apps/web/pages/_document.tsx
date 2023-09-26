@@ -1,3 +1,4 @@
+import type { IncomingMessage } from "http";
 import type { NextPageContext } from "next";
 import type { DocumentContext, DocumentProps } from "next/document";
 import Document, { Head, Html, Main, NextScript } from "next/document";
@@ -27,9 +28,9 @@ class MyDocument extends Document<Props> {
       setHeader(ctx, "x-csp", "initialPropsOnly");
     }
 
-    const newLocale = ctx.req ? await getLocale(ctx.req) : "fr";
-
-    console.log("NEW_LOCALE_GET_INITIAL_PROPS_DOCUMENT", newLocale);
+    const newLocale = ctx.req
+      ? await getLocale(ctx.req as IncomingMessage & { cookies: Record<string, any> })
+      : "fr";
 
     const asPath = ctx.asPath || "";
     // Use a dummy URL as default so that URL parsing works for relative URLs as well. We care about searchParams and pathname only
@@ -42,7 +43,7 @@ class MyDocument extends Document<Props> {
 
   render() {
     const { isEmbed, embedColorScheme, newLocale } = this.props;
-    console.log("NEW_LOCALE_RENDER_DOCUMENT", newLocale);
+
     const nonceParsed = z.string().safeParse(this.props.nonce);
     const nonce = nonceParsed.success ? nonceParsed.data : "";
     return (
@@ -93,11 +94,5 @@ class MyDocument extends Document<Props> {
     );
   }
 }
-
-export const getServerSideProps = () => {
-  return {
-    props: {},
-  };
-};
 
 export default MyDocument;
