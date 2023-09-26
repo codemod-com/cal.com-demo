@@ -1,3 +1,4 @@
+import type { IncomingMessage } from "http";
 import type { AppContextType } from "next/dist/shared/lib/utils";
 import React from "react";
 
@@ -15,24 +16,21 @@ function MyApp(props: AppProps) {
   return <Component {...pageProps} />;
 }
 
+declare global {
+  interface Window {
+    calNewLocale: string;
+  }
+}
+
 MyApp.getInitialProps = async (ctx: AppContextType) => {
   const { req } = ctx.ctx;
 
   let newLocale = "en";
 
   if (req) {
-    newLocale = await getLocale(req);
-  } else if (typeof window !== "undefined") {
-    const cookies = window.document.cookie.split(";");
-
-    for (const cookie of cookies) {
-      const [name, value] = cookie.split("=");
-
-      if (name.trim() === "x-cal-locale") {
-        newLocale = value.trim();
-        break;
-      }
-    }
+    newLocale = await getLocale(req as IncomingMessage & { cookies: Record<string, any> });
+  } else if (typeof window !== "undefined" && window.calNewLocale) {
+    newLocale = window.calNewLocale;
   }
 
   return {
