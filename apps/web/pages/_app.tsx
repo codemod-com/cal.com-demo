@@ -1,4 +1,3 @@
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import type { AppContextType } from "next/dist/shared/lib/utils";
 import React from "react";
 
@@ -36,12 +35,9 @@ MyApp.getInitialProps = async (ctx: AppContextType) => {
     }
   }
 
-  const i18n = await serverSideTranslations(newLocale || "en", ["common"]);
-
   return {
     pageProps: {
       newLocale,
-      ...i18n,
     },
   };
 };
