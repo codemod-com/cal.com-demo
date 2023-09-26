@@ -40,8 +40,8 @@ const getPageStatus = (pathname: string) => {
   return pageStatus;
 };
 
-function PageWrapper(props: AppProps & { children?: React.ReactNode }) {
-  const { Component, pageProps, children } = props;
+function PageWrapper(props: { children?: React.ReactNode; getLayout: AppProps["Component"]["getLayout"] }) {
+  const { children } = props;
 
   const pathname = usePathname();
   const router = useRouter();
@@ -49,17 +49,16 @@ function PageWrapper(props: AppProps & { children?: React.ReactNode }) {
   // It also avoids hydration warning that says that Client has the nonce value but server has "" because browser removes nonce attributes before DOM is built
   // See https://github.com/kentcdodds/nonce-hydration-issues
   // Set "" only if server had it set otherwise keep it undefined because server has to match with client to avoid hydration error
-  const nonce = typeof window !== "undefined" ? (pageProps.nonce ? "" : undefined) : pageProps.nonce;
-
+  // @TODO
+  // const nonce = typeof window !== "undefined" ? (pageProps.nonce ? "" : undefined) : pageProps.nonce;
+  const nonce = "";
   const providerProps = {
     ...props,
-    pageProps: {
-      ...props.pageProps,
-      nonce,
-    },
+    Component: {},
+    pageProps: {},
   };
   // Use the layout defined at the page level, if available
-  const getLayout = Component.getLayout ?? ((page) => page);
+  const getLayout = props.getLayout ?? ((page) => page);
 
   // const path = router.asPath;
 
@@ -94,10 +93,7 @@ function PageWrapper(props: AppProps & { children?: React.ReactNode }) {
           --font-cal: ${calFont.style.fontFamily};
         }
       `}</style>
-      {getLayout(
-        Component.requiresLicense ? <LicenseRequired>{children}</LicenseRequired> : children,
-        router
-      )}
+      {getLayout(false ? <LicenseRequired>{children}</LicenseRequired> : children, router)}
     </AppProviders>
   );
 }

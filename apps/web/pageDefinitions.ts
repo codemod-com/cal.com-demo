@@ -1,14 +1,18 @@
+"use client";
+
 import { getLayout } from "@calcom/features/MainLayout";
 
 import type { AppProps } from "@lib/app-providers";
 
 import PageWrapper from "@components/PageWrapperAppDir";
 
+type GetLayout = AppProps["Component"]["getLayout"];
+
 export const pageDefinitions: Record<
   string,
   {
-    PageWrapper: AppProps["Component"]["PageWrapper"];
-    getLayout: AppProps["Component"]["getLayout"];
+    PageWrapper: (props: { children?: React.ReactNode; getLayout: GetLayout }) => JSX.Element;
+    getLayout: GetLayout;
   }
 > = {
   // @TODO
