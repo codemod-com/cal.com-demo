@@ -38,24 +38,26 @@ const middleware: NextMiddleware = async (req) => {
 
   const res = routingForms.handle(url);
 
-  if (res) {
-    const { nonce } = csp(
-      { url: req.url, headers: req.headers } as unknown as IncomingMessage,
-      {
-        setHeader: (name: string, value: string | number | readonly string[]) => {
-          res.headers.set(name, value.toString());
-        },
-      } as unknown as OutgoingMessage
-    );
-    if (!process.env.CSP_POLICY) {
-      res.headers.set("x-csp", "not-opted-in");
-    } else if (!res.headers.get("x-csp")) {
-      // If x-csp not set by gSSP, then it's initialPropsOnly
-      res.headers.set("x-csp", "initialPropsOnly");
-    } else {
-      res.headers.set("x-csp", nonce ?? "");
-    }
+  const { nonce } = csp(
+    { url: req.url, headers: req.headers } as unknown as IncomingMessage,
+    res
+      ? ({
+          setHeader: (name: string, value: string | number | readonly string[]) => {
+            res.headers.set(name, value.toString());
+          },
+        } as unknown as OutgoingMessage)
+      : null
+  );
+  if (!process.env.CSP_POLICY) {
+    req.headers.set("x-csp", "not-opted-in");
+  } else if (!req.headers.get("x-csp")) {
+    // If x-csp not set by gSSP, then it's initialPropsOnly
+    req.headers.set("x-csp", "initialPropsOnly");
+  } else {
+    req.headers.set("x-csp", nonce ?? "");
+  }
 
+  if (res) {
     return res;
   }
 
