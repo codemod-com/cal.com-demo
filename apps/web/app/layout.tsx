@@ -43,26 +43,19 @@ export const metadata: Metadata = {
 const getInitialProps = async (url: string) => {
   // @TODO
   const { pathname, searchParams } = new URL("http://localhost:3000/event-types-1");
-  // @TODO
-  // const { nonce } = csp(ctx.req || null, ctx.res || null);
-  // if (!process.env.CSP_POLICY) {
-  //   setHeader(ctx, "x-csp", "not-opted-in");
-  // } else if (!ctx.res?.getHeader("x-csp")) {
-  //   // If x-csp not set by gSSP, then it's initialPropsOnly
-  //   setHeader(ctx, "x-csp", "initialPropsOnly");
-  // }
 
   const isEmbed = pathname.endsWith("/embed") || (searchParams?.get("embedType") ?? null) !== null;
   const embedColorScheme = searchParams?.get("ui.color-scheme");
 
   // @TODO locale will be implemented during i18n migration
-  return { isEmbed, embedColorScheme, nonce: "", locale: "en" };
+  return { isEmbed, embedColorScheme, locale: "en" };
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const headers = nextHeaders();
   const fullUrl = headers.get("referer") ?? "";
-  const { locale, isEmbed, embedColorScheme, nonce } = await getInitialProps(fullUrl);
+  const nonce = headers.get("x-csp") ?? "";
+  const { locale, isEmbed, embedColorScheme } = await getInitialProps(fullUrl);
 
   return (
     <html lang={locale} style={embedColorScheme ? { colorScheme: embedColorScheme as string } : undefined}>
