@@ -1,6 +1,5 @@
 "use client";
 
-import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import localFont from "next/font/local";
 // import I18nLanguageHandler from "@components/I18nLanguageHandler";
@@ -9,8 +8,6 @@ import Script from "next/script";
 
 import "@calcom/embed-core/src/embed-iframe";
 import LicenseRequired from "@calcom/features/ee/common/components/LicenseRequired";
-import { IS_CALCOM, WEBAPP_URL } from "@calcom/lib/constants";
-import { buildCanonical } from "@calcom/lib/next-seo.config";
 import { trpc } from "@calcom/trpc/react";
 
 import type { AppProps } from "@lib/app-providers";
@@ -27,19 +24,6 @@ const calFont = localFont({
   variable: "--font-cal",
   preload: true,
   display: "swap",
-});
-
-export const buildMetadata = (path: string): Metadata => ({
-  viewport: "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0",
-  alternates: {
-    canonical: IS_CALCOM
-      ? buildCanonical({ path, origin: "https://cal.com" }) // cal.com & .dev
-      : buildCanonical({ path, origin: WEBAPP_URL }),
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "@calcom",
-  },
 });
 
 function PageWrapper(props: AppProps & { children: React.ReactNode }) {
