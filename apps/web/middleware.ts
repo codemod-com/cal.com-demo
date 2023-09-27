@@ -37,20 +37,25 @@ const middleware: NextMiddleware = async (req) => {
   }
 
   const res = routingForms.handle(url);
-  const { nonce } = csp(
-    (req as unknown as IncomingMessage) ?? null,
-    (res as unknown as OutgoingMessage) ?? null
-  );
-  if (!process.env.CSP_POLICY) {
-    requestHeaders.set("x-csp", "not-opted-in");
-  } else if (!res?.headers.get("x-csp")) {
-    // If x-csp not set by gSSP, then it's initialPropsOnly
-    requestHeaders.set("x-csp", "initialPropsOnly");
-  } else {
-    requestHeaders.set("x-csp", nonce ?? "");
-  }
 
   if (res) {
+    const { nonce } = csp(
+      ({ url: req.url, headers: req.headers } as unknown as IncomingMessage) ?? null,
+      ({
+        setHeader: (name: string, value: string | number | readonly string[]) => {
+          res.headers.set(name, value.toString());
+        },
+      } as unknown as OutgoingMessage) ?? null
+    );
+    if (!process.env.CSP_POLICY) {
+      res.headers.set("x-csp", "not-opted-in");
+    } else if (!res.headers.get("x-csp")) {
+      // If x-csp not set by gSSP, then it's initialPropsOnly
+      res.headers.set("x-csp", "initialPropsOnly");
+    } else {
+      res.headers.set("x-csp", nonce ?? "");
+    }
+
     return res;
   }
 
