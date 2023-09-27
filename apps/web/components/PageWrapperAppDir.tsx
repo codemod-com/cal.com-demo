@@ -91,19 +91,4 @@ function PageWrapper(props: AppProps & { children: React.ReactNode }) {
   );
 }
 
-export const withPageWrapper = (Component: AppProps["Component"]) => (props: Record<string, unknown>) => {
-  const wrapperProps = {
-    Component,
-    pageProps: { ...props },
-    // @TODO
-    router: {
-      query: "",
-    },
-  };
-
-  <PageWrapper {...wrapperProps}>
-    <Component />
-  </PageWrapper>;
-};
-
 export default trpc.withTRPC(PageWrapper);
