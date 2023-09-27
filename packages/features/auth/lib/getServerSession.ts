@@ -13,6 +13,17 @@ import prisma from "@calcom/prisma";
  */
 const CACHE = new LRUCache<string, Session>({ max: 1000 });
 
+/**
+ * This is a slimmed down version of the `getServerSession` function from
+ * `next-auth`.
+ *
+ * Instead of requiring the entire options object for NextAuth, we create
+ * a compatible session using information from the incoming token.
+ *
+ * The downside to this is that we won't refresh sessions if the users
+ * token has expired (30 days). This should be fine as we call `/auth/session`
+ * frequently enough on the client-side to keep the session alive.
+ */
 export async function getServerSession(options: {
   req: NextApiRequest | GetServerSidePropsContext["req"];
   res?: NextApiResponse | GetServerSidePropsContext["res"];

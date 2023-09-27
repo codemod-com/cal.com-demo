@@ -52,6 +52,8 @@ class MyDocument extends Document<Props> {
         style={embedColorScheme ? { colorScheme: embedColorScheme as string } : undefined}>
         <Head nonce={nonce}>
           <script
+            nonce={nonce}
+            id="newLocale"
             dangerouslySetInnerHTML={{
               __html: `window.calNewLocale = "${newLocale}";`,
             }}
