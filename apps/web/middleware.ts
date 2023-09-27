@@ -1,9 +1,12 @@
 import { get } from "@vercel/edge-config";
+import type { IncomingMessage, OutgoingMessage } from "http";
 import { collectEvents } from "next-collect/server";
 import type { NextMiddleware } from "next/server";
 import { NextResponse } from "next/server";
 
 import { extendEventData, nextCollectBasicSettings } from "@calcom/lib/telemetry";
+
+import { csp } from "@lib/csp";
 
 const middleware: NextMiddleware = async (req) => {
   const url = req.nextUrl;
@@ -34,6 +37,19 @@ const middleware: NextMiddleware = async (req) => {
   }
 
   const res = routingForms.handle(url);
+  const { nonce } = csp(
+    (req as unknown as IncomingMessage) ?? null,
+    (res as unknown as OutgoingMessage) ?? null
+  );
+  if (!process.env.CSP_POLICY) {
+    requestHeaders.set("x-csp", "not-opted-in");
+  } else if (!res?.headers.get("x-csp")) {
+    // If x-csp not set by gSSP, then it's initialPropsOnly
+    requestHeaders.set("x-csp", "initialPropsOnly");
+  } else {
+    requestHeaders.set("x-csp", nonce ?? "");
+  }
+
   if (res) {
     return res;
   }
