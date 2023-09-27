@@ -73,7 +73,7 @@ import {
 
 import useMeQuery from "@lib/hooks/useMeQuery";
 
-import PageWrapper from "@components/PageWrapper";
+import PageWrapper from "@components/PageWrapperAppDir";
 import SkeletonLoader from "@components/eventtype/SkeletonLoader";
 
 type EventTypeGroups = RouterOutputs["viewer"]["eventTypes"]["getByViewer"]["eventTypeGroups"];
@@ -998,4 +998,21 @@ EventTypesPage.getLayout = getLayout;
 
 EventTypesPage.PageWrapper = PageWrapper;
 
-export default EventTypesPage;
+export default function EventTypesPageWrapped(props) {
+  const wrapperProps = {
+    Component: {
+      getLayout,
+    },
+    pageProps: { ...props },
+    // @TODO
+    router: {
+      query: "",
+    },
+  };
+
+  return (
+    <PageWrapper {...wrapperProps}>
+      <EventTypesPage />
+    </PageWrapper>
+  );
+}

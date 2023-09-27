@@ -3,10 +3,7 @@ import { headers as nextHeaders } from "next/headers";
 import Script from "next/script";
 import React from "react";
 
-import { getLayout } from "@calcom/features/MainLayout";
 import { IS_PRODUCTION } from "@calcom/lib/constants";
-
-import PageWrapper from "@components/PageWrapperAppDir";
 
 import "../styles/globals.css";
 
@@ -44,7 +41,8 @@ export const metadata: Metadata = {
 };
 
 const getInitialProps = async (url: string) => {
-  const { pathname, searchParams } = new URL(url);
+  // @TODO
+  const { pathname, searchParams } = new URL("http://localhost:3000/event-types-1");
   // @TODO
   // const { nonce } = csp(ctx.req || null, ctx.res || null);
   // if (!process.env.CSP_POLICY) {
@@ -54,7 +52,6 @@ const getInitialProps = async (url: string) => {
   //   setHeader(ctx, "x-csp", "initialPropsOnly");
   // }
 
-  console.log(pathname, searchParams, "?parsedurl");
   const isEmbed = pathname.endsWith("/embed") || (searchParams?.get("embedType") ?? null) !== null;
   const embedColorScheme = searchParams?.get("ui.color-scheme");
 
@@ -64,15 +61,8 @@ const getInitialProps = async (url: string) => {
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const headers = nextHeaders();
-  const url = headers.get("x-url") ?? "";
-  const domain = headers.get("host") ?? "";
   const fullUrl = headers.get("referer") ?? "";
-  console.log(url, domain, fullUrl, "?url");
-
   const { locale, isEmbed, embedColorScheme, nonce } = await getInitialProps(fullUrl);
-
-  // const pageDefinition = pathname ? pageDefinitions[pathname] : null;
-  // const PageWrapper = pageDefinition?.PageWrapper ?? null;
 
   return (
     <html lang={locale} style={embedColorScheme ? { colorScheme: embedColorScheme as string } : undefined}>
@@ -99,13 +89,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
               }
             : {}
         }>
-        {PageWrapper ? (
-          <PageWrapper pageProps={{}} getLayout={getLayout}>
-            {children}
-          </PageWrapper>
-        ) : (
-          children
-        )}
+        {children}
       </body>
     </html>
   );

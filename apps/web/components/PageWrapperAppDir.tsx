@@ -1,8 +1,11 @@
 "use client";
 
+// import { DefaultSeo } from "next-seo";
 import { Inter } from "next/font/google";
 import localFont from "next/font/local";
-import { usePathname, useRouter } from "next/navigation";
+// import { seoConfig } from "@lib/config/next-seo.config";
+// import I18nLanguageHandler from "@components/I18nLanguageHandler";
+import { usePathname } from "next/navigation";
 // import Head from "next/head";
 import Script from "next/script";
 
@@ -10,10 +13,10 @@ import "@calcom/embed-core/src/embed-iframe";
 import LicenseRequired from "@calcom/features/ee/common/components/LicenseRequired";
 import { trpc } from "@calcom/trpc/react";
 
-import AppProviders from "@lib/app-providers-app-dir";
-import type { AppProps } from "@lib/app-providers-app-dir";
-
-// import I18nLanguageHandler from "@components/I18nLanguageHandler";
+// import { IS_CALCOM, WEBAPP_URL } from "@calcom/lib/constants";
+// import { buildCanonical } from "@calcom/lib/next-seo.config";
+import type { AppProps } from "@lib/app-providers";
+import AppProviders from "@lib/app-providers";
 
 export interface CalPageWrapper {
   (props?: AppProps): JSX.Element;
@@ -28,7 +31,9 @@ const calFont = localFont({
   display: "swap",
 });
 
-const getPageStatus = (pathname: string) => {
+function PageWrapper(props: AppProps & { children: React.ReactNode }) {
+  const { Component, pageProps, err, router } = props;
+  const pathname = usePathname();
   let pageStatus = "200";
 
   if (pathname === "/404") {
@@ -37,41 +42,32 @@ const getPageStatus = (pathname: string) => {
     pageStatus = "500";
   }
 
-  return pageStatus;
-};
-
-function PageWrapper(props: { children?: React.ReactNode; getLayout: AppProps["Component"]["getLayout"] }) {
-  const { children } = props;
-
-  const pathname = usePathname();
-  const router = useRouter();
   // On client side don't let nonce creep into DOM
   // It also avoids hydration warning that says that Client has the nonce value but server has "" because browser removes nonce attributes before DOM is built
   // See https://github.com/kentcdodds/nonce-hydration-issues
   // Set "" only if server had it set otherwise keep it undefined because server has to match with client to avoid hydration error
-  // @TODO
-  // const nonce = typeof window !== "undefined" ? (pageProps.nonce ? "" : undefined) : pageProps.nonce;
-  const nonce = "";
+  const nonce = typeof window !== "undefined" ? (pageProps.nonce ? "" : undefined) : pageProps.nonce;
   const providerProps = {
     ...props,
-    Component: {},
-    pageProps: {},
+    pageProps: {
+      ...props.pageProps,
+      nonce,
+    },
   };
   // Use the layout defined at the page level, if available
-  const getLayout = props.getLayout ?? ((page) => page);
+  const getLayout = Component.getLayout ?? ((page) => page);
 
   // const path = router.asPath;
 
   return (
     <AppProviders {...providerProps}>
-      {/* @TODO next/head migration */}
       {/* <Head>
         <meta
           name="viewport"
           content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
         />
-      </Head> */}
-      {/* <DefaultSeo
+      </Head>
+      <DefaultSeo
         // Set canonical to https://cal.com or self-hosted URL
         canonical={
           IS_CALCOM
@@ -79,13 +75,12 @@ function PageWrapper(props: { children?: React.ReactNode; getLayout: AppProps["C
             : buildCanonical({ path, origin: WEBAPP_URL }) // self-hosted
         }
         {...seoConfig.defaultNextSeo}
-      /> */}
-      {/* @TODO i18n migration */}
-      {/* <I18nLanguageHandler locales={props.router.locales || []} /> */}
+      />
+      <I18nLanguageHandler locales={props.router.locales || []} /> */}
       <Script
         nonce={nonce}
         id="page-status"
-        dangerouslySetInnerHTML={{ __html: `window.CalComPageStatus = '${getPageStatus(pathname ?? "")}'` }}
+        dangerouslySetInnerHTML={{ __html: `window.CalComPageStatus = '${pageStatus}'` }}
       />
       <style jsx global>{`
         :root {
@@ -93,7 +88,11 @@ function PageWrapper(props: { children?: React.ReactNode; getLayout: AppProps["C
           --font-cal: ${calFont.style.fontFamily};
         }
       `}</style>
-      {getLayout(false ? <LicenseRequired>{children}</LicenseRequired> : children, router)}
+
+      {getLayout(
+        Component.requiresLicense ? <LicenseRequired>{props.children}</LicenseRequired> : props.children,
+        router
+      )}
     </AppProviders>
   );
 }
