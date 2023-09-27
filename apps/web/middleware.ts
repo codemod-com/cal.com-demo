@@ -1,5 +1,8 @@
 import { get } from "@vercel/edge-config";
+<<<<<<< HEAD
 import type { OutgoingMessage } from "http";
+=======
+>>>>>>> a240e0160 (expand csp function argument types)
 import { collectEvents } from "next-collect/server";
 import type { NextMiddleware } from "next/server";
 import { NextResponse } from "next/server";
@@ -38,16 +41,8 @@ const middleware: NextMiddleware = async (req) => {
 
   const res = routingForms.handle(url);
 
-  const { nonce } = csp(
-    req,
-    res
-      ? ({
-          setHeader: (name: string, value: string | number | readonly string[]) => {
-            res.headers.set(name, value.toString());
-          },
-        } as unknown as OutgoingMessage)
-      : null
-  );
+  const { nonce } = csp(req, res ?? null);
+
   if (!process.env.CSP_POLICY) {
     req.headers.set("x-csp", "not-opted-in");
   } else if (!req.headers.get("x-csp")) {

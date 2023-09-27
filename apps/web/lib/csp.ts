@@ -1,5 +1,9 @@
 import type { IncomingMessage, OutgoingMessage } from "http";
+<<<<<<< HEAD
 import type { NextRequest } from "next/server";
+=======
+import type { NextRequest, NextResponse } from "next/server";
+>>>>>>> a240e0160 (expand csp function argument types)
 import { z } from "zod";
 
 import { IS_PRODUCTION } from "@calcom/lib/constants";
@@ -45,12 +49,12 @@ const isPagePathRequest = (url: URL) => {
   return !isNonPagePathPrefix.test(pathname) && !isFile.test(pathname);
 };
 
-export function csp(req: IncomingMessage | NextRequest | null, res: OutgoingMessage | null) {
+export function csp(req: IncomingMessage | NextRequest | null, res: OutgoingMessage | NextResponse | null) {
   if (!req) {
     return { nonce: undefined };
   }
-  const isReqNextRequest = "cache" in req;
-  const existingNonce = isReqNextRequest ? req.headers.get("x-nonce") : req.headers["x-nonce"];
+  const existingNonce = "cache" in req ? req.headers.get("x-nonce") : req.headers["x-nonce"];
+
   if (existingNonce) {
     const existingNoneParsed = z.string().safeParse(existingNonce);
     return { nonce: existingNoneParsed.success ? existingNoneParsed.data : "" };
@@ -71,20 +75,28 @@ export function csp(req: IncomingMessage | NextRequest | null, res: OutgoingMess
   }
   // Set x-nonce request header to be used by `getServerSideProps` or similar fns and `Document.getInitialProps` to read the nonce from
   // It is generated for all page requests but only used by pages that need CSP
-  if (isReqNextRequest) {
+
+  if ("cache" in req) {
     req.headers.set("x-nonce", nonce);
   } else {
     req.headers["x-nonce"] = nonce;
   }
 
-  const cspEnforce = isReqNextRequest ? req.headers.get("x-csp-enforce") : req.headers["x-csp-enforce"];
   if (res) {
-    res.setHeader(
-      cspEnforce === "true" ? "Content-Security-Policy" : "Content-Security-Policy-Report-Only",
-      getCspPolicy(nonce)
-        .replace(/\s{2,}/g, " ")
-        .trim()
-    );
+    const enforced =
+      "cache" in req ? req.headers.get("x-csp-enforce") === "true" : req.headers["x-csp-enforce"] === "true";
+
+    const name = enforced ? "Content-Security-Policy" : "Content-Security-Policy-Report-Only";
+
+    const value = getCspPolicy(nonce)
+      .replace(/\s{2,}/g, " ")
+      .trim();
+
+    if ("body" in res) {
+      res.headers.set(name, value);
+    } else {
+      res.setHeader(name, value);
+    }
   }
 
   return { nonce };
