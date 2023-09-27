@@ -1,8 +1,4 @@
 import { get } from "@vercel/edge-config";
-<<<<<<< HEAD
-import type { OutgoingMessage } from "http";
-=======
->>>>>>> a240e0160 (expand csp function argument types)
 import { collectEvents } from "next-collect/server";
 import type { NextMiddleware } from "next/server";
 import { NextResponse } from "next/server";

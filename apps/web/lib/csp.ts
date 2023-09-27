@@ -1,9 +1,5 @@
 import type { IncomingMessage, OutgoingMessage } from "http";
-<<<<<<< HEAD
-import type { NextRequest } from "next/server";
-=======
 import type { NextRequest, NextResponse } from "next/server";
->>>>>>> a240e0160 (expand csp function argument types)
 import { z } from "zod";
 
 import { IS_PRODUCTION } from "@calcom/lib/constants";
