@@ -1,4 +1,5 @@
 import type { IncomingMessage, OutgoingMessage } from "http";
+import type { NextRequest } from "next/server";
 import { z } from "zod";
 
 import { IS_PRODUCTION } from "@calcom/lib/constants";
@@ -44,11 +45,12 @@ const isPagePathRequest = (url: URL) => {
   return !isNonPagePathPrefix.test(pathname) && !isFile.test(pathname);
 };
 
-export function csp(req: IncomingMessage | null, res: OutgoingMessage | null) {
+export function csp(req: IncomingMessage | NextRequest | null, res: OutgoingMessage | null) {
   if (!req) {
     return { nonce: undefined };
   }
-  const existingNonce = req.headers["x-nonce"];
+  const isReqNextRequest = "cache" in req;
+  const existingNonce = isReqNextRequest ? req.headers.get("x-nonce") : req.headers["x-nonce"];
   if (existingNonce) {
     const existingNoneParsed = z.string().safeParse(existingNonce);
     return { nonce: existingNoneParsed.success ? existingNoneParsed.data : "" };
@@ -69,13 +71,16 @@ export function csp(req: IncomingMessage | null, res: OutgoingMessage | null) {
   }
   // Set x-nonce request header to be used by `getServerSideProps` or similar fns and `Document.getInitialProps` to read the nonce from
   // It is generated for all page requests but only used by pages that need CSP
-  req.headers["x-nonce"] = nonce;
+  if (isReqNextRequest) {
+    req.headers.set("x-nonce", nonce);
+  } else {
+    req.headers["x-nonce"] = nonce;
+  }
 
+  const cspEnforce = isReqNextRequest ? req.headers.get("x-csp-enforce") : req.headers["x-csp-enforce"];
   if (res) {
     res.setHeader(
-      req.headers["x-csp-enforce"] === "true"
-        ? "Content-Security-Policy"
-        : "Content-Security-Policy-Report-Only",
+      cspEnforce === "true" ? "Content-Security-Policy" : "Content-Security-Policy-Report-Only",
       getCspPolicy(nonce)
         .replace(/\s{2,}/g, " ")
         .trim()

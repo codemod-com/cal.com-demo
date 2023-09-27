@@ -1,5 +1,5 @@
 import { get } from "@vercel/edge-config";
-import type { IncomingMessage, OutgoingMessage } from "http";
+import type { OutgoingMessage } from "http";
 import { collectEvents } from "next-collect/server";
 import type { NextMiddleware } from "next/server";
 import { NextResponse } from "next/server";
@@ -39,7 +39,7 @@ const middleware: NextMiddleware = async (req) => {
   const res = routingForms.handle(url);
 
   const { nonce } = csp(
-    { url: req.url, headers: req.headers } as unknown as IncomingMessage,
+    req,
     res
       ? ({
           setHeader: (name: string, value: string | number | readonly string[]) => {
