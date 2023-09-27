@@ -1,4 +1,3 @@
-import crypto from "crypto";
 import type { IncomingMessage, OutgoingMessage } from "http";
 import { z } from "zod";
 
@@ -59,7 +58,7 @@ export function csp(req: IncomingMessage | null, res: OutgoingMessage | null) {
   }
   const CSP_POLICY = process.env.CSP_POLICY;
   const cspEnabledForInstance = CSP_POLICY;
-  const nonce = crypto.randomBytes(16).toString("base64");
+  const nonce = crypto.randomUUID();
 
   const parsedUrl = new URL(req.url, "http://base_url");
   const cspEnabledForPage = cspEnabledForInstance && isPagePathRequest(parsedUrl);
