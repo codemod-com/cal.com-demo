@@ -1,20 +1,18 @@
 "use client";
 
-// import { DefaultSeo } from "next-seo";
+import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import localFont from "next/font/local";
-// import { seoConfig } from "@lib/config/next-seo.config";
 // import I18nLanguageHandler from "@components/I18nLanguageHandler";
 import { usePathname } from "next/navigation";
-// import Head from "next/head";
 import Script from "next/script";
 
 import "@calcom/embed-core/src/embed-iframe";
 import LicenseRequired from "@calcom/features/ee/common/components/LicenseRequired";
+import { IS_CALCOM, WEBAPP_URL } from "@calcom/lib/constants";
+import { buildCanonical } from "@calcom/lib/next-seo.config";
 import { trpc } from "@calcom/trpc/react";
 
-// import { IS_CALCOM, WEBAPP_URL } from "@calcom/lib/constants";
-// import { buildCanonical } from "@calcom/lib/next-seo.config";
 import type { AppProps } from "@lib/app-providers";
 import AppProviders from "@lib/app-providers";
 
@@ -29,6 +27,19 @@ const calFont = localFont({
   variable: "--font-cal",
   preload: true,
   display: "swap",
+});
+
+export const buildMetadata = (path: string): Metadata => ({
+  viewport: "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0",
+  alternates: {
+    canonical: IS_CALCOM
+      ? buildCanonical({ path, origin: "https://cal.com" }) // cal.com & .dev
+      : buildCanonical({ path, origin: WEBAPP_URL }),
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "@calcom",
+  },
 });
 
 function PageWrapper(props: AppProps & { children: React.ReactNode }) {
@@ -57,26 +68,9 @@ function PageWrapper(props: AppProps & { children: React.ReactNode }) {
   // Use the layout defined at the page level, if available
   const getLayout = Component.getLayout ?? ((page) => page);
 
-  // const path = router.asPath;
-
   return (
     <AppProviders {...providerProps}>
-      {/* <Head>
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
-        />
-      </Head>
-      <DefaultSeo
-        // Set canonical to https://cal.com or self-hosted URL
-        canonical={
-          IS_CALCOM
-            ? buildCanonical({ path, origin: "https://cal.com" }) // cal.com & .dev
-            : buildCanonical({ path, origin: WEBAPP_URL }) // self-hosted
-        }
-        {...seoConfig.defaultNextSeo}
-      />
-      <I18nLanguageHandler locales={props.router.locales || []} /> */}
+      {/* <I18nLanguageHandler locales={props.router.locales || []} /> */}
       <Script
         nonce={nonce}
         id="page-status"
@@ -96,5 +90,20 @@ function PageWrapper(props: AppProps & { children: React.ReactNode }) {
     </AppProviders>
   );
 }
+
+export const withPageWrapper = (Component: AppProps["Component"]) => (props: Record<string, unknown>) => {
+  const wrapperProps = {
+    Component,
+    pageProps: { ...props },
+    // @TODO
+    router: {
+      query: "",
+    },
+  };
+
+  <PageWrapper {...wrapperProps}>
+    <Component />
+  </PageWrapper>;
+};
 
 export default trpc.withTRPC(PageWrapper);
