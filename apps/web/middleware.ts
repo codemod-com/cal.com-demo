@@ -40,12 +40,12 @@ const middleware: NextMiddleware = async (req) => {
 
   if (res) {
     const { nonce } = csp(
-      ({ url: req.url, headers: req.headers } as unknown as IncomingMessage) ?? null,
-      ({
+      { url: req.url, headers: req.headers } as unknown as IncomingMessage,
+      {
         setHeader: (name: string, value: string | number | readonly string[]) => {
           res.headers.set(name, value.toString());
         },
-      } as unknown as OutgoingMessage) ?? null
+      } as unknown as OutgoingMessage
     );
     if (!process.env.CSP_POLICY) {
       res.headers.set("x-csp", "not-opted-in");
