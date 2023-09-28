@@ -19,15 +19,8 @@ export const metadata: Metadata = {
 };
 
 export default function EventTypesPageWrapped(props: Record<string, unknown>) {
-  const wrapperProps = {
-    Component: {
-      getLayout,
-    },
-    pageProps: { ...props },
-  };
-
   return (
-    <PageWrapper {...wrapperProps}>
+    <PageWrapper getLayout={getLayout} requiresLicense={false} pageProps={props}>
       <EventTypesPage />
     </PageWrapper>
   );

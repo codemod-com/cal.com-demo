@@ -5,6 +5,7 @@ import localFont from "next/font/local";
 // import I18nLanguageHandler from "@components/I18nLanguageHandler";
 import { usePathname } from "next/navigation";
 import Script from "next/script";
+import type { ReactNode } from "react";
 
 import "@calcom/embed-core/src/embed-iframe";
 import LicenseRequired from "@calcom/features/ee/common/components/LicenseRequired";
@@ -26,8 +27,17 @@ const calFont = localFont({
   display: "swap",
 });
 
-function PageWrapper(props: AppProps & { children: React.ReactElement }) {
-  const { Component, pageProps } = props;
+export type PageWrapperProps = AppProps &
+  Readonly<{
+    getLayout: (page: React.ReactElement) => ReactNode;
+    children: React.ReactElement;
+    requiresLicense: boolean;
+    isThemeSupported: boolean;
+    isBookingPage: boolean;
+  }>;
+
+function PageWrapper(props: PageWrapperProps) {
+  const { pageProps } = props;
   const pathname = usePathname();
   let pageStatus = "200";
 
@@ -42,34 +52,34 @@ function PageWrapper(props: AppProps & { children: React.ReactElement }) {
   // See https://github.com/kentcdodds/nonce-hydration-issues
   // Set "" only if server had it set otherwise keep it undefined because server has to match with client to avoid hydration error
   const nonce = typeof window !== "undefined" ? (pageProps.nonce ? "" : undefined) : pageProps.nonce;
-  const providerProps = {
+  const providerProps: PageWrapperProps = {
     ...props,
     pageProps: {
       ...props.pageProps,
       nonce,
     },
   };
-  // Use the layout defined at the page level, if available
-  const getLayout = Component.getLayout ?? ((page) => page);
 
   return (
     <AppProviders {...providerProps}>
       {/* <I18nLanguageHandler locales={props.router.locales || []} /> */}
-      <Script
-        nonce={nonce}
-        id="page-status"
-        dangerouslySetInnerHTML={{ __html: `window.CalComPageStatus = '${pageStatus}'` }}
-      />
-      <style jsx global>{`
-        :root {
-          --font-inter: ${interFont.style.fontFamily};
-          --font-cal: ${calFont.style.fontFamily};
-        }
-      `}</style>
+      <>
+        <Script
+          nonce={nonce}
+          id="page-status"
+          dangerouslySetInnerHTML={{ __html: `window.CalComPageStatus = '${pageStatus}'` }}
+        />
+        <style jsx global>{`
+          :root {
+            --font-inter: ${interFont.style.fontFamily};
+            --font-cal: ${calFont.style.fontFamily};
+          }
+        `}</style>
 
-      {getLayout(
-        Component.requiresLicense ? <LicenseRequired>{props.children}</LicenseRequired> : props.children
-      )}
+        {props.getLayout(
+          props.requiresLicense ? <LicenseRequired>{props.children}</LicenseRequired> : props.children
+        )}
+      </>
     </AppProviders>
   );
 }
