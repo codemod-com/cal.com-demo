@@ -5,8 +5,9 @@ import { EventCollectionProvider } from "next-collect/client";
 import { appWithTranslation } from "next-i18next";
 import { ThemeProvider } from "next-themes";
 import type { AppProps as NextAppProps } from "next/app";
+import type { ReadonlyURLSearchParams } from "next/navigation";
 import { useSearchParams } from "next/navigation";
-import type { PropsWithChildren, ReactNode } from "react";
+import type { ReactNode } from "react";
 
 import { OrgBrandingProvider } from "@calcom/features/ee/organizations/context/provider";
 import DynamicHelpscoutProvider from "@calcom/features/ee/support/lib/helpscout/providerDynamic";
@@ -53,11 +54,6 @@ const getEmbedNamespace = (searchParams: ReadonlyURLSearchParams) => {
   return typeof window !== "undefined" ? window.getEmbedNamespace() : searchParams.get("embed") ?? null;
 };
 
-// We dont need to pass nonce to the i18n provider - this was causing x2-x3 re-renders on a hard refresh
-type AppPropsWithoutNonce = Omit<AppPropsWithChildren, "pageProps"> & {
-  pageProps: Omit<AppPropsWithChildren["pageProps"], "nonce">;
-};
-
 const AppWithTranslationHoc = appWithTranslation(({ children }) => <>{children}</>);
 
 const CustomI18nextProvider = (props: { children: React.ReactElement }) => {
@@ -89,10 +85,14 @@ const enum ThemeSupport {
   Booking = "userConfigured",
 }
 
-type CalcomThemeProps = PropsWithChildren<
-  Pick<AppProps["pageProps"], "nonce" | "themeBasis"> &
-    Pick<AppProps["Component"], "isBookingPage" | "isThemeSupported">
->;
+type CalcomThemeProps = Readonly<{
+  isBookingPage: boolean;
+  themeBasis: string | null;
+  nonce: string | undefined;
+  isThemeSupported: boolean;
+  children: React.ReactNode;
+}>;
+
 const CalcomThemeProvider = (props: CalcomThemeProps) => {
   // Use namespace of embed to ensure same namespaced embed are displayed with same theme. This allows different embeds on the same website to be themed differently
   // One such example is our Embeds Demo and Testing page at http://localhost:3100
@@ -103,7 +103,7 @@ const CalcomThemeProvider = (props: CalcomThemeProps) => {
   const isEmbedMode = typeof embedNamespace === "string";
 
   return (
-    <ThemeProvider {...getThemeProviderProps({ props, isEmbedMode, embedNamespace })}>
+    <ThemeProvider {...getThemeProviderProps({ ...props, isEmbedMode, embedNamespace })}>
       {/* Embed Mode can be detected reliably only on client side here as there can be static generated pages as well which can't determine if it's embed mode at backend */}
       {/* color-scheme makes background:transparent not work in iframe which is required by embed. */}
       {typeof window !== "undefined" && !isEmbedMode && (
@@ -145,23 +145,15 @@ const CalcomThemeProvider = (props: CalcomThemeProps) => {
  *    - t4 -> Receives storageEvent(B) & thus setItem(B) & thus fires storageEvent(B) (On Page A) - Current State(B)
  *    - ... and so on ...
  */
-function getThemeProviderProps({
-  props,
-  isEmbedMode,
-  embedNamespace,
-}: {
-  props: Omit<CalcomThemeProps, "children">;
+function getThemeProviderProps(props: {
+  isBookingPage: boolean;
+  themeBasis: string | null;
+  nonce: string;
   isEmbedMode: boolean;
   embedNamespace: string | null;
+  isThemeSupported: boolean;
 }) {
-  const isBookingPage = (() => {
-    if (typeof props.isBookingPage === "function") {
-      return props.isBookingPage({ router: props.router });
-    }
-    return props.isBookingPage;
-  })();
-
-  const themeSupport = isBookingPage
+  const themeSupport = props.isBookingPage
     ? ThemeSupport.Booking
     : // if isThemeSupported is explicitly false, we don't use theme there
     props.isThemeSupported === false
@@ -169,15 +161,14 @@ function getThemeProviderProps({
     : ThemeSupport.App;
 
   const isBookingPageThemeSupportRequired = themeSupport === ThemeSupport.Booking;
-  const themeBasis = props.themeBasis;
 
-  if ((isBookingPageThemeSupportRequired || isEmbedMode) && !themeBasis) {
+  if ((isBookingPageThemeSupportRequired || props.isEmbedMode) && !props.themeBasis) {
     console.warn(
       "`themeBasis` is required for booking page theme support. Not providing it will cause theme flicker."
     );
   }
 
-  const appearanceIdSuffix = themeBasis ? ":" + themeBasis : "";
+  const appearanceIdSuffix = props.themeBasis ? ":" + props.themeBasis : "";
   const forcedTheme = themeSupport === ThemeSupport.None ? "light" : undefined;
   let embedExplicitlySetThemeSuffix = "";
 
@@ -188,10 +179,10 @@ function getThemeProviderProps({
     }
   }
 
-  const storageKey = isEmbedMode
+  const storageKey = props.isEmbedMode
     ? // Same Namespace, Same Organizer but different themes would still work seamless and not cause theme flicker
       // Even though it's recommended to use different namespaces when you want to theme differently on the same page but if the embeds are on different pages, the problem can still arise
-      `embed-theme-${embedNamespace}${appearanceIdSuffix}${embedExplicitlySetThemeSuffix}`
+      `embed-theme-${props.embedNamespace}${appearanceIdSuffix}${embedExplicitlySetThemeSuffix}`
     : themeSupport === ThemeSupport.App
     ? "app-theme"
     : isBookingPageThemeSupportRequired
@@ -239,7 +230,7 @@ const AppProviders = (props: PageWrapperProps) => {
           <TooltipProvider>
             {/* color-scheme makes background:transparent not work which is required by embed. We need to ensure next-theme adds color-scheme to `body` instead of `html`(https://github.com/pacocoursey/next-themes/blob/main/src/index.tsx#L74). Once that's done we can enable color-scheme support */}
             <CalcomThemeProvider
-              themeBasis={props.pageProps.themeBasis}
+              themeBasis={props.themeBasis}
               nonce={props.nonce}
               isThemeSupported={props.isThemeSupported}
               isBookingPage={props.isBookingPage || isBookingPage}>

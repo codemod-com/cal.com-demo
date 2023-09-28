@@ -25,7 +25,12 @@ export default function EventTypesPageWrapped(props: Record<string, unknown>) {
   const nonce = h.get("x-nonce") ?? undefined;
 
   return (
-    <PageWrapper getLayout={getLayout} requiresLicense={false} pageProps={props} nonce={nonce}>
+    <PageWrapper
+      getLayout={getLayout}
+      requiresLicense={false}
+      pageProps={props}
+      nonce={nonce}
+      themeBasis={null}>
       <EventTypesPage />
     </PageWrapper>
   );
