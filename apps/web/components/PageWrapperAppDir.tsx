@@ -1,5 +1,6 @@
 "use client";
 
+import { SessionProvider } from "next-auth/react";
 import { Inter } from "next/font/google";
 import localFont from "next/font/local";
 // import I18nLanguageHandler from "@components/I18nLanguageHandler";
@@ -57,26 +58,28 @@ function PageWrapper(props: PageWrapperProps) {
   };
 
   return (
-    <AppProviders {...providerProps}>
-      {/* <I18nLanguageHandler locales={props.router.locales || []} /> */}
-      <>
-        <Script
-          nonce={nonce}
-          id="page-status"
-          dangerouslySetInnerHTML={{ __html: `window.CalComPageStatus = '${pageStatus}'` }}
-        />
-        <style jsx global>{`
-          :root {
-            --font-inter: ${interFont.style.fontFamily};
-            --font-cal: ${calFont.style.fontFamily};
-          }
-        `}</style>
+    <SessionProvider>
+      <AppProviders {...providerProps}>
+        {/* <I18nLanguageHandler locales={props.router.locales || []} /> */}
+        <>
+          <Script
+            nonce={nonce}
+            id="page-status"
+            dangerouslySetInnerHTML={{ __html: `window.CalComPageStatus = '${pageStatus}'` }}
+          />
+          <style jsx global>{`
+            :root {
+              --font-inter: ${interFont.style.fontFamily};
+              --font-cal: ${calFont.style.fontFamily};
+            }
+          `}</style>
 
-        {props.getLayout(
-          props.requiresLicense ? <LicenseRequired>{props.children}</LicenseRequired> : props.children
-        )}
-      </>
-    </AppProviders>
+          {props.getLayout(
+            props.requiresLicense ? <LicenseRequired>{props.children}</LicenseRequired> : props.children
+          )}
+        </>
+      </AppProviders>
+    </SessionProvider>
   );
 }
 
