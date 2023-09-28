@@ -14,7 +14,7 @@ import { buildCanonical } from "@calcom/lib/next-seo.config";
 import { trpc } from "@calcom/trpc/react";
 
 import type { AppProps } from "@lib/app-providers";
-import AppProviders from "@lib/app-providers";
+import AppProviders from "@lib/app-providers-app-dir";
 
 export interface CalPageWrapper {
   (props?: AppProps): JSX.Element;

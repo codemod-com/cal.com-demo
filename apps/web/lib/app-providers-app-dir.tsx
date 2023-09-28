@@ -2,12 +2,11 @@ import { TooltipProvider } from "@radix-ui/react-tooltip";
 import type { Session } from "next-auth";
 import { SessionProvider, useSession } from "next-auth/react";
 import { EventCollectionProvider } from "next-collect/client";
-import type { SSRConfig } from "next-i18next";
 import { appWithTranslation } from "next-i18next";
 import { ThemeProvider } from "next-themes";
-import type { AppProps as NextAppProps, AppProps as NextJsAppProps } from "next/app";
+import type { AppProps as NextAppProps } from "next/app";
 import { useSearchParams } from "next/navigation";
-import type { ComponentProps, PropsWithChildren, ReactNode } from "react";
+import type { PropsWithChildren, ReactNode } from "react";
 
 import { OrgBrandingProvider } from "@calcom/features/ee/organizations/context/provider";
 import DynamicHelpscoutProvider from "@calcom/features/ee/support/lib/helpscout/providerDynamic";
@@ -20,12 +19,6 @@ import useIsBookingPage from "@lib/hooks/useIsBookingPage";
 import type { WithNonceProps } from "@lib/withNonce";
 
 import { useClientViewerI18n } from "@components/I18nLanguageHandler";
-
-const I18nextAdapter = appWithTranslation<
-  NextJsAppProps<SSRConfig> & {
-    children: React.ReactNode;
-  }
->(({ children }) => <>{children}</>);
 
 // Workaround for https://github.com/vercel/next.js/issues/8592
 export type AppProps = Omit<
@@ -64,24 +57,26 @@ type AppPropsWithoutNonce = Omit<AppPropsWithChildren, "pageProps"> & {
   pageProps: Omit<AppPropsWithChildren["pageProps"], "nonce">;
 };
 
+const AppWithTranslationHoc = appWithTranslation(({ children }) => <>{children}</>);
+
 const CustomI18nextProvider = (props: AppPropsWithoutNonce) => {
   /**
    * i18n should never be clubbed with other queries, so that it's caching can be managed independently.
    **/
   // @TODO
-  const clientViewerI18n = useClientViewerI18n(["en", "fr"]);
-  const { i18n, locale } = clientViewerI18n.data || {};
 
-  const passedProps = {
-    ...props,
-    pageProps: {
-      ...props.pageProps,
-      ...i18n,
-    },
-    router: locale ? { locale } : props.router,
-  } as unknown as ComponentProps<typeof I18nextAdapter>;
+  const clientViewerI18n = useClientViewerI18n(["en"]);
+  const i18n = clientViewerI18n.data?.i18n;
 
-  return <I18nextAdapter {...passedProps} />;
+  if (!i18n || !i18n._nextI18Next) {
+    return null;
+  }
+
+  return (
+    <AppWithTranslationHoc pageProps={{ _nextI18Next: i18n._nextI18Next }}>
+      {props.children}
+    </AppWithTranslationHoc>
+  );
 };
 
 const enum ThemeSupport {
