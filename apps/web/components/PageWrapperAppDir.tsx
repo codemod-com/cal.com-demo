@@ -27,7 +27,7 @@ const calFont = localFont({
 });
 
 function PageWrapper(props: AppProps & { children: React.ReactElement }) {
-  const { Component, pageProps, err, router } = props;
+  const { Component, pageProps } = props;
   const pathname = usePathname();
   let pageStatus = "200";
 
