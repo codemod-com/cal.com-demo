@@ -52,7 +52,7 @@ const getInitialProps = async (url: string) => {
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const headers = nextHeaders();
-  const fullUrl = headers.get("x-pathname") ?? "";
+  const fullUrl = headers.get("x-url") ?? "";
   const nonce = headers.get("x-csp") ?? "";
   const { locale, isEmbed, embedColorScheme } = await getInitialProps(fullUrl);
 
