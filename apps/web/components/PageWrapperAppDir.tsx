@@ -10,7 +10,7 @@ import "@calcom/embed-core/src/embed-iframe";
 import LicenseRequired from "@calcom/features/ee/common/components/LicenseRequired";
 import { trpc } from "@calcom/trpc/react";
 
-import type { AppProps } from "@lib/app-providers";
+import type { AppProps } from "@lib/app-providers-app-dir";
 import AppProviders from "@lib/app-providers-app-dir";
 
 export interface CalPageWrapper {
@@ -26,7 +26,7 @@ const calFont = localFont({
   display: "swap",
 });
 
-function PageWrapper(props: AppProps & { children: React.ReactNode }) {
+function PageWrapper(props: AppProps & { children: React.ReactElement }) {
   const { Component, pageProps, err, router } = props;
   const pathname = usePathname();
   let pageStatus = "200";
@@ -68,8 +68,7 @@ function PageWrapper(props: AppProps & { children: React.ReactNode }) {
       `}</style>
 
       {getLayout(
-        Component.requiresLicense ? <LicenseRequired>{props.children}</LicenseRequired> : props.children,
-        router
+        Component.requiresLicense ? <LicenseRequired>{props.children}</LicenseRequired> : props.children
       )}
     </AppProviders>
   );

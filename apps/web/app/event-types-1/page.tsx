@@ -21,10 +21,6 @@ export default function EventTypesPageWrapped(props) {
       getLayout,
     },
     pageProps: { ...props },
-    // @TODO
-    router: {
-      query: "",
-    },
   };
 
   return (
