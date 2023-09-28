@@ -41,8 +41,7 @@ export const metadata: Metadata = {
 };
 
 const getInitialProps = async (url: string) => {
-  // @TODO
-  const { pathname, searchParams } = new URL("http://localhost:3000/event-types-1");
+  const { pathname, searchParams } = new URL(url);
 
   const isEmbed = pathname.endsWith("/embed") || (searchParams?.get("embedType") ?? null) !== null;
   const embedColorScheme = searchParams?.get("ui.color-scheme");
@@ -53,7 +52,7 @@ const getInitialProps = async (url: string) => {
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const headers = nextHeaders();
-  const fullUrl = headers.get("referer") ?? "";
+  const fullUrl = headers.get("x-url") ?? "";
   const nonce = headers.get("x-csp") ?? "";
   const { locale, isEmbed, embedColorScheme } = await getInitialProps(fullUrl);
 
