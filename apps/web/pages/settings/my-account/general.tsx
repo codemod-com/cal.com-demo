@@ -1,4 +1,4 @@
-import { useSession, signOut } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { Controller, useForm } from "react-hook-form";
 
 import { getLayout } from "@calcom/features/settings/layouts/SettingsLayout";
@@ -67,8 +67,8 @@ const GeneralView = ({ localeProp, user }: GeneralViewProps) => {
       showToast(t("settings_updated_successfully"), "success");
       await update(res);
 
-      if (res.signOutUser) {
-        await signOut({ callbackUrl: "/auth/logout" });
+      if (res.locale) {
+        window.calNewLocale = res.locale;
       }
     },
     onError: () => {

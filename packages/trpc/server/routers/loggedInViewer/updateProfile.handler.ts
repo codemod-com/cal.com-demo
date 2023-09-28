@@ -116,12 +116,6 @@ export const updateProfileHandler = async ({ ctx, input }: UpdateProfileOptions)
     signOutUser = true;
   }
 
-  const localeHasBeenChanged = data.locale && user.locale !== data.locale;
-
-  if (localeHasBeenChanged) {
-    signOutUser = true;
-  }
-
   const updatedUser = await prisma.user.update({
     where: {
       id: user.id,
