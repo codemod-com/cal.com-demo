@@ -41,6 +41,14 @@ export const metadata: Metadata = {
 };
 
 const getInitialProps = async (url: string) => {
+  // this can happen if headers from next/header are empty
+  if (url === "") {
+    return {
+      isEmbed: false,
+      embedColorScheme: null,
+      locale: "en",
+    };
+  }
   const { pathname, searchParams } = new URL(url);
 
   const isEmbed = pathname.endsWith("/embed") || (searchParams?.get("embedType") ?? null) !== null;

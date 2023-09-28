@@ -1,5 +1,6 @@
 import EventTypesPage from "@pages/event-types";
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 
 import { getLayout } from "@calcom/features/MainLayout";
 import { IS_CALCOM, WEBAPP_URL } from "@calcom/lib/constants";
@@ -19,8 +20,12 @@ export const metadata: Metadata = {
 };
 
 export default function EventTypesPageWrapped(props: Record<string, unknown>) {
+  const h = headers();
+
+  const nonce = h.get("x-nonce") ?? undefined;
+
   return (
-    <PageWrapper getLayout={getLayout} requiresLicense={false} pageProps={props}>
+    <PageWrapper getLayout={getLayout} requiresLicense={false} pageProps={props} nonce={nonce}>
       <EventTypesPage />
     </PageWrapper>
   );

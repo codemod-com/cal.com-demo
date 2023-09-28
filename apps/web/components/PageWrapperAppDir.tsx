@@ -27,17 +27,16 @@ const calFont = localFont({
   display: "swap",
 });
 
-export type PageWrapperProps = AppProps &
-  Readonly<{
-    getLayout: (page: React.ReactElement) => ReactNode;
-    children: React.ReactElement;
-    requiresLicense: boolean;
-    isThemeSupported: boolean;
-    isBookingPage: boolean;
-  }>;
+export type PageWrapperProps = Readonly<{
+  getLayout: (page: React.ReactElement) => ReactNode;
+  children: React.ReactElement;
+  requiresLicense: boolean;
+  isThemeSupported: boolean;
+  isBookingPage: boolean;
+  nonce: string | undefined;
+}>;
 
 function PageWrapper(props: PageWrapperProps) {
-  const { pageProps } = props;
   const pathname = usePathname();
   let pageStatus = "200";
 
@@ -51,13 +50,10 @@ function PageWrapper(props: PageWrapperProps) {
   // It also avoids hydration warning that says that Client has the nonce value but server has "" because browser removes nonce attributes before DOM is built
   // See https://github.com/kentcdodds/nonce-hydration-issues
   // Set "" only if server had it set otherwise keep it undefined because server has to match with client to avoid hydration error
-  const nonce = typeof window !== "undefined" ? (pageProps.nonce ? "" : undefined) : pageProps.nonce;
+  const nonce = typeof window !== "undefined" ? (props.nonce ? "" : undefined) : props.nonce;
   const providerProps: PageWrapperProps = {
     ...props,
-    pageProps: {
-      ...props.pageProps,
-      nonce,
-    },
+    nonce,
   };
 
   return (

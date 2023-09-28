@@ -231,17 +231,16 @@ const AppProviders = (props: PageWrapperProps) => {
   console.log(props, "here?");
   // No need to have intercom on public pages - Good for Page Performance
   const isBookingPage = useIsBookingPage();
-  const { pageProps } = props;
 
   const RemainingProviders = (
     <EventCollectionProvider options={{ apiPath: "/api/collect-events" }}>
-      <SessionProvider session={pageProps.session ?? undefined}>
+      <SessionProvider session={props.pageProps.session ?? undefined}>
         <CustomI18nextProvider>
           <TooltipProvider>
             {/* color-scheme makes background:transparent not work which is required by embed. We need to ensure next-theme adds color-scheme to `body` instead of `html`(https://github.com/pacocoursey/next-themes/blob/main/src/index.tsx#L74). Once that's done we can enable color-scheme support */}
             <CalcomThemeProvider
               themeBasis={props.pageProps.themeBasis}
-              nonce={props.pageProps.nonce}
+              nonce={props.nonce}
               isThemeSupported={props.isThemeSupported}
               isBookingPage={props.isBookingPage || isBookingPage}>
               <FeatureFlagsProvider>
