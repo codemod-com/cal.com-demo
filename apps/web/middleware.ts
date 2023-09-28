@@ -11,7 +11,7 @@ const middleware: NextMiddleware = async (req) => {
   const url = req.nextUrl;
   const requestHeaders = new Headers(req.headers);
 
-  requestHeaders.set("x-url", req.url);
+  requestHeaders.set("x-pathname", url.pathname);
 
   if (!url.pathname.startsWith("/api")) {
     //
@@ -49,6 +49,7 @@ const middleware: NextMiddleware = async (req) => {
   }
 
   if (res) {
+    res.headers.set("x-pathname", url.pathname);
     return res;
   }
 
