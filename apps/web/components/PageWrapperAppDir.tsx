@@ -26,8 +26,8 @@ const calFont = localFont({
   display: "swap",
 });
 
-function PageWrapper(props: AppProps & { children: React.ReactNode }) {
-  const { Component, pageProps, err, router } = props;
+function PageWrapper(props: Omit<AppProps, "router"> & { children: React.ReactNode }) {
+  const { Component, pageProps } = props;
   const pathname = usePathname();
   let pageStatus = "200";
 
@@ -69,7 +69,7 @@ function PageWrapper(props: AppProps & { children: React.ReactNode }) {
 
       {getLayout(
         Component.requiresLicense ? <LicenseRequired>{props.children}</LicenseRequired> : props.children,
-        router
+        { query: "" }
       )}
     </AppProviders>
   );
