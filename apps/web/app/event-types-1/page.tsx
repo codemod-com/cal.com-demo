@@ -1,11 +1,10 @@
+import EventTypesPage from "@pages/event-types";
 import type { ResolvingMetadata } from "next";
 
 import { getLayout } from "@calcom/features/MainLayout";
 
 import PageWrapper from "@components/PageWrapperAppDir";
 import { buildMetadata } from "@components/PageWrapperMetadata";
-
-import EventTypesPage from "./clientComponent";
 
 export const generateMetadata = async (_: unknown, resolvingMetadata: ResolvingMetadata) => {
   const resolvedMetadata = await resolvingMetadata;
