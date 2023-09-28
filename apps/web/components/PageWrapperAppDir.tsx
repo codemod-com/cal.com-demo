@@ -34,6 +34,7 @@ export type PageWrapperProps = Readonly<{
   isThemeSupported: boolean;
   isBookingPage: boolean;
   nonce: string | undefined;
+  themeBasis: string | null;
 }>;
 
 function PageWrapper(props: PageWrapperProps) {
