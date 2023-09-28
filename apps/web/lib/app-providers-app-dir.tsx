@@ -19,6 +19,7 @@ import useIsBookingPage from "@lib/hooks/useIsBookingPage";
 import type { WithNonceProps } from "@lib/withNonce";
 
 import { useClientViewerI18n } from "@components/I18nLanguageHandler";
+import type { PageWrapperProps } from "@components/PageWrapperAppDir";
 
 // Workaround for https://github.com/vercel/next.js/issues/8592
 export type AppProps = Omit<
@@ -59,7 +60,7 @@ type AppPropsWithoutNonce = Omit<AppPropsWithChildren, "pageProps"> & {
 
 const AppWithTranslationHoc = appWithTranslation(({ children }) => <>{children}</>);
 
-const CustomI18nextProvider = (props: AppPropsWithoutNonce) => {
+const CustomI18nextProvider = (props: { children: React.ReactElement }) => {
   /**
    * i18n should never be clubbed with other queries, so that it's caching can be managed independently.
    **/
@@ -89,8 +90,7 @@ const enum ThemeSupport {
 }
 
 type CalcomThemeProps = PropsWithChildren<
-  Pick<AppProps, "router"> &
-    Pick<AppProps["pageProps"], "nonce" | "themeBasis"> &
+  Pick<AppProps["pageProps"], "nonce" | "themeBasis"> &
     Pick<AppProps["Component"], "isBookingPage" | "isThemeSupported">
 >;
 const CalcomThemeProvider = (props: CalcomThemeProps) => {
@@ -227,31 +227,23 @@ function OrgBrandProvider({ children }: { children: React.ReactNode }) {
   return <OrgBrandingProvider value={{ orgBrand }}>{children}</OrgBrandingProvider>;
 }
 
-const AppProviders = (props: AppPropsWithChildren) => {
+const AppProviders = (props: PageWrapperProps) => {
   console.log(props, "here?");
   // No need to have intercom on public pages - Good for Page Performance
   const isBookingPage = useIsBookingPage();
-  const { pageProps, ...rest } = props;
-  const { _nonce, ...restPageProps } = pageProps;
-  const propsWithoutNonce = {
-    pageProps: {
-      ...restPageProps,
-    },
-    ...rest,
-  };
+  const { pageProps } = props;
 
   const RemainingProviders = (
     <EventCollectionProvider options={{ apiPath: "/api/collect-events" }}>
       <SessionProvider session={pageProps.session ?? undefined}>
-        <CustomI18nextProvider {...propsWithoutNonce}>
+        <CustomI18nextProvider>
           <TooltipProvider>
             {/* color-scheme makes background:transparent not work which is required by embed. We need to ensure next-theme adds color-scheme to `body` instead of `html`(https://github.com/pacocoursey/next-themes/blob/main/src/index.tsx#L74). Once that's done we can enable color-scheme support */}
             <CalcomThemeProvider
               themeBasis={props.pageProps.themeBasis}
               nonce={props.pageProps.nonce}
-              isThemeSupported={props.Component.isThemeSupported}
-              isBookingPage={props.Component.isBookingPage || isBookingPage}
-              router={props.router}>
+              isThemeSupported={props.isThemeSupported}
+              isBookingPage={props.isBookingPage || isBookingPage}>
               <FeatureFlagsProvider>
                 <OrgBrandProvider>
                   <MetaProvider>{props.children}</MetaProvider>
