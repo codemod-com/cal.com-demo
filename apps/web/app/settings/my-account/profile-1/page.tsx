@@ -1,7 +1,7 @@
 // This file has been sourced from: /intuita/cal.com-demo/apps/web/pages/settings/my-account/profile.tsx
 import { headers } from "next/headers";
 
-import { getLayout } from "@calcom/features/MainLayout";
+import { getLayout } from "@calcom/features/settings/layouts/SettingsLayout";
 
 import PageWrapper from "@components/PageWrapperAppDir";
 
