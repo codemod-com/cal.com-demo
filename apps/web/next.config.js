@@ -212,6 +212,8 @@ const nextConfig = {
       // by next.js will be dropped. Doesn't make much sense, but how it is
       fs: false,
       net: false,
+      // @TEMP
+      "superagent-proxy": false,
     };
 
     /**

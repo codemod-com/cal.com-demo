@@ -1,4 +1,4 @@
-import { Trans, type TFunction } from "next-i18next";
+import { type TFunction } from "next-i18next";
 
 import { APP_NAME, WEBAPP_URL } from "@calcom/lib/constants";
 
@@ -90,7 +90,7 @@ export const AdminOrganizationNotificationEmail = ({
         <>{language("hi_admin")}!</>
       </p>
       <p style={{ fontWeight: 400, lineHeight: "24px" }}>
-        <Trans i18nKey="admin_org_notification_email_body_part1" t={language} values={{ orgSlug }}>
+        <>
           An organization with slug {`"${orgSlug}"`} was created.
           <br />
           <br />
@@ -103,7 +103,7 @@ export const AdminOrganizationNotificationEmail = ({
           <br />
           <br />
           You can do it either with the A Record:
-        </Trans>
+        </>
       </p>
       {dnsTable("A", orgSlug, webappIPAddress, language)}
       <p style={{ fontWeight: 400, lineHeight: "24px" }}>

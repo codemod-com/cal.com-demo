@@ -13,11 +13,11 @@ type I18nOptions = {
 
 export const i18nHandler = async ({ input }: I18nOptions) => {
   const { locale } = input;
-  const { serverSideTranslations } = await import("next-i18next/serverSideTranslations");
-  const i18n = await serverSideTranslations(locale, ["common", "vital"]);
+  // const { serverSideTranslations } = await import("next-i18next/serverSideTranslations");
+  // const i18n = await serverSideTranslations(locale, ["common", "vital"]);
 
   return {
-    i18n,
+    i18n: null,
     locale,
   };
 };
