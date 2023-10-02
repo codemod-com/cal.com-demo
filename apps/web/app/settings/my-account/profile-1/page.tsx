@@ -1,11 +1,9 @@
-// This file has been sourced from: /intuita/cal.com-demo/apps/web/pages/settings/my-account/profile.tsx
+import Components from "@pages/settings/my-account/profile";
 import { headers } from "next/headers";
 
 import { getLayout } from "@calcom/features/settings/layouts/SettingsLayout";
 
 import PageWrapper from "@components/PageWrapperAppDir";
-
-import Components from "./components";
 
 export default function Profile(props: Record<string, unknown>) {
   const h = headers();
