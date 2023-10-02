@@ -1,10 +1,9 @@
+import Components from "@pages/settings/security/two-factor-auth";
 import { headers } from "next/headers";
 
 import { getLayout } from "@calcom/features/settings/layouts/SettingsLayout";
 
 import PageWrapper from "@components/PageWrapperAppDir";
-
-import Components from "./components";
 
 export default async function TwoFactorAuth(props: Record<string, unknown>) {
   const h = headers();

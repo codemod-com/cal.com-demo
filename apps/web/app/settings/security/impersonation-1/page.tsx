@@ -1,13 +1,11 @@
-// This file has been sourced from: /intuita/cal.com-demo/apps/web/pages/settings/security/impersonation.tsx
+import Components from "@pages/settings/security/impersonation";
 import { headers } from "next/headers";
 
 import { getLayout } from "@calcom/features/settings/layouts/SettingsLayout";
 
 import PageWrapper from "@components/PageWrapperAppDir";
 
-import Components from "./components";
-
-export default async function Impersonation(props: any) {
+export default async function Impersonation(props: Record<string, unknown>) {
   // it used SSR init
   const h = headers();
 
