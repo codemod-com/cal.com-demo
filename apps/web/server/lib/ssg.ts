@@ -1,5 +1,5 @@
 import type { GetStaticPropsContext } from "next";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+// import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import superjson from "superjson";
 
 import { CALCOM_VERSION } from "@calcom/lib/constants";
@@ -24,7 +24,7 @@ export async function ssgInit<TParams extends { locale?: string }>(opts: GetStat
   }
   const locale = isSupportedLocale ? requestedLocale : i18n.defaultLocale;
 
-  const _i18n = await serverSideTranslations(locale, ["common"]);
+  // const _i18n = await serverSideTranslations(locale, ["common"]);
 
   const ssg = createProxySSGHelpers({
     router: appRouter,
@@ -33,7 +33,7 @@ export async function ssgInit<TParams extends { locale?: string }>(opts: GetStat
       prisma,
       session: null,
       locale,
-      i18n: _i18n,
+      // i18n: _i18n,
     },
   });
 
