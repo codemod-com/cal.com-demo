@@ -63,6 +63,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const fullUrl = headers.get("x-url") ?? "";
   const nonce = headers.get("x-csp") ?? "";
   const { locale, isEmbed, embedColorScheme } = await getInitialProps(fullUrl);
+  console.log("123");
+  throw new Error("TEST");
 
   return (
     <html lang={locale} style={embedColorScheme ? { colorScheme: embedColorScheme as string } : undefined}>

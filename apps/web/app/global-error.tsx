@@ -2,9 +2,9 @@
 
 import { type NextPage } from "next";
 
-import CustomError, { type CustomErrorProps } from "./error";
+import CustomError, { type DefaultErrorProps } from "./error";
 
-export const GlobalError: NextPage<CustomErrorProps> = (props) => {
+export const GlobalError: NextPage<DefaultErrorProps> = (props) => {
   return (
     <html>
       <body>
