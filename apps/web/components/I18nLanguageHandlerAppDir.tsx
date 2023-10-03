@@ -1,10 +1,10 @@
 import { useTranslation } from "@intuita-inc/next-i18next";
+import { trpc } from "@utils/trpc";
 import { lookup } from "bcp-47-match";
 import { useSession } from "next-auth/react";
 import { useEffect } from "react";
 
 import { CALCOM_VERSION } from "@calcom/lib/constants";
-import { trpc } from "@calcom/trpc/react";
 
 function useViewerI18n(locale: string) {
   return trpc.viewer.public.i18n.useQuery(

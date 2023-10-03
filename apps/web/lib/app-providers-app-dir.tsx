@@ -1,8 +1,8 @@
+import { appWithTranslation } from "@intuita-inc/next-i18next";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
 import type { Session } from "next-auth";
 import { SessionProvider, useSession } from "next-auth/react";
 import { EventCollectionProvider } from "next-collect/client";
-import { appWithTranslation } from "next-i18next";
 import { ThemeProvider } from "next-themes";
 import type { AppProps as NextAppProps } from "next/app";
 import type { ReadonlyURLSearchParams } from "next/navigation";
@@ -19,7 +19,7 @@ import { MetaProvider } from "@calcom/ui";
 import useIsBookingPage from "@lib/hooks/useIsBookingPage";
 import type { WithNonceProps } from "@lib/withNonce";
 
-import { useClientViewerI18n } from "@components/I18nLanguageHandler";
+import { useClientViewerI18n } from "@components/I18nLanguageHandlerAppDir";
 import type { PageWrapperProps } from "@components/PageWrapperAppDir";
 
 // Workaround for https://github.com/vercel/next.js/issues/8592
@@ -44,10 +44,6 @@ export type AppProps = Omit<
   err?: Error;
 };
 
-type AppPropsWithChildren = AppProps & {
-  children: ReactNode;
-};
-
 const getEmbedNamespace = (searchParams: ReadonlyURLSearchParams) => {
   // Mostly embed query param should be available on server. Use that there.
   // Use the most reliable detection on client
@@ -64,16 +60,12 @@ const CustomI18nextProvider = (props: { children: React.ReactElement }) => {
 
   const clientViewerI18n = useClientViewerI18n(["en"]);
   const i18n = clientViewerI18n.data?.i18n;
-
+  console.log(i18n, ">>>>i18n<<<<");
   if (!i18n || !i18n._nextI18Next) {
     return null;
   }
 
-  return (
-    <AppWithTranslationHoc pageProps={{ _nextI18Next: i18n._nextI18Next }}>
-      {props.children}
-    </AppWithTranslationHoc>
-  );
+  return <AppWithTranslationHoc _nextI18Next={i18n._nextI18Next}>{props.children}</AppWithTranslationHoc>;
 };
 
 const enum ThemeSupport {

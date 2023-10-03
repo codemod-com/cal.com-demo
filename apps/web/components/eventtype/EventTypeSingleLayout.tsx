@@ -1,6 +1,6 @@
+import type { TFunction } from "@intuita-inc/next-i18next";
+import { Trans } from "@intuita-inc/next-i18next";
 import { Webhook as TbWebhook } from "lucide-react";
-import type { TFunction } from "next-i18next";
-import { Trans } from "next-i18next";
 import { useRouter } from "next/navigation";
 import type { EventTypeSetupProps, FormValues } from "pages/event-types/[type]";
 import { useMemo, useState, Suspense } from "react";

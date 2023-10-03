@@ -1,5 +1,5 @@
+import { Trans } from "@intuita-inc/next-i18next";
 import * as RadioGroup from "@radix-ui/react-radio-group";
-import { Trans } from "next-i18next";
 import Link from "next/link";
 import { useCallback, useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";

@@ -1,6 +1,6 @@
+import { Trans } from "@intuita-inc/next-i18next";
 import type { Webhook } from "@prisma/client";
 import { Webhook as TbWebhook } from "lucide-react";
-import { Trans } from "next-i18next";
 import Link from "next/link";
 import type { EventTypeSetupProps } from "pages/event-types/[type]";
 import { useState } from "react";

@@ -1,5 +1,5 @@
+import type { TFunction } from "@intuita-inc/next-i18next";
 import { randomBytes } from "crypto";
-import type { TFunction } from "next-i18next";
 
 import { sendTeamInviteEmail, sendOrganizationAutoJoinEmail } from "@calcom/emails";
 import { WEBAPP_URL } from "@calcom/lib/constants";

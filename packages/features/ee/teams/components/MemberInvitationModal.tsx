@@ -1,5 +1,5 @@
+import { Trans } from "@intuita-inc/next-i18next";
 import { BuildingIcon, PaperclipIcon, UserIcon, Users } from "lucide-react";
-import { Trans } from "next-i18next";
 import { useMemo, useState, useRef } from "react";
 import type { FormEvent } from "react";
 import { Controller, useForm } from "react-hook-form";

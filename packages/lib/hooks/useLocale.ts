@@ -1,4 +1,4 @@
-import { useTranslation } from "next-i18next";
+import { useTranslation } from "@intuita-inc/next-i18next";
 
 export const useLocale = (namespace: Parameters<typeof useTranslation>[0] = "common") => {
   const { i18n, t } = useTranslation(namespace);

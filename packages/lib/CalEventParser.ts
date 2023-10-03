@@ -1,4 +1,4 @@
-import type { TFunction } from "next-i18next";
+import type { TFunction } from "@intuita-inc/next-i18next";
 import short from "short-uuid";
 import { v5 as uuidv5 } from "uuid";
 

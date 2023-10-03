@@ -1,4 +1,4 @@
-import { Trans } from "next-i18next";
+import { Trans } from "@intuita-inc/next-i18next";
 
 import type { ChildrenEventType } from "@calcom/features/eventtypes/components/ChildrenEventTypeSelect";
 import { useLocale } from "@calcom/lib/hooks/useLocale";

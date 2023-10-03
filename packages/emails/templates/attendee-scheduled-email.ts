@@ -1,8 +1,8 @@
+import type { TFunction } from "@intuita-inc/next-i18next";
 import type { DateArray, ParticipationStatus, ParticipationRole } from "ics";
 import { createEvent } from "ics";
 // eslint-disable-next-line no-restricted-imports
 import { cloneDeep } from "lodash";
-import type { TFunction } from "next-i18next";
 import { RRule } from "rrule";
 
 import dayjs from "@calcom/dayjs";

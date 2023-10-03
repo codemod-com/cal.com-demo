@@ -1,5 +1,5 @@
+import { Trans } from "@intuita-inc/next-i18next";
 import type { InferGetServerSidePropsType } from "next";
-import { Trans } from "next-i18next";
 import Link from "next/link";
 import { useState } from "react";
 import { Toaster } from "react-hot-toast";

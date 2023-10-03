@@ -1,5 +1,5 @@
+import { Trans } from "@intuita-inc/next-i18next";
 import { useSession } from "next-auth/react";
-import { Trans } from "next-i18next";
 import type { AriaRole, ComponentType } from "react";
 import React, { Fragment, useEffect } from "react";
 

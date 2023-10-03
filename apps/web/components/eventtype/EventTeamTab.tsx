@@ -1,4 +1,4 @@
-import { Trans } from "next-i18next";
+import { Trans } from "@intuita-inc/next-i18next";
 import Link from "next/link";
 import type { EventTypeSetupProps, FormValues } from "pages/event-types/[type]";
 import { useEffect, useRef } from "react";

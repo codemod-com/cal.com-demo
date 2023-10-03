@@ -1,6 +1,6 @@
 import { faker } from "@faker-js/faker";
+import type { TFunction } from "@intuita-inc/next-i18next";
 import type { Booking, EventType, Prisma, Webhook } from "@prisma/client";
-import type { TFunction } from "next-i18next";
 
 import { BookingStatus } from "@calcom/prisma/enums";
 import type { CalendarEvent, Person, VideoCallData } from "@calcom/types/Calendar";

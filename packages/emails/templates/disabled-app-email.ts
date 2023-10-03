@@ -1,4 +1,4 @@
-import { TFunction } from "next-i18next";
+import type { TFunction } from "@intuita-inc/next-i18next";
 
 import { renderEmail } from "..";
 import BaseEmail from "./_base-email";

@@ -1,3 +1,4 @@
+import { TrpcProvider } from "@utils/Provider";
 import type { Metadata } from "next";
 import { headers as nextHeaders } from "next/headers";
 import Script from "next/script";
@@ -89,7 +90,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
               }
             : {}
         }>
-        {children}
+        <TrpcProvider>{children}</TrpcProvider>
       </body>
     </html>
   );

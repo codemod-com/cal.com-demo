@@ -1,4 +1,4 @@
-import type { TFunction } from "next-i18next";
+import type { TFunction } from "@intuita-inc/next-i18next";
 
 import { WorkflowActions } from "@calcom/prisma/enums";
 

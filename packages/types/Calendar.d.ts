@@ -1,8 +1,8 @@
+import type { TFunction } from "@intuita-inc/next-i18next";
 import type { BookingSeat, DestinationCalendar, Prisma, SelectedCalendar } from "@prisma/client";
 import type { Dayjs } from "dayjs";
 import type { calendar_v3 } from "googleapis";
 import type { Time } from "ical.js";
-import type { TFunction } from "next-i18next";
 import type z from "zod";
 
 import type { bookingResponse } from "@calcom/features/bookings/lib/getBookingResponsesSchema";

@@ -1,5 +1,5 @@
-import type { TFunction } from "next-i18next";
-import { Trans } from "next-i18next";
+import type { TFunction } from "@intuita-inc/next-i18next";
+import { Trans } from "@intuita-inc/next-i18next";
 
 import { CAL_URL } from "@calcom/lib/constants";
 

@@ -1,9 +1,9 @@
+import type { SSRConfig } from "@intuita-inc/next-i18next";
+import { appWithTranslation } from "@intuita-inc/next-i18next";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
 import type { Session } from "next-auth";
 import { SessionProvider, useSession } from "next-auth/react";
 import { EventCollectionProvider } from "next-collect/client";
-import type { SSRConfig } from "next-i18next";
-import { appWithTranslation } from "next-i18next";
 import { ThemeProvider } from "next-themes";
 import type { AppProps as NextAppProps, AppProps as NextJsAppProps } from "next/app";
 import type { ParsedUrlQuery } from "querystring";

@@ -1,6 +1,6 @@
+import type { TFunction } from "@intuita-inc/next-i18next";
 // eslint-disable-next-line no-restricted-imports
 import { cloneDeep } from "lodash";
-import type { TFunction } from "next-i18next";
 
 import type { EventNameObjectType } from "@calcom/core/event";
 import { getEventName } from "@calcom/core/event";

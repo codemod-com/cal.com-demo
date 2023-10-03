@@ -1,4 +1,4 @@
-import type { TFunction } from "next-i18next";
+import type { TFunction } from "@intuita-inc/next-i18next";
 
 import { APP_NAME, COMPANY_NAME } from "@calcom/lib/constants";
 

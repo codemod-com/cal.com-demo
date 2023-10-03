@@ -1,4 +1,4 @@
-import type { TFunction } from "next-i18next";
+import type { TFunction } from "@intuita-inc/next-i18next";
 import { Trans } from "react-i18next";
 
 import { AppStoreLocationType } from "@calcom/app-store/locations";

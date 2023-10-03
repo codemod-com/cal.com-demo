@@ -1,4 +1,4 @@
-import { Trans, type TFunction } from "next-i18next";
+import { Trans, type TFunction } from "@intuita-inc/next-i18next";
 
 import { APP_NAME, WEBAPP_URL } from "@calcom/lib/constants";
 

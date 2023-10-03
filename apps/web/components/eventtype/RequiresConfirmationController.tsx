@@ -1,6 +1,6 @@
+import { Trans } from "@intuita-inc/next-i18next";
 import * as RadioGroup from "@radix-ui/react-radio-group";
 import type { UnitTypeLongPlural } from "dayjs";
-import { Trans } from "next-i18next";
 import type { EventTypeSetup, FormValues } from "pages/event-types/[type]";
 import type { Dispatch, SetStateAction } from "react";
 import { useEffect, useState } from "react";

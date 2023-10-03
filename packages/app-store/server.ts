@@ -1,4 +1,4 @@
-import type { TFunction } from "next-i18next";
+import type { TFunction } from "@intuita-inc/next-i18next";
 
 import type { CredentialDataWithTeamName } from "@calcom/app-store/utils";
 import { defaultVideoAppCategories } from "@calcom/app-store/utils";

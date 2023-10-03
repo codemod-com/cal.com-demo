@@ -1,5 +1,5 @@
+import type { TFunction } from "@intuita-inc/next-i18next";
 import type { BookingReference, EventType } from "@prisma/client";
-import type { TFunction } from "next-i18next";
 
 import { getCalendar } from "@calcom/app-store/_utils/getCalendar";
 import { CalendarEventBuilder } from "@calcom/core/builders/CalendarEvent/builder";
