@@ -9,6 +9,7 @@ import type { ErrorProps } from "next/error";
 import React from "react";
 
 import { HttpError } from "@calcom/lib/http-error";
+import logger from "@calcom/lib/logger";
 import { redactError } from "@calcom/lib/redactError";
 
 import { ErrorPage } from "@components/error/error-page";
@@ -28,6 +29,8 @@ type CustomErrorProps = {
   statusCode?: number;
   message?: string;
 } & Omit<ErrorProps, "err" | "statusCode">;
+
+const log = logger.getSubLogger({ prefix: ["[error]"] });
 
 const CustomError: NextPage<DefaultErrorProps> = (props) => {
   const { error } = props;
@@ -49,9 +52,11 @@ const CustomError: NextPage<DefaultErrorProps> = (props) => {
     };
   }
 
-  // `error.digest` property contains an automatically generated hash of the error that can be used to match the corresponding error in server-side logs
-  console.debug(`${error?.toString() ?? JSON.stringify(error)}`);
-  console.info("errorObject: ", errorObject);
+  if (error) {
+    // `error.digest` property contains an automatically generated hash of the error that can be used to match the corresponding error in server-side logs
+    log.debug(`${error?.toString() ?? JSON.stringify(error)}`);
+    log.info("errorObject: ", errorObject);
+  }
 
   return (
     <ErrorPage statusCode={errorObject.statusCode} error={errorObject.err} message={errorObject.message} />
