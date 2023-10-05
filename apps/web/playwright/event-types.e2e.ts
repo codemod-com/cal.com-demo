@@ -26,11 +26,6 @@ test.describe("Event Types tests", () => {
     test("headers", async ({ page }) => {
       /*
      
-      <link rel="icon" type="image/png" sizes="32x32" href="/api/logo?type=favicon-32">
-      <link rel="icon" type="image/png" sizes="16x16" href="/api/logo?type=favicon-16">
-      <link rel="manifest" href="/site.webmanifest">
-      <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#000000">
-      <meta name="msapplication-TileColor" content="#ff0000">
       <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f9fafb">
       <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1C1C1C">
       */
@@ -132,25 +127,77 @@ test.describe("Event Types tests", () => {
       {
         const locator = page.locator('link[rel="apple-touch-icon"]');
 
-        const content = await locator.getAttribute("href");
+        const href = await locator.getAttribute("href");
 
-        expect(content).toEqual("/api/logo?type=apple-touch-icon");
+        expect(href).toEqual("/api/logo?type=apple-touch-icon");
       }
 
       {
         const locator = page.locator('link[sizes="32x32"]');
 
-        const content = await locator.getAttribute("href");
+        const href = await locator.getAttribute("href");
 
-        expect(content).toEqual("/api/logo?type=favicon-32");
+        expect(href).toEqual("/api/logo?type=favicon-32");
       }
 
       {
         const locator = page.locator('link[sizes="16x16"]');
 
-        const content = await locator.getAttribute("href");
+        const href = await locator.getAttribute("href");
 
-        expect(content).toEqual("/api/logo?type=favicon-16");
+        expect(href).toEqual("/api/logo?type=favicon-16");
+      }
+
+      {
+        const locator = page.locator('link[rel="manifest"]');
+
+        const href = await locator.getAttribute("href");
+
+        expect(href).toEqual("/site.webmanifest");
+      }
+
+      {
+        const locator = page.locator('link[rel="mask-icon"]');
+
+        const href = await locator.getAttribute("href");
+
+        expect(href).toEqual("/safari-pinned-tab.svg");
+
+        const color = await locator.getAttribute("color");
+
+        expect(color).toEqual("#000000");
+      }
+
+      {
+        const locator = page.locator('meta[name="msapplication-TileColor"]');
+
+        const content = await locator.getAttribute("content");
+
+        expect(content).toEqual("#ff0000");
+      }
+
+      {
+        const locator = page.locator('meta[media="(prefers-color-scheme: light)"]');
+
+        const name = await locator.getAttribute("name");
+
+        expect(name).toEqual("theme-color");
+
+        const content = await locator.getAttribute("content");
+
+        expect(content).toEqual("#f9fafb");
+      }
+
+      {
+        const locator = page.locator('meta[media="(prefers-color-scheme: dark)"]');
+
+        const name = await locator.getAttribute("name");
+
+        expect(name).toEqual("theme-color");
+
+        const content = await locator.getAttribute("content");
+
+        expect(content).toEqual("#1C1C1C");
       }
     });
 
