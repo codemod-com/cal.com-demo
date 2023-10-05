@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import type { NextSeoProps } from "next-seo";
 import { NextSeo } from "next-seo";
 import { usePathname } from "next/navigation";
@@ -23,7 +24,7 @@ export type HeadSeoProps = {
 /**
  * Build full seo tags from title, desc, canonical and url
  */
-const buildSeoMeta = (pageProps: {
+export const buildSeoMeta = (pageProps: {
   title: string;
   description: string;
   image: string;
@@ -67,15 +68,14 @@ const buildSeoMeta = (pageProps: {
   };
 };
 
-export const HeadSeo = (props: HeadSeoProps): JSX.Element => {
-  const path = usePathname();
+export const buildMetadata = (pathname: string | null, props: HeadSeoProps): NextSeoProps => {
   // The below code sets the defaultUrl for our canonical tags
   // Get the router's path
   const selfHostedOrigin = WEBSITE_URL || "https://cal.com";
   // Set the default URL to either the current URL (if self-hosted) or https://cal.com canonical URL
   const defaultUrl = IS_CALCOM
-    ? buildCanonical({ path, origin: "https://cal.com" })
-    : buildCanonical({ path, origin: selfHostedOrigin });
+    ? buildCanonical({ path: pathname, origin: "https://cal.com" })
+    : buildCanonical({ path: pathname, origin: selfHostedOrigin });
 
   const {
     title,
@@ -124,7 +124,7 @@ export const HeadSeo = (props: HeadSeoProps): JSX.Element => {
 
   // Instead of doing a blackbox deep merge which can be tricky implementation wise and need a good implementation, we should generate the object manually as we know the properties
   // Goal is to avoid big dependency
-  const seoProps: NextSeoProps = {
+  return {
     ...nextSeoProps,
     ...seoObject,
     openGraph: {
@@ -134,6 +134,26 @@ export const HeadSeo = (props: HeadSeoProps): JSX.Element => {
     },
     additionalMetaTags: [...(nextSeoProps.additionalMetaTags || [])],
   };
+};
+
+const mapNextSeoPropsToMetadata = (nextSeoProps: NextSeoProps): Metadata => {
+  return {
+    title: nextSeoProps.title,
+    description: nextSeoProps.description,
+    themeColor: nextSeoProps.themeColor,
+    robots: nextSeoProps.robotsProps, // does it work?
+    alternates: {
+      canonical: nextSeoProps.canonical,
+    },
+    // openGraph: nextSeoProps.openGraph ?? null,
+    twitter: nextSeoProps.twitter,
+  };
+};
+
+export const HeadSeo = (props: HeadSeoProps): JSX.Element => {
+  const pathname = usePathname();
+
+  const seoProps = buildMetadata(pathname, props);
 
   return <NextSeo {...seoProps} />;
 };
