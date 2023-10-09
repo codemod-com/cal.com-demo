@@ -3,20 +3,21 @@ import { expect } from "@playwright/test";
 import { test } from "../lib/fixtures";
 import { metadataCommons } from "../lib/metadata";
 
-test.describe("Event Types Metadata", () => {
+test.describe("Event Types Metadata1", () => {
   test.afterEach(async ({ users }) => {
     await users.deleteAll();
   });
 
-  test("emits proper metadata", async ({ page, users }) => {
+  test("sees proper metadata", async ({ page, users }) => {
     const user = await users.create();
     await user.apiLogin();
-    await page.goto("/event-types");
-    await page.waitForSelector('[data-testid="event-types"]');
+    await page.goto("/apps/installed");
 
-    expect(await metadataCommons.getTitle(page)).toMatch(/(Event Types|Cal\.com) \| Cal\.com/);
+    expect(await metadataCommons.getTitle(page)).toMatch(/(Installed Apps|Cal\.com) \| Cal\.com/);
 
-    expect(await metadataCommons.getCanonicalLinkHref(page)).toEqual("http://localhost:3000/event-types");
+    expect(await metadataCommons.getCanonicalLinkHref(page)).toEqual(
+      "http://localhost:3000/apps/installed/calendar"
+    );
 
     expect(await metadataCommons.getAppleTouchIconHref(page)).toEqual("/api/logo?type=apple-touch-icon");
 
@@ -52,16 +53,20 @@ test.describe("Event Types Metadata", () => {
     expect(await metadataCommons.getTwitterAuthorContent(page)).toEqual("@calcom");
 
     expect(await metadataCommons.getOgDescriptionContent(page)).toEqual(
-      "Create events to share for people to book on your calendar."
+      "Manage your installed apps or change settings"
     );
 
-    expect(await metadataCommons.getOgUrlContent(page)).toEqual("http://localhost:3000/event-types");
+    expect(await metadataCommons.getOgUrlContent(page)).toEqual(
+      "http://localhost:3000/apps/installed/calendar"
+    );
 
     expect(await metadataCommons.getOgTypeContent(page)).toEqual("website");
 
     expect(await metadataCommons.getOgSiteNameContent(page)).toEqual("Cal.com");
 
-    expect(await metadataCommons.getOgTitleContent(page)).toMatch(/(Event Types|Cal\.com) \| Cal\.com/);
+    expect(await metadataCommons.getOgTitleContent(page)).toMatch(
+      /(Installed Apps|installed_apps) \| Cal\.com/
+    );
 
     expect(
       (await metadataCommons.getOgImageContent(page))?.startsWith(
