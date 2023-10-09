@@ -25,7 +25,7 @@ test.describe("free user", () => {
     await page.goto(`/${free.username}`);
   });
 
-  test("sees proper metadata1", async ({ page }) => {
+  test("sees proper metadata", async ({ page }) => {
     {
       const locator = page.locator('meta[name="viewport"]');
 

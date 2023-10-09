@@ -5,7 +5,7 @@ import { test } from "./lib/fixtures";
 test.afterEach(({ users }) => users.deleteAll());
 
 test.describe("Change Password Test", () => {
-  test("change password metadata1", async ({ page, users }) => {
+  test("change password metadata", async ({ page, users }) => {
     const pro = await users.create();
     await pro.apiLogin();
     // Go to http://localhost:3000/settings/security
