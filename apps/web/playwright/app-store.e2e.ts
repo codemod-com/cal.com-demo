@@ -17,7 +17,7 @@ test.describe("App Store - Authed", () => {
     await expect(page.locator(`text=Connect to Apple Server`)).toBeVisible();
   });
 
-  test("sees proper metadata1", async ({ page, users }) => {
+  test("sees proper metadata", async ({ page, users }) => {
     const user = await users.create();
     await user.apiLogin();
     await page.goto("/apps/installed");
