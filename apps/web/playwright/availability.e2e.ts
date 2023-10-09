@@ -19,7 +19,7 @@ test.describe("Availablity tests", () => {
     await users.deleteAll();
   });
 
-  test("sees proper metadata1", async ({ page }) => {
+  test("sees proper metadata", async ({ page }) => {
     {
       const locator = page.locator('meta[name="viewport"]');
 
