@@ -56,6 +56,24 @@ const getTwitterSiteContent = async (page: Page): Promise<string | null> =>
 const getTwitterAuthorContent = async (page: Page): Promise<string | null> =>
   page.locator('meta[name="twitter:creator"]').getAttribute("content");
 
+const getOgDescriptionContent = async (page: Page): Promise<string | null> =>
+  page.locator('meta[property="og:description"]').getAttribute("content");
+
+const getOgUrlContent = async (page: Page): Promise<string | null> =>
+  page.locator('meta[property="og:url"]').getAttribute("content");
+
+const getOgTypeContent = async (page: Page): Promise<string | null> =>
+  page.locator('meta[property="og:type"]').getAttribute("content");
+
+const getOgSiteNameContent = async (page: Page): Promise<string | null> =>
+  page.locator('meta[property="og:site_name"]').getAttribute("content");
+
+const getOgTitleContent = async (page: Page): Promise<string | null> =>
+  page.locator('meta[property="og:title"]').getAttribute("content");
+
+const getOgImageContent = async (page: Page): Promise<string | null> =>
+  page.locator('meta[property="og:image"]').getAttribute("content");
+
 test.describe("Event Types Metadata1", () => {
   test.afterEach(async ({ users }) => {
     await users.deleteAll();
@@ -104,50 +122,20 @@ test.describe("Event Types Metadata1", () => {
 
     expect(await getTwitterAuthorContent(page)).toEqual("@calcom");
 
-    // OG TAGS
+    expect(await getOgDescriptionContent(page)).toEqual(
+      "Create events to share for people to book on your calendar."
+    );
 
-    {
-      const locator = page.locator('meta[property="og:description"]');
+    expect(await getOgUrlContent(page)).toEqual("http://localhost:3000/event-types");
 
-      await expect(locator).toHaveAttribute(
-        "content",
-        "Create events to share for people to book on your calendar."
-      );
-    }
+    expect(await getOgTypeContent(page)).toEqual("website");
 
-    {
-      const locator = page.locator('meta[property="og:url"]');
+    expect(await getOgSiteNameContent(page)).toEqual("Cal.com");
 
-      await expect(locator).toHaveAttribute("content", "http://localhost:3000/event-types");
-    }
+    expect(await getOgTitleContent(page)).toMatch(/(Event Types|Cal\.com) \| Cal\.com/);
 
-    {
-      const locator = page.locator('meta[property="og:type"]');
-
-      await expect(locator).toHaveAttribute("content", "website");
-    }
-
-    {
-      const locator = page.locator('meta[property="og:site_name"]');
-
-      await expect(locator).toHaveAttribute("content", "Cal.com");
-    }
-
-    {
-      const locator = page.locator('meta[property="og:title"]');
-
-      const content = await locator.getAttribute("content");
-
-      expect(content).toMatch(/(Event Types|Cal\.com) \| Cal\.com/);
-    }
-
-    {
-      const locator = page.locator('meta[property="og:image"]');
-      const content = await locator.getAttribute("content");
-
-      expect(content?.startsWith("http://localhost:3000/_next/image?w=1200&q=100&url=")).toBeTruthy();
-    }
-
-    // OTHER META
+    expect(
+      (await getOgImageContent(page))?.startsWith("http://localhost:3000/_next/image?w=1200&q=100&url=")
+    ).toBeTruthy();
   });
 });
