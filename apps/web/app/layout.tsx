@@ -8,6 +8,7 @@ import { IS_PRODUCTION } from "@calcom/lib/constants";
 import { prepareMetadata } from "@lib/metadata";
 
 import "../styles/globals.css";
+import { TrpcProvider } from "./_trpc/trpc-provider";
 
 export const generateMetadata = () =>
   prepareMetadata({
@@ -80,7 +81,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
               }
             : {}
         }>
-        {children}
+        <TrpcProvider>{children}</TrpcProvider>
       </body>
     </html>
   );
