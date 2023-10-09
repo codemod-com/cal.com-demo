@@ -35,7 +35,26 @@ const getRobotsContent = async (page: Page): Promise<string | null> =>
 const getTileColorContent = async (page: Page): Promise<string | null> =>
   page.locator('meta[name="msapplication-TileColor"]').getAttribute("content");
 
-const a = async (page: Page): Promise<string | null> => page.locator("").getAttribute("");
+const getLightSchemeName = async (page: Page): Promise<string | null> =>
+  page.locator('meta[media="(prefers-color-scheme: light)"]').getAttribute("name");
+
+const getLightSchemeContent = async (page: Page): Promise<string | null> =>
+  page.locator('meta[media="(prefers-color-scheme: light)"]').getAttribute("content");
+
+const getDarkSchemeName = async (page: Page): Promise<string | null> =>
+  page.locator('meta[media="(prefers-color-scheme: dark)"]').getAttribute("name");
+
+const getDarkSchemeContent = async (page: Page): Promise<string | null> =>
+  page.locator('meta[media="(prefers-color-scheme: dark)"]').getAttribute("content");
+
+const getTwitterCardContent = async (page: Page): Promise<string | null> =>
+  page.locator('meta[name="twitter:card"]').getAttribute("content");
+
+const getTwitterSiteContent = async (page: Page): Promise<string | null> =>
+  page.locator('meta[name="twitter:site"]').getAttribute("content");
+
+const getTwitterAuthorContent = async (page: Page): Promise<string | null> =>
+  page.locator('meta[name="twitter:creator"]').getAttribute("content");
 
 test.describe("Event Types Metadata1", () => {
   test.afterEach(async ({ users }) => {
@@ -49,14 +68,18 @@ test.describe("Event Types Metadata1", () => {
     await page.waitForSelector('[data-testid="event-types"]');
 
     expect(await getTitle(page)).toMatch(/(Event Types|Cal\.com) \| Cal\.com/);
+
     expect(await getCanonicalLinkHref(page)).toEqual("http://localhost:3000/event-types");
+
     expect(await getAppleTouchIconHref(page)).toEqual("/api/logo?type=apple-touch-icon");
+
     expect(await getManifestHref(page)).toEqual("/site.webmanifest");
 
     expect(await getMaskIconHref(page)).toEqual("/safari-pinned-tab.svg");
     expect(await getMaskIconColor(page)).toEqual("#000000");
 
     expect(await getLink16Href(page)).toEqual("/api/logo?type=favicon-16");
+
     expect(await getLink32Href(page)).toEqual("/api/logo?type=favicon-32");
 
     expect(await getViewportContent(page)).toEqual(
@@ -67,49 +90,19 @@ test.describe("Event Types Metadata1", () => {
 
     expect(await getTileColorContent(page)).toEqual("#ff0000");
 
-    {
-      const locator = page.locator('meta[media="(prefers-color-scheme: light)"]');
+    expect(await getLightSchemeName(page)).toEqual("theme-color");
 
-      const name = await locator.getAttribute("name");
+    expect(await getLightSchemeContent(page)).toEqual("#f9fafb");
 
-      expect(name).toEqual("theme-color");
+    expect(await getDarkSchemeName(page)).toEqual("theme-color");
 
-      const content = await locator.getAttribute("content");
+    expect(await getDarkSchemeContent(page)).toEqual("#1C1C1C");
 
-      expect(content).toEqual("#f9fafb");
-    }
+    expect(await getTwitterCardContent(page)).toEqual("summary_large_image");
 
-    {
-      const locator = page.locator('meta[media="(prefers-color-scheme: dark)"]');
+    expect(await getTwitterSiteContent(page)).toEqual("@calcom");
 
-      const name = await locator.getAttribute("name");
-
-      expect(name).toEqual("theme-color");
-
-      const content = await locator.getAttribute("content");
-
-      expect(content).toEqual("#1C1C1C");
-    }
-
-    // TWITTER meta
-
-    {
-      const locator = page.locator('meta[name="twitter:card"]');
-
-      await expect(locator).toHaveAttribute("content", "summary_large_image");
-    }
-
-    {
-      const locator = page.locator('meta[name="twitter:site"]');
-
-      await expect(locator).toHaveAttribute("content", "@calcom");
-    }
-
-    {
-      const locator = page.locator('meta[name="twitter:creator"]');
-
-      await expect(locator).toHaveAttribute("content", "@calcom");
-    }
+    expect(await getTwitterAuthorContent(page)).toEqual("@calcom");
 
     // OG TAGS
 
