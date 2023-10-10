@@ -1,7 +1,7 @@
 import { AB_TEST_BUCKET_PROBABILITY } from "@calcom/lib/constants";
 
 const cryptoRandom = () => {
-  return crypto.getRandomValues(new Uint32Array(1))[0] / (0xffffffff + 1);
+  return crypto.getRandomValues(new Uint8Array(1))[0] / 0xff;
 };
 
 export const getBucket = () => {
