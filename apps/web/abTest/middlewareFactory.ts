@@ -2,8 +2,7 @@ import { get } from "@vercel/edge-config";
 import { getBucket } from "abTest/utils";
 import type { NextFetchEvent, NextMiddleware, NextRequest } from "next/server";
 import { NextResponse } from "next/server";
-
-type Bucket = (typeof BUCKETS)[number];
+import z from "zod";
 
 const BUCKETS = ["future", "legacy"] as const;
 
@@ -15,6 +14,8 @@ const ROUTES = [
     featureFlagName: "isABTestEnabledEventTypes",
   },
 ] as const;
+
+const bucketSchema = z.union([z.literal("legacy"), z.literal("future")]);
 
 export const ABTestMiddlewareFactory =
   (next: NextMiddleware): NextMiddleware =>
@@ -33,12 +34,13 @@ export const ABTestMiddlewareFactory =
       return next(req, event);
     }
 
-    const bucket = req.cookies.get(route.cookie)?.value as Bucket | undefined;
+    const parsedBucket = bucketSchema.safeParse(req.cookies.get(route.cookie)?.value);
 
-    if (!bucket || !route.buckets.includes(bucket)) {
+    if (!parsedBucket.success || !route.buckets.includes(parsedBucket.data)) {
       return next(req, event);
     }
 
+    const bucket = parsedBucket.data;
     const bucketUrlPrefix = bucket === "future" ? "future" : "";
 
     const url = req.nextUrl.clone();
