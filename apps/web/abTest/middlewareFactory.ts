@@ -36,20 +36,25 @@ export const ABTestMiddlewareFactory =
 
     const parsedBucket = bucketSchema.safeParse(req.cookies.get(route.cookie)?.value);
 
-    if (!parsedBucket.success || !route.buckets.includes(parsedBucket.data)) {
-      return next(req, event);
+    const bucketCookieExists = parsedBucket.success;
+
+    if (!bucketCookieExists) {
+      const res = NextResponse.next();
+      res.cookies.set(route.cookie, getBucket());
+      return res;
     }
 
     const bucket = parsedBucket.data;
-    const bucketUrlPrefix = bucket === "future" ? "future" : "";
+
+    if (!route.buckets.includes(bucket)) {
+      return next(req, event);
+    }
+
+    const bucketUrlPrefix = bucketCookieExists && bucket === "future" ? "future" : "";
 
     const url = req.nextUrl.clone();
-    url.pathname = `${bucketUrlPrefix}/${pathname}/`;
+    url.pathname = `${bucketUrlPrefix}${pathname}/`;
     const res = NextResponse.rewrite(url);
-
-    if (bucket === undefined) {
-      res.cookies.set(route.cookie, getBucket());
-    }
 
     return res;
   };
