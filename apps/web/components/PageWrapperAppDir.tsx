@@ -1,5 +1,6 @@
 "use client";
 
+import type { SSRConfig } from "next-i18next";
 import { Inter } from "next/font/google";
 import localFont from "next/font/local";
 // import I18nLanguageHandler from "@components/I18nLanguageHandler";
@@ -35,6 +36,7 @@ export type PageWrapperProps = Readonly<{
   isBookingPage: boolean;
   nonce: string | undefined;
   themeBasis: string | null;
+  i18n?: SSRConfig;
 }>;
 
 function PageWrapper(props: PageWrapperProps) {
@@ -57,6 +59,8 @@ function PageWrapper(props: PageWrapperProps) {
     nonce,
   };
 
+  const getLayout: (page: React.ReactElement) => ReactNode = props.getLayout ?? ((page) => page);
+
   return (
     <AppProviders {...providerProps}>
       {/* <I18nLanguageHandler locales={props.router.locales || []} /> */}
@@ -73,7 +77,7 @@ function PageWrapper(props: PageWrapperProps) {
           }
         `}</style>
 
-        {props.getLayout(
+        {getLayout(
           props.requiresLicense ? <LicenseRequired>{props.children}</LicenseRequired> : props.children
         )}
       </>

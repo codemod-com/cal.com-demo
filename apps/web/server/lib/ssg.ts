@@ -1,11 +1,12 @@
 import type { GetStaticPropsContext } from "next";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import superjson from "superjson";
 
 import { CALCOM_VERSION } from "@calcom/lib/constants";
 import prisma from "@calcom/prisma";
 import { createProxySSGHelpers } from "@calcom/trpc/react/ssg";
 import { appRouter } from "@calcom/trpc/server/routers/_app";
+
+import { serverSideTranslations } from "@server/lib/serverSideTranslations";
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { i18n } = require("@calcom/config/next-i18next.config");
@@ -37,8 +38,11 @@ export async function ssgInit<TParams extends { locale?: string }>(opts: GetStat
     },
   });
 
+  ssg.queryClient.setQueryData(
+    [["viewer", "public", "i18n"], { input: { locale, CalComVersion: CALCOM_VERSION }, type: "query" }],
+    { i18n: _i18n }
+  );
   // always preload i18n
-  await ssg.viewer.public.i18n.fetch({ locale, CalComVersion: CALCOM_VERSION });
 
   return ssg;
 }

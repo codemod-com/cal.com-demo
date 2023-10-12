@@ -2,7 +2,7 @@ import { TooltipProvider } from "@radix-ui/react-tooltip";
 import type { Session } from "next-auth";
 import { SessionProvider, useSession } from "next-auth/react";
 import { EventCollectionProvider } from "next-collect/client";
-import { appWithTranslation } from "next-i18next";
+import { appWithTranslation, type SSRConfig } from "next-i18next";
 import { ThemeProvider } from "next-themes";
 import type { AppProps as NextAppProps } from "next/app";
 import type { ReadonlyURLSearchParams } from "next/navigation";
@@ -53,14 +53,14 @@ const getEmbedNamespace = (searchParams: ReadonlyURLSearchParams) => {
 // @ts-expect-error appWithTranslation expects AppProps
 const AppWithTranslationHoc = appWithTranslation(({ children }) => <>{children}</>);
 
-const CustomI18nextProvider = (props: { children: React.ReactElement }) => {
+const CustomI18nextProvider = (props: { children: React.ReactElement; i18n?: SSRConfig }) => {
   /**
    * i18n should never be clubbed with other queries, so that it's caching can be managed independently.
    **/
   // @TODO
 
   const clientViewerI18n = useClientViewerI18n(["en"]);
-  const i18n = clientViewerI18n.data?.i18n;
+  const i18n = clientViewerI18n.data?.i18n ?? props.i18n;
 
   if (!i18n || !i18n._nextI18Next) {
     return null;
@@ -223,7 +223,7 @@ const AppProviders = (props: PageWrapperProps) => {
   const RemainingProviders = (
     <EventCollectionProvider options={{ apiPath: "/api/collect-events" }}>
       <SessionProvider>
-        <CustomI18nextProvider>
+        <CustomI18nextProvider i18n={props.i18n}>
           <TooltipProvider>
             {/* color-scheme makes background:transparent not work which is required by embed. We need to ensure next-theme adds color-scheme to `body` instead of `html`(https://github.com/pacocoursey/next-themes/blob/main/src/index.tsx#L74). Once that's done we can enable color-scheme support */}
             <CalcomThemeProvider
