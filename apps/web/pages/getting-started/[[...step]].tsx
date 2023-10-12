@@ -1,5 +1,4 @@
 import type { GetServerSidePropsContext } from "next";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import Head from "next/head";
 import { usePathname, useRouter } from "next/navigation";
 import type { CSSProperties } from "react";
@@ -22,6 +21,7 @@ import { SetupAvailability } from "@components/getting-started/steps-views/Setup
 import UserProfile from "@components/getting-started/steps-views/UserProfile";
 import { UserSettings } from "@components/getting-started/steps-views/UserSettings";
 
+import { serverSideTranslations } from "@server/lib/serverSideTranslations";
 import { ssrInit } from "@server/lib/ssr";
 
 const INITIAL_STEP = "user-settings";

@@ -1,12 +1,12 @@
 import NotFoundPage from "@pages/legacy_404";
-import config from "next-i18next.config";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { headers } from "next/headers";
 
 import PageWrapper from "@components/PageWrapperAppDir";
 
+import { serverSideTranslations } from "@server/lib/serverSideTranslations";
+
 const getProps = async () => {
-  const i18n = await serverSideTranslations("en", undefined, config);
+  const i18n = await serverSideTranslations("en");
 
   return {
     i18n,
