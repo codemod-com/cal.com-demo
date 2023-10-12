@@ -1,16 +1,13 @@
 import Bookings from "@pages/bookings/[status]";
 import type { ResolvingMetadata } from "next";
-import type { GetStaticPaths, GetStaticProps } from "next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { notFound } from "next/navigation";
 import React from "react";
 import { z } from "zod";
 
-import { getLayout } from "@calcom/features/MainLayout";
 import { IS_CALCOM, WEBAPP_URL } from "@calcom/lib/constants";
 
 import PageWrapper from "@components/PageWrapperAppDir";
-
-import { ssgInit } from "@server/lib/ssg";
 
 const validStatuses = ["upcoming", "recurring", "past", "cancelled", "unconfirmed"] as const;
 
@@ -27,7 +24,7 @@ export const generateMetadata = async (
     viewport: "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0",
     metadataBase: new URL(IS_CALCOM ? "https://cal.com" : WEBAPP_URL),
     alternates: {
-      canonical: `/event-types/${params.status}`,
+      canonical: `/bookings/${params.status}`,
     },
     twitter: {
       card: "summary_large_image",
@@ -38,68 +35,37 @@ export const generateMetadata = async (
 
 type Props = { params: { status: string } };
 
-const getPageProps = async ({ params }: Props) => {
-  const result = await getStaticProps({ params });
+const getData = async ({ params }: Props) => {
+  const parsedParams = querySchema.safeParse(params);
 
-  if ("notFound" in result) {
+  if (!parsedParams.success) {
     return notFound();
   }
 
-  if ("props" in result) {
-    return result.props;
-  }
-
-  return {};
-};
-
-const getStaticProps: GetStaticProps = async (ctx) => {
-  const params = querySchema.safeParse(ctx.params);
-  const ssg = await ssgInit(ctx);
-
-  if (!params.success) return { notFound: true };
+  const i18n = await serverSideTranslations("en");
 
   return {
-    props: {
-      status: params.data.status,
-      trpcState: ssg.dehydrate(),
-    },
-  };
-};
-
-const getStaticPaths: GetStaticPaths = () => {
-  return {
-    paths: validStatuses.map((status) => ({
-      params: { status },
-      locale: "en",
-    })),
-    fallback: "blocking",
+    i18n,
+    status: parsedParams.data.status,
   };
 };
 
 export const generateStaticParams = async () => {
-  const staticPath = getStaticPaths(null);
-
-  return staticPath.paths.map(({ params }) => ({
-    status: params.status,
+  return validStatuses.map((status) => ({
+    status,
   }));
 };
 
 export default async function BookingPagesWrapped({ params }: Props) {
-  const props = await getPageProps({ params });
-  console.log(props, "props");
-  const wrapperProps = {
-    Component: {
-      getLayout,
-    },
-    pageProps: { ...props },
-  };
+  const { i18n } = await getData({ params });
 
   return (
-    <PageWrapper {...wrapperProps}>
+    // @ts-expect-error withTrpc expects AppProps
+    <PageWrapper requiresLicense={false} pageProps={{ i18n }} nonce={nonce} themeBasis={null} i18n={i18n}>
       <Bookings />
     </PageWrapper>
   );
 }
 
 export const dynamicParams = true;
-// export const dynamic = "force-static";
+export const dynamic = "force-static";
