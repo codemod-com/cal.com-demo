@@ -19,7 +19,7 @@ import { MetaProvider } from "@calcom/ui";
 import useIsBookingPage from "@lib/hooks/useIsBookingPage";
 import type { WithNonceProps } from "@lib/withNonce";
 
-import { useClientViewerI18n } from "@components/I18nLanguageHandler";
+import { useViewerI18n } from "@components/I18nLanguageHandler";
 import type { PageWrapperProps } from "@components/PageWrapperAppDir";
 
 // Workaround for https://github.com/vercel/next.js/issues/8592
@@ -59,7 +59,10 @@ const CustomI18nextProvider = (props: { children: React.ReactElement; i18n?: SSR
    **/
   // @TODO
 
-  const clientViewerI18n = useClientViewerI18n(["en"]);
+  const session = useSession();
+  const locale = session?.data?.user.locale ?? "en";
+
+  const clientViewerI18n = useViewerI18n(locale);
   const i18n = clientViewerI18n.data?.i18n ?? props.i18n;
 
   if (!i18n || !i18n._nextI18Next) {
@@ -166,14 +169,14 @@ function getThemeProviderProps(props: {
     );
   }
 
-  const appearanceIdSuffix = props.themeBasis ? ":" + props.themeBasis : "";
+  const appearanceIdSuffix = props.themeBasis ? `:${props.themeBasis}` : "";
   const forcedTheme = themeSupport === ThemeSupport.None ? "light" : undefined;
   let embedExplicitlySetThemeSuffix = "";
 
   if (typeof window !== "undefined") {
     const embedTheme = window.getEmbedTheme();
     if (embedTheme) {
-      embedExplicitlySetThemeSuffix = ":" + embedTheme;
+      embedExplicitlySetThemeSuffix = `:${embedTheme}`;
     }
   }
 
