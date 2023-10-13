@@ -7,7 +7,7 @@ import { ThemeProvider } from "next-themes";
 import type { AppProps as NextAppProps } from "next/app";
 import type { ReadonlyURLSearchParams } from "next/navigation";
 import { useSearchParams } from "next/navigation";
-import type { ReactNode } from "react";
+import { useEffect, type ReactNode } from "react";
 
 import { OrgBrandingProvider } from "@calcom/features/ee/organizations/context/provider";
 import DynamicHelpscoutProvider from "@calcom/features/ee/support/lib/helpscout/providerDynamic";
@@ -61,6 +61,22 @@ const CustomI18nextProvider = (props: { children: React.ReactElement; i18n?: SSR
 
   const session = useSession();
   const locale = session?.data?.user.locale ?? "en";
+
+  useEffect(() => {
+    window.document.documentElement.lang = locale;
+
+    let direction = window.document.dir || "ltr";
+
+    try {
+      const intlLocale = new Intl.Locale(locale);
+      // @ts-expect-error INFO: Typescript does not know about the Intl.Locale textInfo attribute
+      direction = intlLocale.textInfo?.direction;
+    } catch (error) {
+      console.error(error);
+    }
+
+    window.document.dir = direction;
+  }, [locale]);
 
   const clientViewerI18n = useViewerI18n(locale);
   const i18n = clientViewerI18n.data?.i18n ?? props.i18n;
