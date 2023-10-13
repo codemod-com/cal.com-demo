@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
-import { headers as nextHeaders } from "next/headers";
+import { headers as nextHeaders, cookies as nextCookies } from "next/headers";
 import Script from "next/script";
 import React from "react";
 
+import { getLocale } from "@calcom/features/auth/lib/getLocale";
 import { IS_PRODUCTION } from "@calcom/lib/constants";
 
 import "../styles/globals.css";
@@ -40,32 +41,44 @@ export const metadata: Metadata = {
   },
 };
 
-const getInitialProps = async (url: string) => {
-  // this can happen if headers from next/header are empty
-  if (url === "") {
-    return {
-      isEmbed: false,
-      embedColorScheme: null,
-      locale: "en",
-    };
-  }
+const getInitialProps = async (
+  url: string,
+  headers: ReturnType<typeof nextHeaders>,
+  cookies: ReturnType<typeof nextCookies>
+) => {
   const { pathname, searchParams } = new URL(url);
 
   const isEmbed = pathname.endsWith("/embed") || (searchParams?.get("embedType") ?? null) !== null;
   const embedColorScheme = searchParams?.get("ui.color-scheme");
 
-  // @TODO locale will be implemented during i18n migration
-  return { isEmbed, embedColorScheme, locale: "en" };
+  // @ts-expect-error we cannot access ctx.req in app dir, however headers and cookies are only properties needed to extract the locale
+  const newLocale = await getLocale({ headers, cookies });
+
+  const intlLocale = new Intl.Locale(newLocale);
+  // @ts-expect-error INFO: Typescript does not know about the Intl.Locale textInfo attribute
+  const direction = intlLocale.textInfo?.direction;
+
+  if (!direction) {
+    throw new Error("NodeJS major breaking change detected, use getTextInfo() instead.");
+  }
+
+  return { isEmbed, embedColorScheme, locale: newLocale, direction };
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const headers = nextHeaders();
+  const cookies = nextCookies();
+
   const fullUrl = headers.get("x-url") ?? "";
   const nonce = headers.get("x-csp") ?? "";
-  const { locale, isEmbed, embedColorScheme } = await getInitialProps(fullUrl);
+
+  const { locale, direction, isEmbed, embedColorScheme } = await getInitialProps(fullUrl, headers, cookies);
 
   return (
-    <html lang={locale} style={embedColorScheme ? { colorScheme: embedColorScheme as string } : undefined}>
+    <html
+      lang={locale}
+      dir={direction}
+      style={embedColorScheme ? { colorScheme: embedColorScheme as string } : undefined}>
       <head nonce={nonce}>
         {!IS_PRODUCTION && process.env.VERCEL_ENV === "preview" && (
           // eslint-disable-next-line @next/next/no-sync-scripts
