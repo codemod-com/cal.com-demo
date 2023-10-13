@@ -60,7 +60,8 @@ const CustomI18nextProvider = (props: { children: React.ReactElement; i18n?: SSR
   // @TODO
 
   const session = useSession();
-  const locale = session?.data?.user.locale ?? "en";
+  const locale =
+    session?.data?.user.locale ?? typeof window !== "undefined" ? window.document.documentElement.lang : "en";
 
   useEffect(() => {
     window.document.documentElement.lang = locale;

@@ -53,13 +53,14 @@ const getInitialProps = async (
 
   // @ts-expect-error we cannot access ctx.req in app dir, however headers and cookies are only properties needed to extract the locale
   const newLocale = await getLocale({ headers, cookies });
+  let direction = "ltr";
 
-  const intlLocale = new Intl.Locale(newLocale);
-  // @ts-expect-error INFO: Typescript does not know about the Intl.Locale textInfo attribute
-  const direction = intlLocale.textInfo?.direction;
-
-  if (!direction) {
-    throw new Error("NodeJS major breaking change detected, use getTextInfo() instead.");
+  try {
+    const intlLocale = new Intl.Locale(newLocale);
+    // @ts-expect-error INFO: Typescript does not know about the Intl.Locale textInfo attribute
+    direction = intlLocale.textInfo?.direction;
+  } catch (e) {
+    console.error(e);
   }
 
   return { isEmbed, embedColorScheme, locale: newLocale, direction };
@@ -73,7 +74,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const nonce = headers.get("x-csp") ?? "";
 
   const { locale, direction, isEmbed, embedColorScheme } = await getInitialProps(fullUrl, headers, cookies);
-
+  console.log(locale, "?locale in here");
   return (
     <html
       lang={locale}
