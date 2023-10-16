@@ -166,14 +166,14 @@ function getThemeProviderProps(props: {
     );
   }
 
-  const appearanceIdSuffix = props.themeBasis ? ":" + props.themeBasis : "";
+  const appearanceIdSuffix = props.themeBasis ? `:${props.themeBasis}` : "";
   const forcedTheme = themeSupport === ThemeSupport.None ? "light" : undefined;
   let embedExplicitlySetThemeSuffix = "";
 
   if (typeof window !== "undefined") {
     const embedTheme = window.getEmbedTheme();
     if (embedTheme) {
-      embedExplicitlySetThemeSuffix = ":" + embedTheme;
+      embedExplicitlySetThemeSuffix = `:${embedTheme}`;
     }
   }
 
