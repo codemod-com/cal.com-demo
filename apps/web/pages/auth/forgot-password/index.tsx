@@ -2,7 +2,6 @@
 import { debounce } from "lodash";
 import type { GetServerSidePropsContext } from "next";
 import { getCsrfToken } from "next-auth/react";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import Link from "next/link";
 import type { CSSProperties, SyntheticEvent } from "react";
 import React from "react";
@@ -14,6 +13,8 @@ import { Button, EmailField } from "@calcom/ui";
 
 import PageWrapper from "@components/PageWrapper";
 import AuthContainer from "@components/ui/AuthContainer";
+
+import { serverSideTranslations } from "@server/lib/serverSideTranslations";
 
 export default function ForgotPassword({ csrfToken }: { csrfToken: string }) {
   const { t } = useLocale();

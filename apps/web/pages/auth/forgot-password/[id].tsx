@@ -1,6 +1,5 @@
 import type { GetServerSidePropsContext } from "next";
 import { getCsrfToken } from "next-auth/react";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import Link from "next/link";
 import type { CSSProperties } from "react";
 import { useForm } from "react-hook-form";
@@ -12,6 +11,8 @@ import { Button, PasswordField, Form } from "@calcom/ui";
 
 import PageWrapper from "@components/PageWrapper";
 import AuthContainer from "@components/ui/AuthContainer";
+
+import { serverSideTranslations } from "@server/lib/serverSideTranslations";
 
 type Props = {
   requestId: string;
