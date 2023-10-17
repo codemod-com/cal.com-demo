@@ -37,7 +37,7 @@ export function OverlayCalendarContainer() {
     credentialId: number;
     externalId: string;
   }>("toggledConnectedCalendars", []);
-  const overlayCalendarQueryParam = searchParams.get("overlayCalendar");
+  const overlayCalendarQueryParam = searchParams?.get("overlayCalendar");
 
   const { data: overlayBusyDates } = trpc.viewer.availability.calendarOverlay.useQuery(
     {
@@ -79,7 +79,7 @@ export function OverlayCalendarContainer() {
   // Toggle query param for overlay calendar
   const toggleOverlayCalendarQueryParam = useCallback(
     (state: boolean) => {
-      const current = new URLSearchParams(Array.from(searchParams.entries()));
+      const current = new URLSearchParams(Array.from(searchParams?.entries() ?? []));
       if (state) {
         current.set("overlayCalendar", "true");
       } else {

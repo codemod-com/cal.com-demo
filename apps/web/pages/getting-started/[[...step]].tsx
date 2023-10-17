@@ -14,6 +14,7 @@ import prisma from "@calcom/prisma";
 import { trpc } from "@calcom/trpc";
 import { Button, StepCard, Steps } from "@calcom/ui";
 import { Loader } from "@calcom/ui/components/icon";
+import { serverSideTranslations } from "@calcom/web/server/lib/serverSideTranslations";
 
 import PageWrapper from "@components/PageWrapper";
 import { ConnectedCalendars } from "@components/getting-started/steps-views/ConnectCalendars";
@@ -22,7 +23,6 @@ import { SetupAvailability } from "@components/getting-started/steps-views/Setup
 import UserProfile from "@components/getting-started/steps-views/UserProfile";
 import { UserSettings } from "@components/getting-started/steps-views/UserSettings";
 
-import { serverSideTranslations } from "@server/lib/serverSideTranslations";
 import { ssrInit } from "@server/lib/ssr";
 
 const INITIAL_STEP = "user-settings";

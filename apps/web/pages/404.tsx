@@ -51,7 +51,7 @@ export default function Custom404() {
   const [url, setUrl] = useState(`${WEBSITE_URL}/signup`);
   useEffect(() => {
     const { isValidOrgDomain, currentOrgDomain } = orgDomainConfig(window.location.host);
-    const [routerUsername] = pathname?.replace("%20", "-").split(/[?#]/);
+    const [routerUsername] = pathname?.replace("%20", "-").split(/[?#]/) ?? [];
     if (!isValidOrgDomain || !currentOrgDomain) {
       const splitPath = routerUsername.split("/");
       if (splitPath[1] === "team" && splitPath.length === 3) {

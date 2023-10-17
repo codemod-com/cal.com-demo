@@ -10,11 +10,10 @@ import { getLocale } from "@calcom/features/auth/lib/getLocale";
 import { getServerSession } from "@calcom/features/auth/lib/getServerSession";
 import { useLocale } from "@calcom/lib/hooks/useLocale";
 import { Button, EmailField } from "@calcom/ui";
+import { serverSideTranslations } from "@calcom/web/server/lib/serverSideTranslations";
 
 import PageWrapper from "@components/PageWrapper";
 import AuthContainer from "@components/ui/AuthContainer";
-
-import { serverSideTranslations } from "@server/lib/serverSideTranslations";
 
 export default function ForgotPassword({ csrfToken }: { csrfToken: string }) {
   const { t } = useLocale();
