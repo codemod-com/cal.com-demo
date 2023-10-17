@@ -1,4 +1,4 @@
-import NotFoundPage from "@pages/legacy_404";
+import NotFoundPage from "@pages/404";
 import { cookies, headers } from "next/headers";
 
 import { getLocale } from "@calcom/features/auth/lib/getLocale";

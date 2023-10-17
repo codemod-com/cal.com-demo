@@ -1,5 +1,4 @@
-"use client";
-
+import type { GetStaticPropsContext } from "next";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -10,6 +9,10 @@ import { useLocale } from "@calcom/lib/hooks/useLocale";
 import { HeadSeo } from "@calcom/ui";
 import { BookOpen, Check, ChevronRight, FileText, Shield } from "@calcom/ui/components/icon";
 import { Discord } from "@calcom/ui/components/icon/Discord";
+
+import PageWrapper from "@components/PageWrapper";
+
+import { ssgInit } from "@server/lib/ssg";
 
 enum pageType {
   ORG = "org",
@@ -370,3 +373,15 @@ export default function Custom404() {
     </>
   );
 }
+
+Custom404.PageWrapper = PageWrapper;
+
+export const getStaticProps = async (context: GetStaticPropsContext) => {
+  const ssr = await ssgInit(context);
+
+  return {
+    props: {
+      trpcState: ssr.dehydrate(),
+    },
+  };
+};
