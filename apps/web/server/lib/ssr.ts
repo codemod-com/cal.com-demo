@@ -1,4 +1,3 @@
-import { lookup } from "bcp-47-match";
 import type { GetServerSidePropsContext } from "next";
 import superjson from "superjson";
 
@@ -10,8 +9,6 @@ import { appRouter } from "@calcom/trpc/server/routers/_app";
 
 import { serverSideTranslations } from "@server/lib/serverSideTranslations";
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const { i18n: i18nConfig } = require("@calcom/config/next-i18next.config");
 /**
  * Initialize server-side rendering tRPC helpers.
  * Provides a method to prefetch tRPC-queries in a `getServerSideProps`-function.
@@ -21,22 +18,18 @@ const { i18n: i18nConfig } = require("@calcom/config/next-i18next.config");
 export async function ssrInit(context: GetServerSidePropsContext, options?: { noI18nPreload: boolean }) {
   const ctx = await createContext(context);
   const locale = await getLocale(context.req);
-  const resolvedLocale = lookup(i18nConfig.locales, locale) ?? locale;
-  const i18n = await serverSideTranslations(resolvedLocale, ["common", "vital"]);
+  const i18n = await serverSideTranslations(locale, ["common", "vital"]);
 
   const ssr = createProxySSGHelpers({
     router: appRouter,
     transformer: superjson,
-    ctx: { ...ctx, locale: resolvedLocale, i18n },
+    ctx: { ...ctx, locale, i18n },
   });
 
   // manually set query value, insetead of fetching it
   if (!options?.noI18nPreload) {
     ssr.queryClient.setQueryData(
-      [
-        ["viewer", "public", "i18n"],
-        { input: { locale: resolvedLocale, CalComVersion: CALCOM_VERSION }, type: "query" },
-      ],
+      [["viewer", "public", "i18n"], { input: { locale, CalComVersion: CALCOM_VERSION }, type: "query" }],
       { i18n }
     );
   }
