@@ -181,7 +181,7 @@ test.describe("unauthorized user sees correct translations (es-419)", async () =
     await page.goto("/");
     await page.waitForLoadState("load");
 
-    await page.locator("html[lang=es-419]").waitFor({ state: "attached" });
+    await page.locator("html[lang=es]").waitFor({ state: "attached" });
     await page.locator("html[dir=ltr]").waitFor({ state: "attached" });
 
     {
