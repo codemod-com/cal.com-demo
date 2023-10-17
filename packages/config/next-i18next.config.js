@@ -36,6 +36,7 @@ const config = {
   fallbackLng: {
     default: ["en"],
     zh: ["zh-CN"],
+    "es-419": ["es"],
   },
   reloadOnPrerender: process.env.NODE_ENV !== "production",
 };
