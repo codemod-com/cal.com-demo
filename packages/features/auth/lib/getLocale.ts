@@ -1,6 +1,10 @@
 import { parse } from "accept-language-parser";
+import { lookup } from "bcp-47-match";
 import type { GetTokenParams } from "next-auth/jwt";
 import { getToken } from "next-auth/jwt";
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const { i18n: i18nConfig } = require("@calcom/config/next-i18next.config");
 
 /**
  * This is a slimmed down version of the `getServerSession` function from
@@ -40,5 +44,6 @@ export const getLocale = async (req: GetTokenParams["req"]): Promise<string> => 
   // the regex underneath is more permissive
   const testedRegion = /^[a-zA-Z0-9]+$/.test(region) ? region : "";
 
-  return `${testedCode}${testedRegion !== "" ? "-" : ""}${testedRegion}`;
+  const requestedLocale = `${testedCode}${testedRegion !== "" ? "-" : ""}${testedRegion}`;
+  return lookup(i18nConfig.locales, requestedLocale) ?? requestedLocale;
 };

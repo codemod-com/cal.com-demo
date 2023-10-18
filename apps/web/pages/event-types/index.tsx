@@ -1,3 +1,5 @@
+"use client";
+
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import type { User } from "@prisma/client";
 import { Trans } from "next-i18next";
@@ -299,7 +301,7 @@ export const EventTypeList = ({ group, groupIndex, readOnly, types }: EventTypeL
 
   // inject selection data into url for correct router history
   const openDuplicateModal = (eventType: EventType, group: EventTypeGroup) => {
-    const newSearchParams = new URLSearchParams(searchParams);
+    const newSearchParams = new URLSearchParams(searchParams ?? undefined);
     function setParamsIfDefined(key: string, value: string | number | boolean | null | undefined) {
       if (value) newSearchParams.set(key, value.toString());
       if (value === null) newSearchParams.delete(key);
