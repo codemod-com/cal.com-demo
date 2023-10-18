@@ -1,14 +1,11 @@
 "use client";
 
 import Head from "next/head";
-import z from "zod";
 
-import logger from "@calcom/lib/logger";
 import type { inferSSRProps } from "@calcom/types/inferSSRProps";
 
 import { getServerSideProps } from "./getServerSideProps";
 
-const log = logger.getSubLogger({ prefix: ["[routing-forms]", "[router]"] });
 export default function Router({ form, message }: inferSSRProps<typeof getServerSideProps>) {
   return (
     <>
@@ -25,13 +22,5 @@ export default function Router({ form, message }: inferSSRProps<typeof getServer
     </>
   );
 }
-
-const querySchema = z
-  .object({
-    form: z.string(),
-    slug: z.string(),
-    pages: z.array(z.string()),
-  })
-  .catchall(z.string().or(z.array(z.string())));
 
 export { getServerSideProps };

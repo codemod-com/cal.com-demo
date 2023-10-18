@@ -1,4 +1,3 @@
-"use client";
 
 import { stringify } from "querystring";
 import z from "zod";
