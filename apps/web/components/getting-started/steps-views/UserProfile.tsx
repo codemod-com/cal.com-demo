@@ -1,3 +1,4 @@
+import { getTprc } from "app/getTrpc";
 import { useRouter } from "next/navigation";
 import type { FormEvent } from "react";
 import { useRef, useState } from "react";
@@ -8,7 +9,6 @@ import { useLocale } from "@calcom/lib/hooks/useLocale";
 import { md } from "@calcom/lib/markdownIt";
 import { telemetryEventTypes, useTelemetry } from "@calcom/lib/telemetry";
 import turndown from "@calcom/lib/turndownService";
-import { trpc } from "@calcom/trpc/react";
 import type { Ensure } from "@calcom/types/utils";
 import { Button, Editor, ImageUploader, Label, showToast } from "@calcom/ui";
 import { ArrowRight } from "@calcom/ui/components/icon";
@@ -17,7 +17,9 @@ type FormData = {
   bio: string;
 };
 
-const UserProfile = () => {
+const UserProfile = (props: { isAppDir?: boolean }) => {
+  const trpc = getTprc(Boolean(props.isAppDir));
+  // @ts-expect-error Property 'useSuspenseQuery' does not exist on type
   const [user] = trpc.viewer.me.useSuspenseQuery();
   const { t } = useLocale();
   const avatarRef = useRef<HTMLInputElement>(null);

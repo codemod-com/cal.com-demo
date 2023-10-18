@@ -48,9 +48,7 @@ export default async function Page() {
   const h = headers();
   const nonce = h.get("x-nonce") ?? undefined;
 
-  return (
     <PageWrapper getLayout={null} requiresLicense={false} nonce={nonce} themeBasis={null} {...props}>
       <LegacyPage {...props} />
     </PageWrapper>
   );
-}

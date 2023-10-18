@@ -1,3 +1,5 @@
+"use client";
+
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { useRouter, usePathname } from "next/navigation";
 import { useCallback } from "react";

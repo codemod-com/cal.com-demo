@@ -1,6 +1,7 @@
+import { getTprc } from "app/getTrpc";
+
 import classNames from "@calcom/lib/classNames";
 import { useLocale } from "@calcom/lib/hooks/useLocale";
-import { trpc } from "@calcom/trpc/react";
 import { List } from "@calcom/ui";
 import { ArrowRight } from "@calcom/ui/components/icon";
 
@@ -9,10 +10,12 @@ import { StepConnectionLoader } from "../components/StepConnectionLoader";
 
 interface ConnectedAppStepProps {
   nextStep: () => void;
+  isAppDir?: boolean;
 }
 
 const ConnectedVideoStep = (props: ConnectedAppStepProps) => {
   const { nextStep } = props;
+  const trpc = getTprc(Boolean(props.isAppDir));
   const { data: queryConnectedVideoApps, isLoading } = trpc.viewer.integrations.useQuery({
     variant: "conferencing",
     onlyInstalled: false,

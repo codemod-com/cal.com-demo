@@ -1,6 +1,7 @@
+import { getTprc } from "app/getTrpc";
+
 import classNames from "@calcom/lib/classNames";
 import { useLocale } from "@calcom/lib/hooks/useLocale";
-import { trpc } from "@calcom/trpc/react";
 import { List } from "@calcom/ui";
 import { ArrowRight } from "@calcom/ui/components/icon";
 
@@ -11,10 +12,13 @@ import { StepConnectionLoader } from "../components/StepConnectionLoader";
 
 interface IConnectCalendarsProps {
   nextStep: () => void;
+  isAppDir?: boolean;
 }
 
 const ConnectedCalendars = (props: IConnectCalendarsProps) => {
   const { nextStep } = props;
+  const trpc = getTprc(Boolean(props.isAppDir));
+
   const queryConnectedCalendars = trpc.viewer.connectedCalendars.useQuery({ onboarding: true });
   const { t } = useLocale();
   const queryIntegrations = trpc.viewer.integrations.useQuery({

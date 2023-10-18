@@ -471,6 +471,11 @@ const nextConfig = {
         permanent: true,
       },
       {
+        source: "/future/bookings",
+        destination: "/future/bookings/upcoming",
+        permanent: true,
+      },
+      {
         source: "/call/:path*",
         destination: "/video/:path*",
         permanent: false,

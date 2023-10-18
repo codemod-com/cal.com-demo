@@ -8,7 +8,6 @@ import { TeamsListing } from "@calcom/features/ee/teams/components";
 import { ShellMain } from "@calcom/features/shell/Shell";
 import { WEBAPP_URL } from "@calcom/lib/constants";
 import { useLocale } from "@calcom/lib/hooks/useLocale";
-import { trpc } from "@calcom/trpc/react";
 import { Button } from "@calcom/ui";
 import { Plus } from "@calcom/ui/components/icon";
 
@@ -16,8 +15,13 @@ import PageWrapper from "@components/PageWrapper";
 
 import { ssrInit } from "@server/lib/ssr";
 
-function Teams() {
+type TeamsProps = {
+  isAppDir?: boolean;
+};
+
+function Teams(props: TeamsProps) {
   const { t } = useLocale();
+  const trpc = getTprc(Boolean(props.isAppDir));
   const [user] = trpc.viewer.me.useSuspenseQuery();
 
   return (

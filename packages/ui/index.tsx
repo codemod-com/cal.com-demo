@@ -1,3 +1,4 @@
+"use client";
 export { Avatar, AvatarGroup } from "./components/avatar";
 export type { AvatarProps, AvatarGroupProps } from "./components/avatar";
 export { ArrowButton } from "./components/arrow-button";
