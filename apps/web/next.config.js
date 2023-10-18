@@ -155,6 +155,7 @@ const nextConfig = {
       "@ewsjs",
       "handlebars",
       "ews-javascript-api",
+      "react-awesome-query-builder",
     ],
   },
   i18n: {

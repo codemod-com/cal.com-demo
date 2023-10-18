@@ -1,3 +1,4 @@
+'use client'
 import type { App_RoutingForms_Form } from "@prisma/client";
 import { Utils as QbUtils } from "react-awesome-query-builder";
 import type { z } from "zod";

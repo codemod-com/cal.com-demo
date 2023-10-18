@@ -17,6 +17,12 @@ class ErrorBoundary extends React.Component<
   }
 
   render() {
+    // do not intercept next-not-found error, allow displaying not-found.tsx page
+    // uncomment when not-found page migrated 
+    // if(this.state.error  !== null && 'digest' in this.state.error && this.state.error.digest === "NEXT_NOT_FOUND") {
+    //   return this.props.children;
+    // }
+
     if (this.state.errorInfo) {
       // Error path
       return (
