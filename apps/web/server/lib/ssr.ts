@@ -6,8 +6,7 @@ import { CALCOM_VERSION } from "@calcom/lib/constants";
 import { createProxySSGHelpers } from "@calcom/trpc/react/ssg";
 import { createContext } from "@calcom/trpc/server/createContext";
 import { appRouter } from "@calcom/trpc/server/routers/_app";
-
-import { serverSideTranslations } from "@server/lib/serverSideTranslations";
+import { serverSideTranslations } from "@calcom/web/server/lib/serverSideTranslations";
 
 /**
  * Initialize server-side rendering tRPC helpers.

@@ -25,10 +25,10 @@ import type { PageWrapperProps } from "@components/PageWrapperAppDir";
 // Workaround for https://github.com/vercel/next.js/issues/8592
 export type AppProps = Omit<
   NextAppProps<
-    WithNonceProps & {
+    WithNonceProps<{
       themeBasis?: string;
       session: Session;
-    } & Record<string, unknown>
+    }>
   >,
   "Component"
 > & {

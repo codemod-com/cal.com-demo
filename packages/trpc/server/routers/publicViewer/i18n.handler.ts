@@ -6,7 +6,7 @@ type I18nOptions = {
 
 export const i18nHandler = async ({ input }: I18nOptions) => {
   const { locale } = input;
-  const { serverSideTranslations } = await import("@server/lib/serverSideTranslations");
+  const { serverSideTranslations } = await import("@calcom/web/server/lib/serverSideTranslations");
   const i18n = await serverSideTranslations(locale, ["common", "vital"]);
 
   return {

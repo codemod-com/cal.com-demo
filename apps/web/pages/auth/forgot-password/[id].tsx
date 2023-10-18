@@ -8,11 +8,10 @@ import { getLocale } from "@calcom/features/auth/lib/getLocale";
 import { useLocale } from "@calcom/lib/hooks/useLocale";
 import prisma from "@calcom/prisma";
 import { Button, PasswordField, Form } from "@calcom/ui";
+import { serverSideTranslations } from "@calcom/web/server/lib/serverSideTranslations";
 
 import PageWrapper from "@components/PageWrapper";
 import AuthContainer from "@components/ui/AuthContainer";
-
-import { serverSideTranslations } from "@server/lib/serverSideTranslations";
 
 type Props = {
   requestId: string;
