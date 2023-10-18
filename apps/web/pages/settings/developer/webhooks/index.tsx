@@ -1,3 +1,5 @@
+"use client";
+
 import WeebhooksView from "@calcom/features/webhooks/pages/webhooks-view";
 
 import type { CalPageWrapper } from "@components/PageWrapper";

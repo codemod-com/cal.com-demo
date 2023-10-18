@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { getTprc } from "app/getTrpc";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -8,7 +9,6 @@ import { useTimePreferences } from "@calcom/features/bookings/lib";
 import { FULL_NAME_LENGTH_MAX_LIMIT } from "@calcom/lib/constants";
 import { useLocale } from "@calcom/lib/hooks/useLocale";
 import { telemetryEventTypes, useTelemetry } from "@calcom/lib/telemetry";
-import { trpc } from "@calcom/trpc/react";
 import { Button, TimezoneSelect } from "@calcom/ui";
 import { ArrowRight } from "@calcom/ui/components/icon";
 
@@ -17,10 +17,13 @@ import { UsernameAvailabilityField } from "@components/ui/UsernameAvailability";
 interface IUserSettingsProps {
   nextStep: () => void;
   hideUsername?: boolean;
+  isAppDir?: boolean;
 }
 
 const UserSettings = (props: IUserSettingsProps) => {
   const { nextStep } = props;
+  const trpc = getTprc(Boolean(props.isAppDir));
+  // @ts-expect-error Property 'useSuspenseQuery' does not exist on type
   const [user] = trpc.viewer.me.useSuspenseQuery();
   const { t } = useLocale();
   const { setTimezone: setSelectedTimeZone, timezone: selectedTimeZone } = useTimePreferences();

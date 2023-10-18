@@ -1,10 +1,10 @@
+import { getTprc } from "app/getTrpc";
 import { useForm } from "react-hook-form";
 
 import { Schedule } from "@calcom/features/schedules";
 import { DEFAULT_SCHEDULE } from "@calcom/lib/availability";
 import { useLocale } from "@calcom/lib/hooks/useLocale";
 import type { TRPCClientErrorLike } from "@calcom/trpc/react";
-import { trpc } from "@calcom/trpc/react";
 import type { AppRouter } from "@calcom/trpc/server/routers/_app";
 import { Button, Form } from "@calcom/ui";
 import { ArrowRight } from "@calcom/ui/components/icon";
@@ -12,6 +12,7 @@ import { ArrowRight } from "@calcom/ui/components/icon";
 interface ISetupAvailabilityProps {
   nextStep: () => void;
   defaultScheduleId?: number | null;
+  isAppDir?: boolean;
 }
 
 const SetupAvailability = (props: ISetupAvailabilityProps) => {
@@ -19,7 +20,7 @@ const SetupAvailability = (props: ISetupAvailabilityProps) => {
 
   const { t } = useLocale();
   const { nextStep } = props;
-
+  const trpc = getTprc(Boolean(props.isAppDir));
   const scheduleId = defaultScheduleId === null ? undefined : defaultScheduleId;
   const queryAvailability = trpc.viewer.availability.schedule.get.useQuery(
     { scheduleId: defaultScheduleId ?? undefined },
