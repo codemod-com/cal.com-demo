@@ -1,3 +1,5 @@
+"use client";
+
 import type { GetServerSidePropsContext } from "next";
 import type { ChangeEventHandler } from "react";
 import { useState } from "react";
@@ -5,8 +7,8 @@ import { useState } from "react";
 import { getAppRegistry, getAppRegistryWithCredentials } from "@calcom/app-store/_appRegistry";
 import { getLayout } from "@calcom/features/MainLayout";
 import { getServerSession } from "@calcom/features/auth/lib/getServerSession";
-import getUserAdminTeams from "@calcom/features/ee/teams/lib/getUserAdminTeams";
 import type { UserAdminTeams } from "@calcom/features/ee/teams/lib/getUserAdminTeams";
+import getUserAdminTeams from "@calcom/features/ee/teams/lib/getUserAdminTeams";
 import { classNames } from "@calcom/lib";
 import { useLocale } from "@calcom/lib/hooks/useLocale";
 import type { AppCategories } from "@calcom/prisma/enums";

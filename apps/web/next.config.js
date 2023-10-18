@@ -146,6 +146,17 @@ const matcherConfigUserTypeEmbedRoute = {
 
 /** @type {import("next").NextConfig} */
 const nextConfig = {
+  experimental: {
+    serverComponentsExternalPackages: [
+      "next-i18next",
+      "auth0",
+      "typeorm",
+      "@boxyhq",
+      "@ewsjs",
+      "handlebars",
+      "ews-javascript-api",
+    ],
+  },
   i18n: {
     ...i18n,
     localeDetection: false,
@@ -223,6 +234,8 @@ const nextConfig = {
       ...config.resolve.fallback, // if you miss it, all the other options in fallback, specified
       // by next.js will be dropped. Doesn't make much sense, but how it is
       fs: false,
+      "pg-native": false,
+      "superagent-proxy": false,
     };
 
     /**
@@ -454,6 +467,11 @@ const nextConfig = {
       {
         source: "/bookings",
         destination: "/bookings/upcoming",
+        permanent: true,
+      },
+      {
+        source: "/future/bookings",
+        destination: "/future/bookings/upcoming",
         permanent: true,
       },
       {
