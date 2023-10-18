@@ -1,3 +1,5 @@
+"use client";
+
 import type { DailyEventObjectRecordingStarted } from "@daily-co/daily-js";
 import DailyIframe from "@daily-co/daily-js";
 import MarkdownIt from "markdown-it";
@@ -27,7 +29,7 @@ const recordingStartedEventResponse = z
   })
   .passthrough();
 
-export type JoinCallPageProps = inferSSRProps<typeof getServerSideProps>;
+export type JoinCallPageProps = Partial<inferSSRProps<typeof getServerSideProps>>;
 const md = new MarkdownIt("default", { html: true, breaks: true, linkify: true });
 
 export default function JoinCall(props: JoinCallPageProps) {
