@@ -1,3 +1,4 @@
+// root pages (e.g., /availability/index.tsx) are supposed to go under (layout) folder
 import { headers } from "next/headers";
 import { type ReactElement } from "react";
 
@@ -5,11 +6,11 @@ import { getLayout } from "@calcom/features/MainLayout";
 
 import PageWrapper from "@components/PageWrapperAppDir";
 
-type EventTypesLayoutProps = {
+type WrapperWithLayoutProps = {
   children: ReactElement;
 };
 
-export default function EventTypesLayout({ children }: EventTypesLayoutProps) {
+export default async function WrapperWithLayout({ children }: WrapperWithLayoutProps) {
   const h = headers();
   const nonce = h.get("x-nonce") ?? undefined;
 
@@ -18,9 +19,9 @@ export default function EventTypesLayout({ children }: EventTypesLayoutProps) {
     <PageWrapper
       getLayout={getLayout}
       requiresLicense={false}
-      pageProps={children?.props}
       nonce={nonce}
-      themeBasis={null}>
+      themeBasis={null}
+      pageProps={{ ...children?.props, trpcState: {} }}>
       {children}
     </PageWrapper>
   );
