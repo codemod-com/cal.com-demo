@@ -22,8 +22,6 @@ test.describe("Event Types A/B tests", () => {
     await user.apiLogin();
     await page.goto("/event-types");
 
-    // await page.pause();
-
     const locator = page.getByRole("heading", { name: "This page does not exist." });
 
     await expect(locator).toBeVisible();
