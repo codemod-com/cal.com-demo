@@ -5,6 +5,8 @@ import { NextResponse } from "next/server";
 
 import { extendEventData, nextCollectBasicSettings } from "@calcom/lib/telemetry";
 
+import { abTestMiddlewareFactory } from "./abTest/middlewareFactory";
+
 const middleware: NextMiddleware = async (req) => {
   const url = req.nextUrl;
   const requestHeaders = new Headers(req.headers);
@@ -74,11 +76,12 @@ export const config = {
      * Paths required by routingForms.handle
      */
     "/apps/routing_forms/:path*",
+    "/event-types",
   ],
 };
 
 export default collectEvents({
-  middleware,
+  middleware: abTestMiddlewareFactory(middleware),
   ...nextCollectBasicSettings,
   cookieName: "__clnds",
   extend: extendEventData,
