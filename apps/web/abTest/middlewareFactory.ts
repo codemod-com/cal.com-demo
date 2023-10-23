@@ -40,7 +40,7 @@ export const ABTestMiddlewareFactory =
 
     if (!bucketCookieExists) {
       const res = NextResponse.next();
-      res.cookies.set(route.cookie, getBucket());
+      res.cookies.set(route.cookie, getBucket(), { expires: 1000 * 60 * 30 }); // 30 min in ms
       return res;
     }
 
