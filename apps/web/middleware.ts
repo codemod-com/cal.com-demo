@@ -7,7 +7,6 @@ import { extendEventData, nextCollectBasicSettings } from "@calcom/lib/telemetry
 
 const middleware: NextMiddleware = async (req) => {
   const url = req.nextUrl;
-  const requestHeaders = new Headers(req.headers);
 
   if (!url.pathname.startsWith("/api")) {
     //
@@ -31,35 +30,32 @@ const middleware: NextMiddleware = async (req) => {
     }
   }
 
-  const res = routingForms.handle(url);
-  if (res) {
-    return res;
+  // Don't 404 old routing_forms links
+  if (url.pathname.startsWith("/apps/routing_forms")) {
+    url.pathname = url.pathname.replace(/^\/apps\/routing_forms($|\/)/, "/apps/routing-forms/");
+    return NextResponse.rewrite(url);
   }
 
+  const headers = new Headers(req.headers);
+
+  // since we cannot use usePathname within generateMetadata
+  // we set the x-cal-pathname header so we can read it using headers()
+  headers.set("x-cal-pathname", url.pathname);
+
   if (url.pathname.startsWith("/api/trpc/")) {
-    requestHeaders.set("x-cal-timezone", req.headers.get("x-vercel-ip-timezone") ?? "");
+    headers.set("x-cal-timezone", req.headers.get("x-vercel-ip-timezone") ?? "");
   }
 
   if (url.pathname.startsWith("/auth/login") || url.pathname.startsWith("/login")) {
     // Use this header to actually enforce CSP, otherwise it is running in Report Only mode on all pages.
-    requestHeaders.set("x-csp-enforce", "true");
+    headers.set("x-csp-enforce", "true");
   }
 
   return NextResponse.next({
     request: {
-      headers: requestHeaders,
+      headers,
     },
   });
-};
-
-const routingForms = {
-  handle: (url: URL) => {
-    // Don't 404 old routing_forms links
-    if (url.pathname.startsWith("/apps/routing_forms")) {
-      url.pathname = url.pathname.replace(/^\/apps\/routing_forms($|\/)/, "/apps/routing-forms/");
-      return NextResponse.rewrite(url);
-    }
-  },
 };
 
 export const config = {
