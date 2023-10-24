@@ -3,10 +3,6 @@ import type { Metadata } from "next";
 export type MetadataRecipe = Readonly<{
   title: string;
   canonical: string;
-  iconMaskColor: string;
-  tileColor: string;
-  lightThemeColor: string;
-  darkThemeColor: string;
   twitterCreator: string;
   twitterSite: string;
   siteName: string;
@@ -31,7 +27,7 @@ export const prepareMetadata = (recipe: MetadataRecipe): Metadata => ({
         rel: "icon-mask",
         url: "/safari-pinned-tab.svg",
         // TODO available in the never Next.js version
-        color: recipe.iconMaskColor,
+        color: "#000000",
       },
       {
         url: "/api/logo?type=favicon-16",
@@ -49,16 +45,16 @@ export const prepareMetadata = (recipe: MetadataRecipe): Metadata => ({
   viewport: "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0",
   robots: recipe.robots,
   other: {
-    "application-TileColor": recipe.tileColor,
+    "application-TileColor": "#ff0000",
   },
   themeColor: [
     {
       media: "(prefers-color-scheme: light)",
-      color: recipe.lightThemeColor,
+      color: "#f9fafb",
     },
     {
       media: "(prefers-color-scheme: dark)",
-      color: recipe.darkThemeColor,
+      color: "#1C1C1C",
     },
   ],
   twitter: {
@@ -82,13 +78,10 @@ export const generateMetadata = (): Metadata => {
   return prepareMetadata({
     title: "",
     canonical: "",
-    iconMaskColor: "",
-    tileColor: "",
-    lightThemeColor: "",
-    darkThemeColor: "",
-    twitterCreator: "",
-    twitterSite: "",
-    siteName: "",
+    tileColor: "#ff0000",
+    twitterCreator: "", // @calcom
+    twitterSite: "", // @calcom
+    siteName: "", // APP_NAME from env vars
     image: "",
     description: "",
     robots: {
