@@ -1,7 +1,7 @@
 import { headers } from "next/headers";
 import { type ReactElement } from "react";
 
-import { getLayout } from "@calcom/features/MainLayout";
+import { getLayout } from "@calcom/features/MainLayoutAppDir";
 import { getFeatureFlagMap } from "@calcom/features/flags/server/utils";
 
 import PageWrapper from "@components/PageWrapperAppDir";
@@ -32,11 +32,10 @@ export default async function InsightsLayout({ children }: InsightsLayoutProps) 
   const props = await getProps();
 
   return (
-    // @ts-expect-error withTrpc expects AppProps
     <PageWrapper
       getLayout={getLayout}
       requiresLicense={false}
-      pageProps={{ ...props, trpcState: {} }}
+      pageProps={props}
       nonce={nonce}
       themeBasis={null}>
       {children}

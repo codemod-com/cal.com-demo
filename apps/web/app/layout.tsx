@@ -7,7 +7,6 @@ import { getLocale } from "@calcom/features/auth/lib/getLocale";
 import { IS_PRODUCTION } from "@calcom/lib/constants";
 
 import "../styles/globals.css";
-import { TrpcProvider } from "./_trpc/trpc-provider";
 
 export const metadata: Metadata = {
   icons: {
@@ -103,7 +102,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
               }
             : {}
         }>
-        <TrpcProvider>{children}</TrpcProvider>
+        {children}
       </body>
     </html>
   );

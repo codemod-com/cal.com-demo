@@ -1,3 +1,3 @@
-import InsightsPage from "@pages/insights";
+import InsightsPage from "pages/insights";
 
 export default InsightsPage;
