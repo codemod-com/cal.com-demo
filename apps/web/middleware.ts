@@ -62,6 +62,17 @@ const middleware: NextMiddleware = async (req) => {
     requestHeaders.set("x-csp-enforce", "true");
   }
 
+  if (url.pathname.startsWith("/apps-1/installed/")) {
+    const returnTo = req.cookies.get("return-to")?.value;
+
+    if (returnTo !== undefined) {
+      const nextUrl = url.clone();
+      nextUrl.pathname = returnTo;
+
+      return NextResponse.redirect(nextUrl);
+    }
+  }
+
   requestHeaders.set("x-pathname", url.pathname);
 
   const locale = await getLocale(req);

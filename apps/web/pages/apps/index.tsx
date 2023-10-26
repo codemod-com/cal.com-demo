@@ -1,16 +1,11 @@
-import type { GetServerSidePropsContext } from "next";
+"use client";
+
 import type { ChangeEventHandler } from "react";
 import { useState } from "react";
 
-import { getAppRegistry, getAppRegistryWithCredentials } from "@calcom/app-store/_appRegistry";
 import { getLayout } from "@calcom/features/MainLayout";
-import { getServerSession } from "@calcom/features/auth/lib/getServerSession";
-import getUserAdminTeams from "@calcom/features/ee/teams/lib/getUserAdminTeams";
-import type { UserAdminTeams } from "@calcom/features/ee/teams/lib/getUserAdminTeams";
 import { classNames } from "@calcom/lib";
 import { useLocale } from "@calcom/lib/hooks/useLocale";
-import type { AppCategories } from "@calcom/prisma/enums";
-import type { inferSSRProps } from "@calcom/types/inferSSRProps";
 import type { HorizontalTabItemProps } from "@calcom/ui";
 import {
   AllApps,
@@ -25,7 +20,7 @@ import { Search } from "@calcom/ui/components/icon";
 import PageWrapper from "@components/PageWrapper";
 import AppsLayout from "@components/apps/layouts/AppsLayout";
 
-import { ssrInit } from "@server/lib/ssr";
+// import { ssrInit } from "@server/lib/ssr";
 
 const tabs: HorizontalTabItemProps[] = [
   {
@@ -60,11 +55,7 @@ function AppsSearch({
   );
 }
 
-export default function Apps({
-  categories,
-  appStore,
-  userAdminTeams,
-}: inferSSRProps<typeof getServerSideProps>) {
+export default function Apps({ categories, appStore, userAdminTeams }: any) {
   const { t } = useLocale();
   const [searchText, setSearchText] = useState<string | undefined>(undefined);
 
@@ -96,7 +87,7 @@ export default function Apps({
         <AllApps
           apps={appStore}
           searchText={searchText}
-          categories={categories.map((category) => category.name)}
+          categories={categories.map((category: any) => category.name)}
           userAdminTeams={userAdminTeams}
         />
       </div>
@@ -107,45 +98,45 @@ export default function Apps({
 Apps.PageWrapper = PageWrapper;
 Apps.getLayout = getLayout;
 
-export const getServerSideProps = async (context: GetServerSidePropsContext) => {
-  const { req, res } = context;
+// export const getServerSideProps = async (context: GetServerSidePropsContext) => {
+//   const { req, res } = context;
 
-  const ssr = await ssrInit(context);
+//   const ssr = await ssrInit(context);
 
-  const session = await getServerSession({ req, res });
+//   const session = await getServerSession({ req, res });
 
-  let appStore, userAdminTeams: UserAdminTeams;
-  if (session?.user?.id) {
-    userAdminTeams = await getUserAdminTeams({ userId: session.user.id, getUserInfo: true });
-    appStore = await getAppRegistryWithCredentials(session.user.id, userAdminTeams);
-  } else {
-    appStore = await getAppRegistry();
-    userAdminTeams = [];
-  }
+//   let appStore, userAdminTeams: UserAdminTeams;
+//   if (session?.user?.id) {
+//     userAdminTeams = await getUserAdminTeams({ userId: session.user.id, getUserInfo: true });
+//     appStore = await getAppRegistryWithCredentials(session.user.id, userAdminTeams);
+//   } else {
+//     appStore = await getAppRegistry();
+//     userAdminTeams = [];
+//   }
 
-  const categoryQuery = appStore.map(({ categories }) => ({
-    categories: categories || [],
-  }));
-  const categories = categoryQuery.reduce((c, app) => {
-    for (const category of app.categories) {
-      c[category] = c[category] ? c[category] + 1 : 1;
-    }
-    return c;
-  }, {} as Record<string, number>);
+//   const categoryQuery = appStore.map(({ categories }) => ({
+//     categories: categories || [],
+//   }));
+//   const categories = categoryQuery.reduce((c, app) => {
+//     for (const category of app.categories) {
+//       c[category] = c[category] ? c[category] + 1 : 1;
+//     }
+//     return c;
+//   }, {} as Record<string, number>);
 
-  return {
-    props: {
-      categories: Object.entries(categories)
-        .map(([name, count]): { name: AppCategories; count: number } => ({
-          name: name as AppCategories,
-          count,
-        }))
-        .sort(function (a, b) {
-          return b.count - a.count;
-        }),
-      appStore,
-      userAdminTeams,
-      trpcState: ssr.dehydrate(),
-    },
-  };
-};
+//   return {
+//     props: {
+//       categories: Object.entries(categories)
+//         .map(([name, count]): { name: AppCategories; count: number } => ({
+//           name: name as AppCategories,
+//           count,
+//         }))
+//         .sort(function (a, b) {
+//           return b.count - a.count;
+//         }),
+//       appStore,
+//       userAdminTeams,
+//       trpcState: ssr.dehydrate(),
+//     },
+//   };
+// };
