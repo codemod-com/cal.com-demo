@@ -46,6 +46,7 @@ const getInitialProps = async (
   headers: ReturnType<typeof nextHeaders>,
   cookies: ReturnType<typeof nextCookies>
 ) => {
+  return { isEmbed: false, embedColorScheme: null, locale: "en", direction: "ltr" };
   const { pathname, searchParams } = new URL(url);
 
   const isEmbed = pathname.endsWith("/embed") || (searchParams?.get("embedType") ?? null) !== null;
