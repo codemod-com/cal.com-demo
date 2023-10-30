@@ -15,7 +15,7 @@ export const generateMetadata = async () => {
   const t = await getFixedT(locale, "common");
 
   const title = t("password");
-  const description = t("password_description", { appName: APP_NAME });
+  const description = t("password_description");
 
   const metadataBase = new URL(IS_CALCOM ? "https://cal.com" : WEBAPP_URL);
 
