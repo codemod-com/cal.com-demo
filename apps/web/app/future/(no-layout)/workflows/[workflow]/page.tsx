@@ -36,4 +36,3 @@ export default async function WorkflowPage({ params }: WorkflowPageProps) {
 }
 
 export const dynamicParams = true;
-export const dynamic = "force-static";
