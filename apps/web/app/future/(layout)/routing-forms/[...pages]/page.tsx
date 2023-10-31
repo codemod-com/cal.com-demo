@@ -1,6 +1,4 @@
-"use client";
-
-import type { GetServerSidePropsContext } from "next";
+import Page from "@pages/routing-forms/[...pages]";
 import z from "zod";
 
 const paramsSchema = z
@@ -11,12 +9,8 @@ const paramsSchema = z
     pages: [],
   });
 
-export default function RoutingForms() {
-  return null;
-}
-
-export const getServerSideProps = (context: GetServerSidePropsContext) => {
-  const { pages } = paramsSchema.parse(context.params);
+const getProps = (params: any) => {
+  const { pages } = paramsSchema.parse(params);
 
   return {
     redirect: {
@@ -25,3 +19,8 @@ export const getServerSideProps = (context: GetServerSidePropsContext) => {
     },
   };
 };
+
+export default function RoutingForms({ params }: { params: any }) {
+  const props = getProps(params);
+  return <Page {...props} />;
+}

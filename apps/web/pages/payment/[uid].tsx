@@ -1,3 +1,5 @@
+"use client";
+
 import PaymentPage from "@calcom/features/ee/payments/components/PaymentPage";
 import { getServerSideProps } from "@calcom/features/ee/payments/pages/payment";
 import type { inferSSRProps } from "@calcom/types/inferSSRProps";
