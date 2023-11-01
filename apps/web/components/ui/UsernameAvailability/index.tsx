@@ -1,10 +1,10 @@
 import dynamic from "next/dynamic";
-import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 
 import { useOrgBranding } from "@calcom/features/ee/organizations/context/provider";
 import { CAL_URL, IS_SELF_HOSTED } from "@calcom/lib/constants";
+import { useCompatSearchParams } from "@calcom/lib/hooks/useCompatSearchParams";
 import type { TRPCClientErrorLike } from "@calcom/trpc/client";
 import { trpc } from "@calcom/trpc/react";
 import type { AppRouter } from "@calcom/trpc/server/routers/_app";
@@ -26,7 +26,8 @@ export const UsernameAvailabilityField = ({
   onSuccessMutation,
   onErrorMutation,
 }: UsernameAvailabilityFieldProps) => {
-  const searchParams = useSearchParams();
+  // TEST1
+  const searchParams = useCompatSearchParams();
   const [user] = trpc.viewer.me.useSuspenseQuery();
   const [currentUsernameState, setCurrentUsernameState] = useState(user.username || "");
   const { username: usernameFromQuery, setQuery: setUsernameFromQuery } = useRouterQuery("username");

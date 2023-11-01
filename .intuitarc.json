@@ -1,0 +1,14 @@
+{
+  "schemaVersion": "1.0.0",
+  "preCommitCodemods": [
+    {
+      "source": "registry",
+      "name": "next/13/replace-use-search-params",
+      "arguments": {
+        "useCompatSearchParamsHookRelativePath": "packages/lib/hooks/useCompatSearchParams.tsx",
+        "useCompatSearchParamsHookModuleSpecifier": "@calcom/lib/hooks/useCompatSearchParams",
+        "hookModuleCreation": false
+      }
+    }
+  ]
+}
