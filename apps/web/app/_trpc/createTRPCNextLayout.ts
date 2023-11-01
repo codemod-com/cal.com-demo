@@ -1,5 +1,7 @@
-// originally from https://github.com/trpc/next-13/blob/main/%40trpc/next-layout/createTRPCNextLayout.ts
-// and adapted by Benny for our usage
+// originally from in the "experimental playground for tRPC + next.js 13" repo owned by trpc team
+// file link: https://github.com/trpc/next-13/blob/main/%40trpc/next-layout/createTRPCNextLayout.ts
+// repo link: https://github.com/trpc/next-13
+// code is / will continue to be adapted for our usage
 import { dehydrate, QueryClient } from "@tanstack/query-core";
 import type { DehydratedState } from "@tanstack/react-query";
 
