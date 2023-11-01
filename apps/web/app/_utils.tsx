@@ -1,3 +1,4 @@
+import { type TFunction } from "i18next";
 import { headers } from "next/headers";
 
 import { constructGenericImage } from "@calcom/lib/OgImages";
@@ -7,10 +8,8 @@ import { getFixedT } from "@calcom/lib/server/getFixedT";
 import { preparePageMetadata } from "@lib/metadata";
 
 export const _generateMetadata = async (
-  titleKey: string,
-  descriptionKey: string,
-  usePlainTitleKey?: boolean,
-  usePlainDescriptionKey?: boolean
+  getTitle: (t: TFunction<string, undefined>) => string,
+  getDescription: (t: TFunction<string, undefined>) => string
 ) => {
   const h = headers();
   const canonical = h.get("x-pathname") ?? "";
@@ -18,8 +17,8 @@ export const _generateMetadata = async (
 
   const t = await getFixedT(locale, "common");
 
-  const title = usePlainTitleKey ? titleKey : t(titleKey);
-  const description = usePlainDescriptionKey ? descriptionKey : t(descriptionKey);
+  const title = getTitle(t);
+  const description = getDescription(t);
 
   const metadataBase = new URL(IS_CALCOM ? "https://cal.com" : WEBAPP_URL);
 
