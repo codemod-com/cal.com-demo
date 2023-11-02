@@ -5,6 +5,7 @@
 import { dehydrate, QueryClient } from "@tanstack/query-core";
 import type { DehydratedState } from "@tanstack/react-query";
 
+import type { Maybe, TRPCClientError, TRPCClientErrorLike } from "@calcom/trpc";
 import {
   callProcedure,
   type AnyProcedure,
@@ -19,6 +20,31 @@ import {
 } from "@calcom/trpc/server";
 
 import { createRecursiveProxy, createFlatProxy } from "@trpc/server/shared";
+
+// copy starts
+// copied from trpc/trpc repo
+// ref: https://github.com/trpc/trpc/blob/main/packages/next/src/withTRPC.tsx#L37-#L58
+function transformQueryOrMutationCacheErrors<
+  TState extends DehydratedState["queries"][0] | DehydratedState["mutations"][0]
+>(result: TState): TState {
+  const error = result.state.error as Maybe<TRPCClientError<any>>;
+  if (error instanceof Error && error.name === "TRPCClientError") {
+    const newError: TRPCClientErrorLike<any> = {
+      message: error.message,
+      data: error.data,
+      shape: error.shape,
+    };
+    return {
+      ...result,
+      state: {
+        ...result.state,
+        error: newError,
+      },
+    };
+  }
+  return result;
+}
+// copy ends
 
 interface CreateTRPCNextLayoutOptions<TRouter extends AnyRouter> {
   router: TRouter;
@@ -103,8 +129,26 @@ export function createTRPCNextLayout<TRouter extends AnyRouter>(
     }
 
     if (key === "dehydrate") {
-      return () => transformer.serialize(dehydrate(queryClient));
+      // copy starts
+      // copied from trpc/trpc repo
+      // ref: https://github.com/trpc/trpc/blob/main/packages/next/src/withTRPC.tsx#L214-#L229
+      const dehydratedCache = dehydrate(queryClient, {
+        shouldDehydrateQuery() {
+          // makes sure errors are also dehydrated
+          return true;
+        },
+      });
+
+      // since error instances can't be serialized, let's make them into `TRPCClientErrorLike`-objects
+      const dehydratedCacheWithErrors = {
+        ...dehydratedCache,
+        queries: dehydratedCache.queries.map(transformQueryOrMutationCacheErrors),
+        mutations: dehydratedCache.mutations.map(transformQueryOrMutationCacheErrors),
+      };
+
+      return () => transformer.serialize(dehydratedCacheWithErrors);
     }
+    // copy ends
 
     return createRecursiveProxy(async (callOpts) => {
       const path = [key, ...callOpts.path];
