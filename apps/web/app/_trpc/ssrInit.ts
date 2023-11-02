@@ -1,4 +1,3 @@
-import type { SSRConfig } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { headers } from "next/headers";
 import superjson from "superjson";
@@ -18,7 +17,7 @@ export async function ssrInit(options?: { noI18nPreload: boolean }) {
     router: appRouter,
     transformer: superjson,
     createContext() {
-      return { prisma, session: null, locale, i18n: i18n as unknown as SSRConfig };
+      return { prisma, session: null, locale, i18n };
     },
   });
 
