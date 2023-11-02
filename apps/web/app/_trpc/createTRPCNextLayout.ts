@@ -32,6 +32,8 @@ export type DecorateProcedure<TProcedure extends AnyProcedure> = TProcedure exte
   ? {
       fetch(input: inferProcedureInput<TProcedure>): Promise<inferProcedureOutput<TProcedure>>;
       fetchInfinite(input: inferProcedureInput<TProcedure>): Promise<inferProcedureOutput<TProcedure>>;
+      prefetch(input: inferProcedureInput<TProcedure>): Promise<inferProcedureOutput<TProcedure>>;
+      prefetchInfinite(input: inferProcedureInput<TProcedure>): Promise<inferProcedureOutput<TProcedure>>;
     }
   : never;
 
@@ -57,6 +59,7 @@ export type DecoratedProcedureRecord<
 
 type CreateTRPCNextLayout<TRouter extends AnyRouter> = DecoratedProcedureRecord<TRouter["_def"]["record"]> & {
   dehydrate(): Promise<DehydratedState>;
+  queryClient: QueryClient;
 };
 
 function getQueryKey(path: string[], input: unknown) {
@@ -90,14 +93,19 @@ export function createTRPCNextLayout<TRouter extends AnyRouter>(
     serialize: (v) => v,
     deserialize: (v) => v,
   };
+
   return createRecursiveProxy(async (callOpts) => {
     const path = [...callOpts.path];
-    const lastPart = path.pop();
+    const utilName = path.pop();
     const state = getState();
-    const ctx = await state.context;
     const { queryClient } = state;
+    const ctx = await state.context;
 
-    if (lastPart === "dehydrate" && path.length === 0) {
+    if (utilName === "queryClient") {
+      return queryClient;
+    }
+
+    if (utilName === "dehydrate" && path.length === 0) {
       if (queryClient.isFetching()) {
         await new Promise<void>((resolve) => {
           const unsub = queryClient.getQueryCache().subscribe((event) => {
@@ -119,8 +127,16 @@ export function createTRPCNextLayout<TRouter extends AnyRouter>(
     const input = callOpts.args[0];
     const queryKey = getQueryKey(path, input);
 
-    if (lastPart === "fetchInfinite") {
+    if (utilName === "fetchInfinite") {
       return queryClient.fetchInfiniteQuery(queryKey, () => caller.query(pathStr, input));
+    }
+
+    if (utilName === "prefetch") {
+      return queryClient.prefetchQuery(queryKey, () => caller.query(pathStr, input));
+    }
+
+    if (utilName === "prefetchInfinite") {
+      return queryClient.prefetchInfiniteQuery(queryKey, () => caller.query(pathStr, input));
     }
 
     return queryClient.fetchQuery(queryKey, () => caller.query(pathStr, input));
