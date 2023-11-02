@@ -1,8 +1,7 @@
-import type { SSRConfig } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { headers } from "next/headers";
 import superjson from "superjson";
 
-import { create } from "@calcom/lib/server/getFixedT";
 import prisma from "@calcom/prisma";
 import { appRouter } from "@calcom/trpc/server/routers/_app";
 
@@ -17,14 +16,13 @@ import { createTRPCNextLayout } from "./createTRPCNextLayout";
 export async function ssgInit() {
   const locale = headers().get("x-locale") ?? "en";
 
-  const i18n = await create(locale, "common");
+  const i18n = (await serverSideTranslations(locale, ["common"])) || "en";
 
   const ssg = createTRPCNextLayout({
     router: appRouter,
     transformer: superjson,
     createContext() {
-      // TODO: improve typing so that casting as SSRConfig is unnecessary
-      return { prisma, session: null, locale, i18n: i18n as unknown as SSRConfig };
+      return { prisma, session: null, locale, i18n };
     },
   });
 
