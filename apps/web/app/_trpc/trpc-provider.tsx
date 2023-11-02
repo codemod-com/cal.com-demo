@@ -1,14 +1,18 @@
-"use client";
-
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { HydrateClient } from "app/_trpc/HydrateClient";
 import { trpc } from "app/_trpc/client";
-import { useState } from "react";
+import { createTRPCNextLayout } from "app/_trpc/createTRPCNextLayout";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { headers } from "next/headers";
+import { use, useState } from "react";
 import superjson from "superjson";
 
+import prisma from "@calcom/prisma";
 import { httpBatchLink } from "@calcom/trpc/client/links/httpBatchLink";
 import { httpLink } from "@calcom/trpc/client/links/httpLink";
 import { loggerLink } from "@calcom/trpc/client/links/loggerLink";
 import { splitLink } from "@calcom/trpc/client/links/splitLink";
+import { appRouter } from "@calcom/trpc/server/routers/_app";
 
 const ENDPOINTS = [
   "admin",
@@ -116,9 +120,25 @@ export const TrpcProvider: React.FC<{ children: React.ReactNode }> = ({ children
     })
   );
 
+  const locale = headers().get("x-locale") ?? "en";
+
+  const i18n = use(serverSideTranslations(locale, ["common"])) ?? "en";
+
+  const helper = createTRPCNextLayout({
+    router: appRouter,
+    transformer: superjson,
+    createContext() {
+      return { prisma, session: null, locale, i18n };
+    },
+  });
+
+  const hydratedState = trpc.useDehydratedState(trpcClient, use(helper.dehydrate()));
+
   return (
     <trpc.Provider client={trpcClient} queryClient={queryClient}>
-      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+      <QueryClientProvider client={queryClient}>
+        {hydratedState ? <HydrateClient state={hydratedState}>{children}</HydrateClient> : children}
+      </QueryClientProvider>
     </trpc.Provider>
   );
 };
