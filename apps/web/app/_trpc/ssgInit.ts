@@ -2,17 +2,12 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { headers } from "next/headers";
 import superjson from "superjson";
 
+import { CALCOM_VERSION } from "@calcom/lib/constants";
 import prisma from "@calcom/prisma";
 import { appRouter } from "@calcom/trpc/server/routers/_app";
 
 import { createTRPCNextLayout } from "./createTRPCNextLayout";
 
-/**
- * Initialize static site rendering tRPC helpers.
- * Provides a method to prefetch tRPC-queries in a `getStaticProps`-function.
- * Automatically prefetches i18n based on the passed in `context`-object to prevent i18n-flickering.
- * Make sure to `return { props: { trpcState: ssr.dehydrate() } }` at the end.
- */
 export async function ssgInit() {
   const locale = headers().get("x-locale") ?? "en";
 
@@ -25,6 +20,15 @@ export async function ssgInit() {
       return { prisma, session: null, locale, i18n };
     },
   });
+
+  // i18n translations are already retrieved from serverSideTranslations call, there is no need to run a i18n.fetch
+  // we can set query data directly to the queryClient
+  const queryKey = [
+    ["viewer", "public", "i18n"],
+    { input: { locale, CalComVersion: CALCOM_VERSION }, type: "query" },
+  ];
+
+  ssg.queryClient.setQueryData(queryKey, { i18n });
 
   return ssg;
 }
