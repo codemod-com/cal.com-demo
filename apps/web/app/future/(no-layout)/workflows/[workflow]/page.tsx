@@ -1,4 +1,5 @@
 import { headers } from "next/headers";
+import { notFound } from "next/navigation";
 import { z } from "zod";
 
 import Workflow from "@calcom/features/ee/workflows/pages/workflow";
@@ -19,7 +20,9 @@ export async function getProps({ params }: { params: Params }) {
   const safeParams = querySchema.safeParse(params);
 
   console.log("Built workflow page:", safeParams);
-  if (!safeParams.success) return { notFound: true };
+  if (!safeParams.success) {
+    return notFound();
+  }
   return { workflow: safeParams.data.workflow };
 }
 
