@@ -135,7 +135,15 @@ const matcherConfigUserTypeEmbedRoute = {
 /** @type {import("next").NextConfig} */
 const nextConfig = {
   experimental: {
-    serverComponentsExternalPackages: ["next-i18next", "auth0"],
+    serverComponentsExternalPackages: [
+      "next-i18next",
+      "auth0",
+      "typeorm",
+      "@boxyhq",
+      "@ewsjs",
+      "handlebars",
+      "ews-javascript-api",
+    ],
   },
   i18n: {
     ...i18n,
@@ -186,7 +194,7 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  webpack: (config, { webpack, buildId }) => {
+  webpack: (config, { webpack, buildId, isServer }) => {
     config.plugins.push(
       new CopyWebpackPlugin({
         patterns: [
