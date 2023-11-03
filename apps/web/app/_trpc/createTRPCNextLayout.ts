@@ -5,16 +5,17 @@
 import { dehydrate, QueryClient } from "@tanstack/query-core";
 import type { DehydratedState } from "@tanstack/react-query";
 
-import type {
-  AnyProcedure,
-  AnyQueryProcedure,
-  AnyRouter,
-  DataTransformer,
-  inferProcedureInput,
-  inferProcedureOutput,
-  inferRouterContext,
-  MaybePromise,
-  ProcedureRouterRecord,
+import {
+  callProcedure,
+  type AnyProcedure,
+  type AnyQueryProcedure,
+  type AnyRouter,
+  type DataTransformer,
+  type inferProcedureInput,
+  type inferProcedureOutput,
+  type inferRouterContext,
+  type MaybePromise,
+  type ProcedureRouterRecord,
 } from "@calcom/trpc/server";
 
 import { createRecursiveProxy } from "@trpc/server/shared";
@@ -66,9 +67,23 @@ function getQueryKey(path: string[], input: unknown) {
   return input === undefined ? [path] : [path, input];
 }
 
+const getQueryClientContainer = () => {
+  let queryClient: QueryClient | null = null;
+
+  return () => {
+    if (queryClient === null) {
+      queryClient = new QueryClient();
+    }
+
+    return queryClient;
+  };
+};
+
 export function createTRPCNextLayout<TRouter extends AnyRouter>(
   opts: CreateTRPCNextLayoutOptions<TRouter>
 ): CreateTRPCNextLayout<TRouter> {
+  const getQueryClient = getQueryClientContainer();
+
   function getState() {
     // const requestStorage = getRequestStorage<{
     //   _trpc: {
@@ -86,7 +101,7 @@ export function createTRPCNextLayout<TRouter extends AnyRouter>(
     return {
       cache: Object.create(null),
       context: opts.createContext(),
-      queryClient: new QueryClient(),
+      getQueryClient,
     };
   }
   const transformer = opts.transformer ?? {
@@ -98,7 +113,7 @@ export function createTRPCNextLayout<TRouter extends AnyRouter>(
     const path = [...callOpts.path];
     const utilName = path.pop();
     const state = getState();
-    const { queryClient } = state;
+    const queryClient = state.getQueryClient();
     const ctx = await state.context;
 
     if (utilName === "queryClient") {
@@ -117,7 +132,6 @@ export function createTRPCNextLayout<TRouter extends AnyRouter>(
         });
       }
       const dehydratedState = dehydrate(queryClient);
-
       return transformer.serialize(dehydratedState);
     }
 
@@ -132,7 +146,19 @@ export function createTRPCNextLayout<TRouter extends AnyRouter>(
     }
 
     if (utilName === "prefetch") {
-      return queryClient.prefetchQuery(queryKey, () => caller.query(pathStr, input));
+      return queryClient.prefetchQuery({
+        queryKey,
+        queryFn: async () => {
+          const res = await callProcedure({
+            procedures: opts.router._def.procedures,
+            path: pathStr,
+            rawInput: input,
+            ctx,
+            type: "query",
+          });
+          return res;
+        },
+      });
     }
 
     if (utilName === "prefetchInfinite") {
