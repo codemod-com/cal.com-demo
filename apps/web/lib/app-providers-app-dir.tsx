@@ -256,7 +256,7 @@ const AppProviders = (props: PageWrapperProps) => {
   const isBookingPage = useIsBookingPage();
 
   const RemainingProviders = (
-    <TrpcProvider>
+    <TrpcProvider dehydratedState={props.dehydratedState}>
       <EventCollectionProvider options={{ apiPath: "/api/collect-events" }}>
         <SessionProvider>
           <CustomI18nextProvider i18n={props.i18n}>
@@ -265,7 +265,7 @@ const AppProviders = (props: PageWrapperProps) => {
               <CalcomThemeProvider
                 themeBasis={props.themeBasis}
                 nonce={props.nonce}
-                isThemeSupported={props.isThemeSupported}
+                isThemeSupported={!!props.isThemeSupported}
                 isBookingPage={props.isBookingPage || isBookingPage}>
                 <FeatureFlagsProvider>
                   <OrgBrandProvider>

@@ -1,5 +1,6 @@
 "use client";
 
+import { type DehydratedState } from "@tanstack/react-query";
 import type { SSRConfig } from "next-i18next";
 import { Inter } from "next/font/google";
 import localFont from "next/font/local";
@@ -33,6 +34,7 @@ export type PageWrapperProps = Readonly<{
   requiresLicense: boolean;
   nonce: string | undefined;
   themeBasis: string | null;
+  dehydratedState?: DehydratedState;
   isThemeSupported?: boolean;
   isBookingPage?: boolean;
   i18n?: SSRConfig;
