@@ -194,7 +194,7 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  webpack: (config, { webpack, buildId, isServer }) => {
+  webpack: (config, { webpack, buildId }) => {
     config.plugins.push(
       new CopyWebpackPlugin({
         patterns: [
