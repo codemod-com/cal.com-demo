@@ -67,43 +67,35 @@ function getQueryKey(path: string[], input: unknown) {
   return input === undefined ? [path] : [path, input];
 }
 
-const getQueryClientContainer = () => {
-  let queryClient: QueryClient | null = null;
+const getRequestStorage = <TRouter extends AnyRouter>(opts: CreateTRPCNextLayoutOptions<TRouter>) => {
+  let _trpc: {
+    cache: unknown;
+    queryClient: QueryClient;
+    context: inferRouterContext<TRouter>;
+  } | null = null;
 
   return () => {
-    if (queryClient === null) {
-      queryClient = new QueryClient();
+    if (_trpc === null) {
+      _trpc = {
+        cache: Object.create(null),
+        context: opts.createContext(),
+        queryClient: new QueryClient(),
+      };
     }
 
-    return queryClient;
+    return _trpc;
   };
 };
 
 export function createTRPCNextLayout<TRouter extends AnyRouter>(
   opts: CreateTRPCNextLayoutOptions<TRouter>
 ): CreateTRPCNextLayout<TRouter> {
-  const getQueryClient = getQueryClientContainer();
+  const getRequest = getRequestStorage(opts);
 
   function getState() {
-    // const requestStorage = getRequestStorage<{
-    //   _trpc: {
-    //     queryClient: QueryClient;
-    //     context: inferRouterContext<TRouter>;
-    //   };
-    // }>();
-
-    // requestStorage._trpc = requestStorage._trpc ?? {
-    //   cache: Object.create(null),
-    //   context: opts.createContext(),
-    //   queryClient: new QueryClient(),
-    // };
-    // return requestStorage._trpc;
-    return {
-      cache: Object.create(null),
-      context: opts.createContext(),
-      getQueryClient,
-    };
+    return getRequest();
   }
+
   const transformer = opts.transformer ?? {
     serialize: (v) => v,
     deserialize: (v) => v,
@@ -113,7 +105,7 @@ export function createTRPCNextLayout<TRouter extends AnyRouter>(
     const path = [...callOpts.path];
     const utilName = path.pop();
     const state = getState();
-    const queryClient = state.getQueryClient();
+    const { queryClient } = state;
     const ctx = await state.context;
 
     if (utilName === "queryClient") {
