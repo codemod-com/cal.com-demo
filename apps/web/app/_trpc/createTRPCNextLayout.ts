@@ -103,18 +103,7 @@ export function createTRPCNextLayout<TRouter extends AnyRouter>(
     }
 
     if (key === "dehydrate") {
-      // if (queryClient.isFetching()) {
-      //   await new Promise<void>((resolve) => {
-      //     const unsub = queryClient.getQueryCache().subscribe((event) => {
-      //       if (event?.query.getObserversCount() === 0) {
-      //         resolve();
-      //         unsub();
-      //       }
-      //     });
-      //   });
-      // }
-      const dehydratedState = dehydrate(queryClient);
-      return () => transformer.serialize(dehydratedState);
+      return () => transformer.serialize(dehydrate(queryClient));
     }
 
     return createRecursiveProxy(async (callOpts) => {
