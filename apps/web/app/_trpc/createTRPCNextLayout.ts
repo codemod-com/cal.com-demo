@@ -5,19 +5,20 @@
 import { dehydrate, QueryClient } from "@tanstack/query-core";
 import type { DehydratedState } from "@tanstack/react-query";
 
-import type {
-  AnyProcedure,
-  AnyQueryProcedure,
-  AnyRouter,
-  DataTransformer,
-  inferProcedureInput,
-  inferProcedureOutput,
-  inferRouterContext,
-  MaybePromise,
-  ProcedureRouterRecord,
+import {
+  callProcedure,
+  type AnyProcedure,
+  type AnyQueryProcedure,
+  type AnyRouter,
+  type DataTransformer,
+  type inferProcedureInput,
+  type inferProcedureOutput,
+  type inferRouterContext,
+  type MaybePromise,
+  type ProcedureRouterRecord,
 } from "@calcom/trpc/server";
 
-import { createRecursiveProxy } from "@trpc/server/shared";
+import { createRecursiveProxy, createFlatProxy } from "@trpc/server/shared";
 
 interface CreateTRPCNextLayoutOptions<TRouter extends AnyRouter> {
   router: TRouter;
@@ -66,79 +67,81 @@ function getQueryKey(path: string[], input: unknown) {
   return input === undefined ? [path] : [path, input];
 }
 
+const getStateContainer = <TRouter extends AnyRouter>(opts: CreateTRPCNextLayoutOptions<TRouter>) => {
+  let _trpc: {
+    queryClient: QueryClient;
+    context: inferRouterContext<TRouter>;
+  } | null = null;
+
+  return () => {
+    if (_trpc === null) {
+      _trpc = {
+        context: opts.createContext(),
+        queryClient: new QueryClient(),
+      };
+    }
+
+    return _trpc;
+  };
+};
+
 export function createTRPCNextLayout<TRouter extends AnyRouter>(
   opts: CreateTRPCNextLayoutOptions<TRouter>
 ): CreateTRPCNextLayout<TRouter> {
-  function getState() {
-    // const requestStorage = getRequestStorage<{
-    //   _trpc: {
-    //     queryClient: QueryClient;
-    //     context: inferRouterContext<TRouter>;
-    //   };
-    // }>();
+  const getState = getStateContainer(opts);
 
-    // requestStorage._trpc = requestStorage._trpc ?? {
-    //   cache: Object.create(null),
-    //   context: opts.createContext(),
-    //   queryClient: new QueryClient(),
-    // };
-    // return requestStorage._trpc;
-    return {
-      cache: Object.create(null),
-      context: opts.createContext(),
-      queryClient: new QueryClient(),
-    };
-  }
   const transformer = opts.transformer ?? {
     serialize: (v) => v,
     deserialize: (v) => v,
   };
 
-  return createRecursiveProxy(async (callOpts) => {
-    const path = [...callOpts.path];
-    const utilName = path.pop();
+  return createFlatProxy((key) => {
     const state = getState();
     const { queryClient } = state;
-    const ctx = await state.context;
-
-    if (utilName === "queryClient") {
+    if (key === "queryClient") {
       return queryClient;
     }
 
-    if (utilName === "dehydrate" && path.length === 0) {
-      if (queryClient.isFetching()) {
-        await new Promise<void>((resolve) => {
-          const unsub = queryClient.getQueryCache().subscribe((event) => {
-            if (event?.query.getObserversCount() === 0) {
-              resolve();
-              unsub();
-            }
-          });
+    if (key === "dehydrate") {
+      return () => transformer.serialize(dehydrate(queryClient));
+    }
+
+    return createRecursiveProxy(async (callOpts) => {
+      const path = [key, ...callOpts.path];
+      const utilName = path.pop();
+      const ctx = await state.context;
+
+      const caller = opts.router.createCaller(ctx);
+
+      const pathStr = path.join(".");
+      const input = callOpts.args[0];
+      const queryKey = getQueryKey(path, input);
+
+      if (utilName === "fetchInfinite") {
+        return queryClient.fetchInfiniteQuery(queryKey, () => caller.query(pathStr, input));
+      }
+
+      if (utilName === "prefetch") {
+        return queryClient.prefetchQuery({
+          queryKey,
+          queryFn: async () => {
+            const res = await callProcedure({
+              procedures: opts.router._def.procedures,
+              path: pathStr,
+              rawInput: input,
+              ctx,
+              type: "query",
+            });
+            return res;
+          },
         });
       }
-      const dehydratedState = dehydrate(queryClient);
 
-      return transformer.serialize(dehydratedState);
-    }
+      if (utilName === "prefetchInfinite") {
+        return queryClient.prefetchInfiniteQuery(queryKey, () => caller.query(pathStr, input));
+      }
 
-    const caller = opts.router.createCaller(ctx);
-
-    const pathStr = path.join(".");
-    const input = callOpts.args[0];
-    const queryKey = getQueryKey(path, input);
-
-    if (utilName === "fetchInfinite") {
-      return queryClient.fetchInfiniteQuery(queryKey, () => caller.query(pathStr, input));
-    }
-
-    if (utilName === "prefetch") {
-      return queryClient.prefetchQuery(queryKey, () => caller.query(pathStr, input));
-    }
-
-    if (utilName === "prefetchInfinite") {
-      return queryClient.prefetchInfiniteQuery(queryKey, () => caller.query(pathStr, input));
-    }
-
-    return queryClient.fetchQuery(queryKey, () => caller.query(pathStr, input));
-  }) as CreateTRPCNextLayout<TRouter>;
+      return queryClient.fetchQuery(queryKey, () => caller.query(pathStr, input));
+    }) as CreateTRPCNextLayout<TRouter>;
+  });
 }
