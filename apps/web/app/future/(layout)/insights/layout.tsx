@@ -1,4 +1,5 @@
 import { headers } from "next/headers";
+import { notFound } from "next/navigation";
 import { type ReactElement } from "react";
 
 import { getFeatureFlagMap } from "@calcom/features/flags/server/utils";
@@ -15,9 +16,7 @@ export const getProps = async () => {
   const flags = await getFeatureFlagMap(prisma);
 
   if (flags.insights === false) {
-    return {
-      notFound: true,
-    };
+    return notFound();
   }
 
   return {
