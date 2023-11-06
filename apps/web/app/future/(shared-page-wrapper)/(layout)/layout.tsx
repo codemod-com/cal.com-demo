@@ -15,12 +15,7 @@ export default async function WrapperWithLayout({ children }: WrapperWithLayoutP
   const nonce = h.get("x-nonce") ?? undefined;
 
   return (
-    <PageWrapper
-      getLayout={getLayout}
-      requiresLicense={false}
-      nonce={nonce}
-      themeBasis={null}
-      {...children.props}>
+    <PageWrapper getLayout={getLayout} requiresLicense={false} nonce={nonce} themeBasis={null}>
       {children}
     </PageWrapper>
   );
