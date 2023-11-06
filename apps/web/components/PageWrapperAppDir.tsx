@@ -38,7 +38,6 @@ export type PageWrapperProps = Readonly<{
   isThemeSupported?: boolean;
   isBookingPage?: boolean;
   i18n?: SSRConfig;
-  notFound?: boolean;
 }>;
 
 function PageWrapper(props: PageWrapperProps) {
