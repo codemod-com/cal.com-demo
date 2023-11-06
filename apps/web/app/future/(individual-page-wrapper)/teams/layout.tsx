@@ -1,5 +1,6 @@
 import { ssrInit } from "app/_trpc/ssrInit";
 import { cookies, headers } from "next/headers";
+import { useSearchParams } from "next/navigation";
 import { type NextRequest } from "next/server";
 import { type ReactElement } from "react";
 
@@ -12,7 +13,7 @@ type LayoutProps = {
   children: ReactElement;
 };
 
-const getProps = async () => {
+const getProps = async (_token: string[] | string) => {
   const ssr = await ssrInit();
   await ssr.viewer.me.prefetch();
   const req: NextRequest = { cookies: cookies(), headers: headers() };
@@ -20,8 +21,8 @@ const getProps = async () => {
     req,
   });
 
-  // const token = Array.isArray(context.query?.token) ? context.query.token[0] : context.query?.token;
-  const token = null;
+  const token = Array.isArray(_token) ? _token[0] : _token;
+
   const callbackUrl = token ? `/teams?token=${encodeURIComponent(token)}` : null;
 
   if (!session) {
@@ -39,7 +40,9 @@ const getProps = async () => {
 export default async function Layout({ children }: LayoutProps) {
   const h = headers();
   const nonce = h.get("x-nonce") ?? undefined;
-  const props = await getProps();
+  const searchParams = useSearchParams();
+
+  const props = await getProps(searchParams?.get("token") ?? "");
 
   return (
     <PageWrapper getLayout={getLayout} requiresLicense={false} nonce={nonce} themeBasis={null} {...props}>
