@@ -17,6 +17,7 @@ export const EventTypeAppCard = (props: {
   disabled?: boolean;
 }) => {
   const { app, getAppData, setAppData, LockedIcon, disabled } = props;
+
   return (
     <ErrorBoundary message={`There is some problem with ${app.name} App`}>
       <EventTypeAppContext.Provider value={{ getAppData, setAppData, LockedIcon, disabled }}>

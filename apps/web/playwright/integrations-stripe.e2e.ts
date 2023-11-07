@@ -86,6 +86,8 @@ test.describe("Stripe integration", () => {
 
     await selectFirstAvailableTimeSlotNextMonth(page);
 
+    // booking goes to payment?
+
     await Promise.all([
       page.waitForURL("/payment/*"),
       page.click('[data-testid="confirm-reschedule-button"]'),

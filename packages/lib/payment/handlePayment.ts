@@ -6,6 +6,7 @@ import type { CompleteEventType } from "@calcom/prisma/zod";
 import type { CalendarEvent } from "@calcom/types/Calendar";
 import type { IAbstractPaymentService, PaymentApp } from "@calcom/types/PaymentService";
 
+// TODO
 const handlePayment = async (
   evt: CalendarEvent,
   selectedEventType: Pick<CompleteEventType, "metadata" | "title">,
@@ -27,9 +28,14 @@ const handlePayment = async (
   bookerName: string,
   bookerEmail: string
 ) => {
+  console.log("paymentAppCredentials", paymentAppCredentials);
+
   const paymentApp = (await appStore[
     paymentAppCredentials?.app?.dirName as keyof typeof appStore
   ]()) as PaymentApp;
+
+  console.log("paymentApp", paymentApp);
+
   if (!paymentApp?.lib?.PaymentService) {
     console.warn(`payment App service of type ${paymentApp} is not implemented`);
     return null;
@@ -41,6 +47,8 @@ const handlePayment = async (
 
   const paymentOption =
     selectedEventType?.metadata?.apps?.[paymentAppCredentials.appId].paymentOption || "ON_BOOKING";
+
+  console.log("HHHH", paymentOption);
 
   let paymentData;
   if (paymentOption === "HOLD") {
@@ -54,6 +62,7 @@ const handlePayment = async (
       paymentOption
     );
   } else {
+    // creation!
     paymentData = await paymentInstance.create(
       {
         amount: selectedEventType?.metadata?.apps?.[paymentAppCredentials.appId].price,
