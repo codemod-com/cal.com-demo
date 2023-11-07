@@ -40,4 +40,13 @@ const appStore = {
   shimmervideo: () => import("./shimmervideo"),
 };
 
-export default appStore;
+const exportedAppStore: typeof appStore & {
+  ["mock-payment-app"]?: () => Promise<typeof import("./mock-payment-app/index")>;
+} = appStore;
+
+// used only in tests
+// if (process.env.MOCK_PAYMENT_APP_ENABLED) {
+exportedAppStore["mock-payment-app"] = () => import("./mock-payment-app/index");
+// }
+
+export default exportedAppStore;
