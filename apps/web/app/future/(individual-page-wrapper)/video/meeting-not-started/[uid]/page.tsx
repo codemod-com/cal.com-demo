@@ -19,7 +19,6 @@ type PageProps = {
 };
 
 export async function getProps({ params }: { params: Params }) {
-  console.log(params.uid, "!@!@#!@#!@#!@#!@");
   const booking = await prisma.booking.findUnique({
     where: {
       uid: params.uid,
