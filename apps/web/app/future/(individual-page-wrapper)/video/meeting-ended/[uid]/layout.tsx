@@ -1,5 +1,4 @@
 import { headers } from "next/headers";
-import { useSearchParams } from "next/navigation";
 import { type ReactElement } from "react";
 
 import prisma, { bookingMinimalSelect } from "@calcom/prisma";
@@ -55,17 +54,13 @@ async function getProps(uid: string) {
 export default async function Layout({ children }: LayoutProps) {
   const h = headers();
   const nonce = h.get("x-nonce") ?? undefined;
+  const fullUrl = h.get("x-url") ?? "";
+  const uid = new URL(fullUrl).searchParams.get("uid") ?? "";
 
-  const searchParams = useSearchParams();
-  const props = await getProps(searchParams?.get("uid") ?? "");
+  const props = await getProps(uid);
 
   return (
-    <PageWrapper
-      getLayout={(page) => page}
-      requiresLicense={false}
-      nonce={nonce}
-      themeBasis={null}
-      {...props}>
+    <PageWrapper getLayout={null} requiresLicense={false} nonce={nonce} themeBasis={null} {...props}>
       {children}
     </PageWrapper>
   );
