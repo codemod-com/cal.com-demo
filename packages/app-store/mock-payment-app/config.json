@@ -13,5 +13,6 @@
   "isTemplate": false,
   "__createdUsingCli": true,
   "__template": "basic",
-  "dirName": "mock-payment-app"
+  "dirName": "mock-payment-app",
+  "extendsFeature": "EventType"
 }

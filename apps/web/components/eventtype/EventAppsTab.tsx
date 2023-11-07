@@ -24,6 +24,7 @@ export const EventAppsTab = ({ eventType }: { eventType: EventType }) => {
   });
 
   const methods = useFormContext<FormValues>();
+  // TODO here?
   const installedApps =
     eventTypeApps?.items.filter((app) => app.userCredentialIds.length || app.teams.length) || [];
   const notInstalledApps =
@@ -143,6 +144,7 @@ export const EventAppsTab = ({ eventType }: { eventType: EventType }) => {
           ) : null}
           {cardsForAppsWithTeams.map((apps) => apps.map((cards) => cards))}
           {installedApps.map((app) => {
+            console.log("HERE1", !app.teams.length);
             if (!app.teams.length)
               return (
                 <EventTypeAppCard

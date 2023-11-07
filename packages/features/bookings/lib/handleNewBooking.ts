@@ -634,6 +634,7 @@ function getCustomInputsResponses(
   return customInputsResponses;
 }
 
+// HERE
 async function handler(
   req: NextApiRequest & { userId?: number | undefined },
   {
@@ -2327,17 +2328,24 @@ async function handler(
             calEvent: getPiiFreeCalendarEvent(evt),
           })
         );
-        await sendScheduledEmails(
-          {
-            ...evt,
-            additionalInformation: metadata,
-            additionalNotes,
-            customInputs,
-          },
-          eventNameObject,
-          isHostConfirmationEmailsDisabled,
-          isAttendeeConfirmationEmailDisabled
-        );
+
+        console.log("ABCDDDDD");
+
+        try {
+          await sendScheduledEmails(
+            {
+              ...evt,
+              additionalInformation: metadata,
+              additionalNotes,
+              customInputs,
+            },
+            eventNameObject,
+            isHostConfirmationEmailsDisabled,
+            isAttendeeConfirmationEmailDisabled
+          );
+        } catch (error) {
+          console.error(error);
+        }
       }
     }
   } else {
@@ -2352,11 +2360,13 @@ async function handler(
     );
   }
 
-  const bookingRequiresPayment =
-    !Number.isNaN(paymentAppData.price) &&
-    paymentAppData.price > 0 &&
-    !originalRescheduledBooking?.paid &&
-    !!booking;
+  const bookingRequiresPayment = true;
+  // !Number.isNaN(paymentAppData.price) &&
+  // paymentAppData.price > 0 &&
+  // !originalRescheduledBooking?.paid &&
+  // !!booking;
+
+  console.log(bookingRequiresPayment);
 
   if (!isConfirmedByDefault && noEmail !== true && !bookingRequiresPayment) {
     loggerWithEventDetails.debug(
@@ -2416,6 +2426,10 @@ async function handler(
         },
       },
     });
+
+    // break here
+    console.log("paymentAppData.appId", paymentAppData.appId);
+
     const eventTypePaymentAppCredential = credentialPaymentAppCategories.find((credential) => {
       return credential.appId === paymentAppData.appId;
     });

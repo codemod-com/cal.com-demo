@@ -44,8 +44,8 @@ const exportedAppStore: typeof appStore & {
 } = appStore;
 
 // used only in tests
-if (process.env.MOCK_PAYMENT_APP_ENABLED) {
-  exportedAppStore["mock-payment-app"] = () => import("./mock-payment-app/index");
-}
+// if (process.env.MOCK_PAYMENT_APP_ENABLED) {
+exportedAppStore["mock-payment-app"] = () => import("./mock-payment-app/index");
+// }
 
 export default exportedAppStore;
