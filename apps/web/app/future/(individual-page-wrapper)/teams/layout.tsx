@@ -1,7 +1,7 @@
 import { ssrInit } from "app/_trpc/ssrInit";
 import { cookies, headers } from "next/headers";
 import { useSearchParams } from "next/navigation";
-import { type NextRequest } from "next/server";
+import { type NextApiRequest } from "next/types";
 import { type ReactElement } from "react";
 
 import { getLayout } from "@calcom/features/MainLayoutAppDir";
@@ -16,7 +16,7 @@ type LayoutProps = {
 const getProps = async (_token: string[] | string) => {
   const ssr = await ssrInit();
   await ssr.viewer.me.prefetch();
-  const req: NextRequest = { cookies: cookies(), headers: headers() };
+  const req = { cookies: cookies(), headers: headers() } as unknown as NextApiRequest;
   const session = await getServerSession({
     req,
   });
