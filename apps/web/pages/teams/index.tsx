@@ -17,7 +17,7 @@ import PageWrapper from "@components/PageWrapper";
 import { ssrInit } from "@server/lib/ssr";
 
 type TeamsProps = {
-  isAppDir: boolean;
+  isAppDir?: boolean;
 };
 
 function Teams(props: TeamsProps) {
