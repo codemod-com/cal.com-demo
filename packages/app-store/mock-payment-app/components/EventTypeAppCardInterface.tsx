@@ -14,7 +14,7 @@ import { useLocale } from "@calcom/lib/hooks/useLocale";
 import { Alert, Select, TextField } from "@calcom/ui";
 
 import type { appDataSchema } from "../zod";
-import { PaypalPaymentOptions as paymentOptions } from "../zod";
+import { paymentOptions } from "../zod";
 
 type Option = { value: string; label: string };
 
