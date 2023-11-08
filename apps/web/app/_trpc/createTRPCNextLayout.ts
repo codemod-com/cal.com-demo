@@ -3,7 +3,7 @@
 // repo link: https://github.com/trpc/next-13
 // code is / will continue to be adapted for our usage
 import { dehydrate, QueryClient } from "@tanstack/query-core";
-import type { DehydratedState } from "@tanstack/react-query";
+import type { DehydratedState, QueryKey } from "@tanstack/react-query";
 
 import type { Maybe, TRPCClientError, TRPCClientErrorLike } from "@calcom/trpc";
 import {
@@ -20,6 +20,26 @@ import {
 } from "@calcom/trpc/server";
 
 import { createRecursiveProxy, createFlatProxy } from "@trpc/server/shared";
+
+export function getArrayQueryKey(
+  queryKey: string | [string] | [string, ...unknown[]] | unknown[],
+  type: string
+): QueryKey {
+  const queryKeyArrayed = Array.isArray(queryKey) ? queryKey : [queryKey];
+  const [arrayPath, input] = queryKeyArrayed;
+
+  if (!input && (!type || type === "any")) {
+    return arrayPath.length ? [arrayPath] : ([] as unknown as QueryKey);
+  }
+
+  return [
+    arrayPath,
+    {
+      ...(typeof input !== "undefined" && { input: input }),
+      ...(type && type !== "any" && { type: type }),
+    },
+  ];
+}
 
 // copy starts
 // copied from trpc/trpc repo
@@ -89,10 +109,6 @@ type CreateTRPCNextLayout<TRouter extends AnyRouter> = DecoratedProcedureRecord<
   queryClient: QueryClient;
 };
 
-function getQueryKey(path: string[], input: unknown) {
-  return input === undefined ? [path] : [path, input];
-}
-
 const getStateContainer = <TRouter extends AnyRouter>(opts: CreateTRPCNextLayoutOptions<TRouter>) => {
   let _trpc: {
     queryClient: QueryClient;
@@ -159,15 +175,16 @@ export function createTRPCNextLayout<TRouter extends AnyRouter>(
 
       const pathStr = path.join(".");
       const input = callOpts.args[0];
-      const queryKey = getQueryKey(path, input);
 
       if (utilName === "fetchInfinite") {
-        return queryClient.fetchInfiniteQuery(queryKey, () => caller.query(pathStr, input));
+        return queryClient.fetchInfiniteQuery(getArrayQueryKey([path, input], "infinite"), () =>
+          caller.query(pathStr, input)
+        );
       }
 
       if (utilName === "prefetch") {
         return queryClient.prefetchQuery({
-          queryKey,
+          queryKey: getArrayQueryKey([path, input], "query"),
           queryFn: async () => {
             const res = await callProcedure({
               procedures: opts.router._def.procedures,
@@ -182,10 +199,14 @@ export function createTRPCNextLayout<TRouter extends AnyRouter>(
       }
 
       if (utilName === "prefetchInfinite") {
-        return queryClient.prefetchInfiniteQuery(queryKey, () => caller.query(pathStr, input));
+        return queryClient.prefetchInfiniteQuery(getArrayQueryKey([path, input], "infinite"), () =>
+          caller.query(pathStr, input)
+        );
       }
 
-      return queryClient.fetchQuery(queryKey, () => caller.query(pathStr, input));
+      return queryClient.fetchQuery(getArrayQueryKey([path, input], "query"), () =>
+        caller.query(pathStr, input)
+      );
     }) as CreateTRPCNextLayout<TRouter>;
   });
 }
