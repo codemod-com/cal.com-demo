@@ -3,7 +3,7 @@ import { ssrInit } from "app/_trpc/ssrInit";
 import { _generateMetadata } from "app/_utils";
 import MarkdownIt from "markdown-it";
 import { cookies, headers } from "next/headers";
-import { type NextApiRequest } from "next/types";
+import { redirect } from "next/navigation";
 
 import { getServerSession } from "@calcom/features/auth/lib/getServerSession";
 import { APP_NAME } from "@calcom/lib/constants";
@@ -25,8 +25,6 @@ type PageProps = {
 const md = new MarkdownIt("default", { html: true, breaks: true, linkify: true });
 
 async function getProps({ params }: { params: Params }) {
-  const ssr = await ssrInit();
-
   const booking = await prisma.booking.findUnique({
     where: {
       uid: params.uid,
@@ -59,12 +57,7 @@ async function getProps({ params }: { params: Params }) {
   });
 
   if (!booking || booking.references.length === 0 || !booking.references[0].meetingUrl) {
-    return {
-      redirect: {
-        destination: "/video/no-meeting-found",
-        permanent: false,
-      },
-    };
+    return redirect("/video/no-meeting-found");
   }
 
   //daily.co calls have a 60 minute exit buffer when a user enters a call when it's not available it will trigger the modals
@@ -74,30 +67,30 @@ async function getProps({ params }: { params: Params }) {
   //find out if the meeting is in the past
   const isPast = booking?.endTime <= exitDate;
   if (isPast) {
-    return {
-      redirect: {
-        destination: `/video/meeting-ended/${booking?.uid}`,
-        permanent: false,
-      },
-    };
+    return redirect(`/video/meeting-ended/${booking?.uid}`);
   }
 
   const bookingObj = Object.assign({}, booking, {
     startTime: booking.startTime.toString(),
     endTime: booking.endTime.toString(),
   });
+
   const req = {
     cookies: cookies(),
     headers: headers(),
-  } as unknown as NextApiRequest;
+  };
+
+  // @ts-expect-error emulate req
   const session = await getServerSession({ req });
 
   // set meetingPassword to null for guests
   if (session?.user.id !== bookingObj.user?.id) {
-    bookingObj.references.forEach((bookRef) => {
+    bookingObj.references.forEach((bookRef: any) => {
       bookRef.meetingPassword = null;
     });
   }
+
+  const ssr = await ssrInit();
 
   return {
     meetingUrl: bookingObj.references[0].meetingUrl ?? "",
@@ -119,12 +112,7 @@ export default async function VideoPage({ params }: PageProps) {
   const props = await getProps({ params });
 
   return (
-    <PageWrapper
-      getLayout={(page) => page}
-      requiresLicense={false}
-      nonce={nonce}
-      themeBasis={null}
-      {...props}>
+    <PageWrapper getLayout={null} requiresLicense={false} nonce={nonce} themeBasis={null} {...props}>
       <Page />
     </PageWrapper>
   );
