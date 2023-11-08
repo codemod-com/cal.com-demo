@@ -45,7 +45,7 @@ const stepTransform = (step: (typeof steps)[number]) => {
 };
 
 const stepRouteSchema = z.object({
-  step: z.enum(steps).default(INITIAL_STEP),
+  step: z.array(z.enum(steps)).default([INITIAL_STEP]),
   from: z.string().optional(),
 });
 
@@ -59,8 +59,13 @@ const OnboardingPage = (props: { isAppDir?: boolean }) => {
   // @ts-expect-error Property 'useSuspenseQuery' does not exist on type
   const [user] = trpc.viewer.me.useSuspenseQuery();
   const { t } = useLocale();
-  const result = stepRouteSchema.safeParse(params);
-  const currentStep = result.success ? result.data.step : INITIAL_STEP;
+
+  const result = stepRouteSchema.safeParse({
+    ...params,
+    step: Array.isArray(params.step) ? params.step : [params.step],
+  });
+
+  const currentStep = result.success ? result.data.step[0] : INITIAL_STEP;
   const from = result.success ? result.data.from : "";
   const headers = [
     {
