@@ -14,11 +14,6 @@ export const PaypalPaymentOptions = [
     label: "on_booking_option",
     value: "ON_BOOKING",
   },
-  // @TODO: not required right now
-  // {
-  //   label: "hold_option",
-  //   value: "HOLD",
-  // },
 ];
 
 type PaymentOption = (typeof PaypalPaymentOptions)[number]["value"];
