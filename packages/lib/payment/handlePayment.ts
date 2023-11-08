@@ -28,9 +28,14 @@ const handlePayment = async (
   bookerName: string,
   bookerEmail: string
 ) => {
+  console.log("paymentAppCredentials", paymentAppCredentials);
+
   const paymentApp = (await appStore[
     paymentAppCredentials?.app?.dirName as keyof typeof appStore
   ]()) as PaymentApp;
+
+  console.log("paymentApp", paymentApp);
+
   if (!paymentApp?.lib?.PaymentService) {
     console.warn(`payment App service of type ${paymentApp} is not implemented`);
     return null;
