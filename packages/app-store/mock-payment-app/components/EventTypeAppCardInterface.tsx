@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 import { useAppContextWithSchema } from "@calcom/app-store/EventTypeAppContext";
 import AppCard from "@calcom/app-store/_components/AppCard";
@@ -33,24 +33,25 @@ const EventTypeAppCard: EventTypeAppCardComponent = function EventTypeAppCard({ 
     isAcceptedCurrencyCode(currency) ? currencySymbols[currency] : ""
   );
 
+  // useEffect(() => {
+  //   if (requirePayment) {
+  //     if (!getAppData("currency")) {
+  //       setAppData("currency", currencyOptions[0].value);
+  //     }
+  //     if (!getAppData("paymentOption")) {
+  //       setAppData("paymentOption", paymentOptions[0].value);
+  //     }
+  //   }
+  // }, []);
+
+  const [requirePayment, setRequirePayment] = useState(enable);
+
   const paymentOptionSelectValue = paymentOptions?.find((option) => paymentOption === option.value) || {
     label: paymentOptions[0].label,
     value: paymentOptions[0].value,
   };
-  // TODO what's that?
-  const [requirePayment, setRequirePayment] = useState(enable);
-  const recurringEventDefined = eventType.recurringEvent?.count !== undefined;
 
-  useEffect(() => {
-    if (requirePayment) {
-      if (!getAppData("currency")) {
-        setAppData("currency", currencyOptions[0].value);
-      }
-      if (!getAppData("paymentOption")) {
-        setAppData("paymentOption", paymentOptions[0].value);
-      }
-    }
-  }, []);
+  const recurringEventDefined = eventType.recurringEvent?.count !== undefined;
 
   return (
     <AppCard

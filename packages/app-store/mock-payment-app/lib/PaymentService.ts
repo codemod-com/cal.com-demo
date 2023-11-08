@@ -42,7 +42,7 @@ export class PaymentService implements IAbstractPaymentService {
             },
           },
           amount: payment.amount,
-          externalId: "orderResult.id",
+          externalId: uid,
           currency: payment.currency,
           data: {} as Prisma.InputJsonValue,
           fee: 0,
