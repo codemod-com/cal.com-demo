@@ -52,7 +52,7 @@ async function getData() {
 
   return {
     dehydratedState: await ssr.dehydrate(),
-    hasPendingInvites: user.teams.find((team) => team.accepted === false) ?? false,
+    hasPendingInvites: user.teams.find((team: any) => team.accepted === false) ?? false,
   };
 }
 
@@ -64,7 +64,7 @@ export default async function Page() {
 
   return (
     <PageWrapper getLayout={null} requiresLicense={false} nonce={nonce} themeBasis={null} {...props}>
-      <LegacyPage />
+      <LegacyPage isAppDir />
     </PageWrapper>
   );
 }
