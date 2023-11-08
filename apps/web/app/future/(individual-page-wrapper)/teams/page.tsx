@@ -21,7 +21,7 @@ type PageProps = {
   params: Params;
 };
 
-const getProps = async (_token: string[] | string) => {
+const getProps = async ({ params }: { params: Params }) => {
   const ssr = await ssrInit();
   await ssr.viewer.me.prefetch();
   const req = { cookies: cookies(), headers: headers() };
@@ -32,7 +32,7 @@ const getProps = async (_token: string[] | string) => {
   });
 
   if (!session) {
-    const token = Array.isArray(_token) ? _token[0] : _token;
+    const token = Array.isArray(params.token) ? params.token[0] : params.token;
 
     const callbackUrl = token ? `/teams?token=${encodeURIComponent(token)}` : null;
     return redirect(callbackUrl ? `/auth/login?callbackUrl=${callbackUrl}` : "/auth/login");
@@ -44,10 +44,10 @@ const getProps = async (_token: string[] | string) => {
 export default async function Teams({ params }: PageProps) {
   const h = headers();
   const nonce = h.get("x-nonce") ?? undefined;
-  console.log(params.token);
+  const props = await getProps({ params });
 
   return (
-    <PageWrapper getLayout={getLayout} requiresLicense={false} nonce={nonce} themeBasis={null}>
+    <PageWrapper getLayout={getLayout} requiresLicense={false} nonce={nonce} themeBasis={null} {...props}>
       <Page isAppDir />
     </PageWrapper>
   );
