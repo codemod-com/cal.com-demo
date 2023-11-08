@@ -30,7 +30,6 @@ export async function getServerSession(options: {
   authOptions?: AuthOptions;
 }) {
   const { req, authOptions: { secret } = {} } = options;
-
   const token = await getToken({
     req,
     secret,

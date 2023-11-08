@@ -1,3 +1,6 @@
+"use client";
+
+import { getTprc } from "app/getTrpc";
 import type { GetServerSidePropsContext } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import Head from "next/head";
@@ -12,7 +15,6 @@ import { APP_NAME } from "@calcom/lib/constants";
 import { useLocale } from "@calcom/lib/hooks/useLocale";
 import { useParamsWithFallback } from "@calcom/lib/hooks/useParamsWithFallback";
 import prisma from "@calcom/prisma";
-import { trpc } from "@calcom/trpc";
 import { Button, StepCard, Steps } from "@calcom/ui";
 import { Loader } from "@calcom/ui/components/icon";
 
@@ -43,21 +45,23 @@ const stepTransform = (step: (typeof steps)[number]) => {
 };
 
 const stepRouteSchema = z.object({
-  step: z.array(z.enum(steps)).default([INITIAL_STEP]),
+  step: z.enum(steps).default(INITIAL_STEP),
   from: z.string().optional(),
 });
 
 // TODO: Refactor how steps work to be contained in one array/object. Currently we have steps,initalsteps,headers etc. These can all be in one place
-const OnboardingPage = () => {
+const OnboardingPage = (props: { isAppDir?: boolean }) => {
   const pathname = usePathname();
   const params = useParamsWithFallback();
+
   const router = useRouter();
+  const trpc = getTprc(Boolean(props.isAppDir));
+  // @ts-expect-error Property 'useSuspenseQuery' does not exist on type
   const [user] = trpc.viewer.me.useSuspenseQuery();
   const { t } = useLocale();
   const result = stepRouteSchema.safeParse(params);
-  const currentStep = result.success ? result.data.step[0] : INITIAL_STEP;
+  const currentStep = result.success ? result.data.step : INITIAL_STEP;
   const from = result.success ? result.data.from : "";
-
   const headers = [
     {
       title: `${t("welcome_to_cal_header", { appName: APP_NAME })}`,
@@ -142,19 +146,28 @@ const OnboardingPage = () => {
             <StepCard>
               <Suspense fallback={<Loader />}>
                 {currentStep === "user-settings" && (
-                  <UserSettings nextStep={() => goToIndex(1)} hideUsername={from === "signup"} />
+                  <UserSettings
+                    nextStep={() => goToIndex(1)}
+                    hideUsername={from === "signup"}
+                    isAppDir={props.isAppDir}
+                  />
                 )}
-                {currentStep === "connected-calendar" && <ConnectedCalendars nextStep={() => goToIndex(2)} />}
+                {currentStep === "connected-calendar" && (
+                  <ConnectedCalendars nextStep={() => goToIndex(2)} isAppDir={props.isAppDir} />
+                )}
 
-                {currentStep === "connected-video" && <ConnectedVideoStep nextStep={() => goToIndex(3)} />}
+                {currentStep === "connected-video" && (
+                  <ConnectedVideoStep nextStep={() => goToIndex(3)} isAppDir={props.isAppDir} />
+                )}
 
                 {currentStep === "setup-availability" && (
                   <SetupAvailability
                     nextStep={() => goToIndex(4)}
                     defaultScheduleId={user.defaultScheduleId}
+                    isAppDir={props.isAppDir}
                   />
                 )}
-                {currentStep === "user-profile" && <UserProfile />}
+                {currentStep === "user-profile" && <UserProfile isAppDir={props.isAppDir} />}
               </Suspense>
             </StepCard>
 
@@ -221,7 +234,6 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
     return { redirect: { permanent: false, destination: "/event-types" } };
   }
   const locale = await getLocale(context.req);
-
   return {
     props: {
       ...(await serverSideTranslations(locale, ["common"])),

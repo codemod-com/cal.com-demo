@@ -1,7 +1,8 @@
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { headers } from "next/headers";
+import { headers, cookies } from "next/headers";
 import superjson from "superjson";
 
+import { getLocale } from "@calcom/features/auth/lib/getLocale";
 import { CALCOM_VERSION } from "@calcom/lib/constants";
 import prisma from "@calcom/prisma";
 import { appRouter } from "@calcom/trpc/server/routers/_app";
@@ -9,15 +10,22 @@ import { appRouter } from "@calcom/trpc/server/routers/_app";
 import { createTRPCNextLayout } from "./createTRPCNextLayout";
 
 export async function ssrInit(options?: { noI18nPreload: boolean }) {
-  const locale = headers().get("x-locale") ?? "en";
+  const req = {
+    headers: headers(),
+    cookies: cookies(),
+  };
+
+  // @ts-expect-error req object incompatible
+  const locale = await getLocale(req);
 
   const i18n = (await serverSideTranslations(locale, ["common", "vital"])) || "en";
 
   const ssr = createTRPCNextLayout({
     router: appRouter,
     transformer: superjson,
+    // @ts-expect-error req object incompatible
     createContext() {
-      return { prisma, session: null, locale, i18n };
+      return { prisma, session: null, locale, i18n, req };
     },
   });
 
