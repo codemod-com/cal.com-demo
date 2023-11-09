@@ -14,7 +14,7 @@ import AppProviders from "@lib/app-providers";
 import { seoConfig } from "@lib/config/next-seo.config";
 
 export interface CalPageWrapper {
-  (props?: AppProps): JSX.Element;
+  (props: AppProps): JSX.Element;
   PageWrapper?: AppProps["Component"]["PageWrapper"];
 }
 
