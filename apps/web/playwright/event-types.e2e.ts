@@ -10,7 +10,7 @@ import { bookTimeSlot, createNewEventType, selectFirstAvailableTimeSlotNextMonth
 test.describe.configure({ mode: "parallel" });
 
 test.describe("Event Types A/B tests", () => {
-  test("should point to a non-existing page", async ({ page, users, context }) => {
+  test("should point to the /future/event-types page", async ({ page, users, context }) => {
     await context.addCookies([
       {
         name: "x-calcom-future-routes-override",
@@ -19,10 +19,20 @@ test.describe("Event Types A/B tests", () => {
       },
     ]);
     const user = await users.create();
+
     await user.apiLogin();
+
     await page.goto("/event-types");
 
-    const locator = page.getByRole("heading", { name: "This page does not exist." });
+    await page.waitForLoadState();
+
+    const dataNextJsRouter = await page.evaluate(() =>
+      window.document.documentElement.getAttribute("data-nextjs-router")
+    );
+
+    expect(dataNextJsRouter).toEqual("app");
+
+    const locator = page.getByRole("heading", { name: "Event Types" });
 
     await expect(locator).toBeVisible();
   });
