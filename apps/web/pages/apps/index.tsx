@@ -98,7 +98,7 @@ export default function Apps({
         <AllApps
           apps={appStore}
           searchText={searchText}
-          categories={categories.map((category: any) => category.name)}
+          categories={categories.map((category) => category.name)}
           userAdminTeams={userAdminTeams}
         />
       </div>
