@@ -16,7 +16,7 @@ const querySchema = z.object({
   workflow: z.string(),
 });
 
-export async function getProps({ params }: { params: Params }) {
+async function getProps({ params }: { params: Params }) {
   const safeParams = querySchema.safeParse(params);
 
   console.log("Built workflow page:", safeParams);

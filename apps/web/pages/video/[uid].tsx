@@ -29,7 +29,7 @@ const recordingStartedEventResponse = z
   })
   .passthrough();
 
-export type JoinCallPageProps = Partial<inferSSRProps<typeof getServerSideProps>>;
+export type JoinCallPageProps = inferSSRProps<typeof getServerSideProps>;
 const md = new MarkdownIt("default", { html: true, breaks: true, linkify: true });
 
 export default function JoinCall(props: JoinCallPageProps) {

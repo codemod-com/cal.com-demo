@@ -18,7 +18,7 @@ type PageProps = {
   params: Params;
 };
 
-export async function getProps({ params }: { params: Params }) {
+async function getProps({ params }: { params: Params }) {
   const booking = await prisma.booking.findUnique({
     where: {
       uid: params.uid,
@@ -67,7 +67,7 @@ export default async function MeetingEnded({ params }: PageProps) {
 
   return (
     <PageWrapper getLayout={null} requiresLicense={false} nonce={nonce} themeBasis={null} {...props}>
-      <Page booking={props.booking} />
+      {props.booking ? <Page booking={props.booking} /> : <></>}
     </PageWrapper>
   );
 }
