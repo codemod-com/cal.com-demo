@@ -61,7 +61,11 @@ function AppsSearch({
   );
 }
 
-export default function Apps({ categories, appStore, userAdminTeams }: any) {
+export default function Apps({
+  categories,
+  appStore,
+  userAdminTeams,
+}: inferSSRProps<typeof getServerSideProps>) {
   const { t } = useLocale();
   const [searchText, setSearchText] = useState<string | undefined>(undefined);
 
