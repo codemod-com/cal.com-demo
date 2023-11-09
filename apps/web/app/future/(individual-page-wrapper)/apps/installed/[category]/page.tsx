@@ -9,8 +9,6 @@ const querySchema = z.object({
 });
 
 const getPageProps = async ({ params }: { params: Record<string, string | string[]> }) => {
-  // get return-to cookie and redirect if needed
-
   const p = querySchema.safeParse(params);
 
   if (!p.success) {

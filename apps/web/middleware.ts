@@ -64,13 +64,17 @@ const middleware: NextMiddleware = async (req) => {
     requestHeaders.set("x-csp-enforce", "true");
   }
 
-  if (url.pathname.startsWith("/apps-1/installed/")) {
-    const returnTo = req.cookies.get("return-to")?.value;
+  if (url.pathname === "/future/apps/installed") {
+    return NextResponse.redirect("/future/apps/installed/calendar");
+  }
 
+  if (url.pathname.startsWith("/future/apps/installed")) {
+    const returnTo = req.cookies.get("return-to")?.value;
     if (returnTo !== undefined) {
+      // @TODO test this
+      req.headers.set("Set-Cookie", "return-to=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT");
       const nextUrl = url.clone();
       nextUrl.pathname = returnTo;
-
       return NextResponse.redirect(nextUrl);
     }
   }
