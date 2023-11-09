@@ -15,16 +15,13 @@ export const getStaticParams = async () => {
   } catch (e: unknown) {
     if (e instanceof Prisma.PrismaClientInitializationError) {
       // Database is not available at build time. Make sure we fall back to building these pages on demand
-      return {
-        paths: [],
-        fallback: "blocking",
-      };
+      return [];
     } else {
       throw e;
     }
   }
 
-  return paths.map((category) => ({ params: { category } }));
+  return paths.map((category) => ({ category }));
 };
 
 const querySchema = z.object({

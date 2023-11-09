@@ -1,4 +1,5 @@
 import AppsPage from "@pages/apps";
+import { ssrInit } from "app/_trpc/ssrInit";
 import { cookies, headers } from "next/headers";
 
 import { getAppRegistry, getAppRegistryWithCredentials } from "@calcom/app-store/_appRegistry";
@@ -8,6 +9,7 @@ import getUserAdminTeams from "@calcom/features/ee/teams/lib/getUserAdminTeams";
 import type { AppCategories } from "@calcom/prisma/enums";
 
 const getPageProps = async () => {
+  const ssr = await ssrInit();
   // @ts-expect-error headers and cookies are enough
   const session = await getServerSession({ req: { headers: headers(), cookies: cookies() } });
 
@@ -42,7 +44,7 @@ const getPageProps = async () => {
       }),
     appStore,
     userAdminTeams,
-    // trpcState,
+    trpcState: await ssr.dehydrate(),
   };
 };
 
