@@ -1,6 +1,6 @@
 import { get } from "@vercel/edge-config";
 import { collectEvents } from "next-collect/server";
-import type { NextMiddleware } from "next/server";
+import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
 import { getLocale } from "@calcom/features/auth/lib/getLocale";
@@ -10,7 +10,7 @@ import { csp } from "@lib/csp";
 
 import { abTestMiddlewareFactory } from "./abTest/middlewareFactory";
 
-const middleware: NextMiddleware = async (req) => {
+const middleware = async (req: NextRequest): Promise<NextResponse<unknown>> => {
   const url = req.nextUrl;
   const requestHeaders = new Headers(req.headers);
 
