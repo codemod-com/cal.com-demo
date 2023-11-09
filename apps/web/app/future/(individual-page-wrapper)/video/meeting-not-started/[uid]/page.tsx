@@ -18,7 +18,7 @@ type PageProps = {
   params: Params;
 };
 
-export async function getProps({ params }: { params: Params }) {
+async function getProps({ params }: { params: Params }) {
   const booking = await prisma.booking.findUnique({
     where: {
       uid: params.uid,
