@@ -265,7 +265,7 @@ const AppProviders = (props: PageWrapperProps) => {
               <CalcomThemeProvider
                 themeBasis={props.themeBasis}
                 nonce={props.nonce}
-                isThemeSupported={!!props.isThemeSupported}
+                isThemeSupported={/* undefined gets treated as true */ props.isThemeSupported ?? true}
                 isBookingPage={props.isBookingPage || isBookingPage}>
                 <FeatureFlagsProvider>
                   <OrgBrandProvider>
