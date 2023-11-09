@@ -1,18 +1,37 @@
-import LegacyPage, { getServerSideProps } from "@pages/apps/categories/index";
+import LegacyPage from "@pages/apps/categories/index";
+import { ssrInit } from "app/_trpc/ssrInit";
 import { cookies, headers } from "next/headers";
 
-type Params = {
-  [key: string]: string | string[] | undefined;
-};
+import { getAppRegistry, getAppRegistryWithCredentials } from "@calcom/app-store/_appRegistry";
+import { getServerSession } from "@calcom/features/auth/lib/getServerSession";
 
-async function getPageProps({ params }: { params: Params }) {
-  // @ts-expect-error context
-  const result = await getServerSideProps({ params, req: { headers: headers(), cookies: cookies() } });
-  return result.props;
+async function getPageProps() {
+  const ssr = await ssrInit();
+  // @ts-expect-error type 'ReadonlyHeaders' is not assignable to type 'IncomingHttpHeaders'.
+  const session = await getServerSession({ req: { headers: headers(), cookies: cookies() } });
+
+  let appStore;
+  if (session?.user?.id) {
+    appStore = await getAppRegistryWithCredentials(session.user.id);
+  } else {
+    appStore = await getAppRegistry();
+  }
+
+  const categories = appStore.reduce((c, app) => {
+    for (const category of app.categories) {
+      c[category] = c[category] ? c[category] + 1 : 1;
+    }
+    return c;
+  }, {} as Record<string, number>);
+
+  return {
+    categories: Object.entries(categories).map(([name, count]) => ({ name, count })),
+    trpcState: await ssr.dehydrate(),
+  };
 }
 
-export default async function Page({ params }: { params: Params }) {
-  const props = await getPageProps({ params });
+export default async function Page() {
+  const props = await getPageProps();
 
   return <LegacyPage {...props} />;
 }
