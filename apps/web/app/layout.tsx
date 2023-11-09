@@ -44,6 +44,13 @@ const getInitialProps = async (
   return { isEmbed, embedColorScheme, locale: newLocale, direction };
 };
 
+const getFallbackProps = () => ({
+  locale: "en",
+  direction: "ltr",
+  isEmbed: false,
+  embedColorScheme: false,
+});
+
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const headers = nextHeaders();
   const cookies = nextCookies();
@@ -51,7 +58,12 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const fullUrl = headers.get("x-url") ?? "";
   const nonce = headers.get("x-csp") ?? "";
 
-  const { locale, direction, isEmbed, embedColorScheme } = await getInitialProps(fullUrl, headers, cookies);
+  const isSSG = !fullUrl;
+
+  const { locale, direction, isEmbed, embedColorScheme } = isSSG
+    ? getFallbackProps()
+    : await getInitialProps(fullUrl, headers, cookies);
+
   return (
     <html
       lang={locale}

@@ -60,3 +60,5 @@ export default async function Page({ params }: { params: Record<string, string |
   const { apps } = await getPageProps({ params });
   return <CategoryPage apps={apps} />;
 }
+
+export const dynamic = "force-static";
