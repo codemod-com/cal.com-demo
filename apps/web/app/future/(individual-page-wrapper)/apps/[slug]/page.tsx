@@ -29,11 +29,11 @@ const sourceSchema = z.object({
 });
 
 export const generateStaticParams = async () => {
-  let paths: { params: { slug: string } }[] = [];
+  let paths: { slug: string }[] = [];
 
   try {
     const appStore = await prisma.app.findMany({ select: { slug: true } });
-    paths = appStore.map(({ slug }) => ({ params: { slug } }));
+    paths = appStore.map(({ slug }) => ({ slug }));
   } catch (e: unknown) {
     if (e instanceof Prisma.PrismaClientInitializationError) {
       // Database is not available at build time, but that's ok – we fall back to resolving paths on demand
@@ -114,3 +114,5 @@ export default async function Page({ params }: { params: Record<string, string |
 
   return <AppPage {...pageProps} />;
 }
+
+export const dynamic = "force-static";
