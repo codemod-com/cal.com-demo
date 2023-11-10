@@ -12,6 +12,7 @@ import prisma from "@calcom/prisma";
 import type { AppGetServerSideProps } from "@calcom/types/AppGetServerSideProps";
 
 import type { AppProps } from "@lib/app-providers";
+import { ssrInit } from "app/_trpc/ssrInit";
 
 type AppPageType = {
   getServerSideProps: AppGetServerSideProps;
@@ -98,10 +99,7 @@ const getPageProps = async ({ params }: { params: Record<string, string | string
       }>,
       prisma,
       user,
-      // @TODO
-      () => {
-        console.log("@TODO");
-      }
+      ssrInit,
     );
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     //@ts-ignore
