@@ -3,7 +3,10 @@ import type { NextMiddleware, NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import z from "zod";
 
-const ROUTES: [RegExp, boolean][] = [[/^\/event-types/, Boolean(process.env.APP_ROUTER_EVENT_TYPES_ENABLED)]];
+const ROUTES: [RegExp, boolean][] = [
+  [/^\/event-types$/, Boolean(process.env.APP_ROUTER_EVENT_TYPES_ENABLED)],
+  [/^\/payment\//, Boolean(process.env.APP_ROUTER_PAYMENT_ENABLED)],
+];
 
 const FUTURE_ROUTES_OVERRIDE_COOKIE_NAME = "x-calcom-future-routes-override";
 const FUTURE_ROUTES_ENABLED_COOKIE_NAME = "x-calcom-future-routes-enabled";
