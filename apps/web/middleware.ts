@@ -71,11 +71,17 @@ const middleware: NextMiddleware = async (req) => {
   if (url.pathname.startsWith("/future/apps/installed")) {
     const returnTo = req.cookies.get("return-to")?.value;
     if (returnTo !== undefined) {
-      // @TODO test this
-      req.headers.set("Set-Cookie", "return-to=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT");
+      requestHeaders.set("Set-Cookie", "return-to=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT");
+
+      let validPathname = returnTo;
+
+      try {
+        validPathname = new URL(returnTo).pathname;
+      } catch (e) {}
+
       const nextUrl = url.clone();
-      nextUrl.pathname = returnTo;
-      return NextResponse.redirect(nextUrl);
+      nextUrl.pathname = validPathname;
+      return NextResponse.redirect(nextUrl, { headers: requestHeaders });
     }
   }
 
