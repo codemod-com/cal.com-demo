@@ -1,3 +1,5 @@
+"use client";
+
 //TODO: Generate this file automatically so that like in Next.js file based routing can work automatically
 import * as formEdit from "./form-edit/[...appPages]";
 import * as forms from "./forms/[...appPages]";
