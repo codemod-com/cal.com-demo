@@ -11,6 +11,8 @@ test.describe("Payment", () => {
     });
 
     test("should create a mock payment for a user", async ({ context, users, page }) => {
+      test.skip(process.env.MOCK_PAYMENT_APP_ENABLED === undefined, "Skipped as Stripe is not installed");
+
       const user = await users.create();
       await user.apiLogin();
 

@@ -161,7 +161,7 @@ async function getData(params: Params) {
       metadata: EventTypeMetaDataSchema.parse(eventType.metadata),
     },
     booking,
-    trpcState: ssr.dehydrate(),
+    trpcState: await ssr.dehydrate(),
     payment,
     clientSecret: getClientSecretFromPayment(payment),
     profile,
