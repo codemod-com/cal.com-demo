@@ -1,20 +1,18 @@
-"use client";
-
+import LegacyPage from "@pages/apps/[slug]/[...pages]";
 import type { GetServerSidePropsContext } from "next";
+import { cookies, headers } from "next/headers";
+import { notFound, redirect } from "next/navigation";
+import z from "zod";
 
 import { getAppWithMetadata } from "@calcom/app-store/_appRegistry";
 import RoutingFormsRoutingConfig from "@calcom/app-store/routing-forms/pages/app-routing.config";
 import TypeformRoutingConfig from "@calcom/app-store/typeform/pages/app-routing.config";
 import { getServerSession } from "@calcom/features/auth/lib/getServerSession";
-import { useParamsWithFallback } from "@calcom/lib/hooks/useParamsWithFallback";
 import prisma from "@calcom/prisma";
 import type { AppGetServerSideProps } from "@calcom/types/AppGetServerSideProps";
 
 import type { AppProps } from "@lib/app-providers";
-
-import PageWrapper from "@components/PageWrapper";
-
-import { ssrInit } from "@server/lib/ssr";
+import { ssrInit } from "app/_trpc/ssrInit";
 
 type AppPageType = {
   getServerSideProps: AppGetServerSideProps;
@@ -30,105 +28,56 @@ type Found = {
   getServerSideProps: AppPageType["getServerSideProps"];
 };
 
-type NotFound = {
-  notFound: true;
-};
-
-// TODO: It is a candidate for apps.*.generated.*
 const AppsRouting = {
   "routing-forms": RoutingFormsRoutingConfig,
   typeform: TypeformRoutingConfig,
 };
 
+const paramsSchema = z.object({
+  slug: z.string(),
+  pages: z.array(z.string()),
+});
+
 function getRoute(appName: string, pages: string[]) {
   const routingConfig = AppsRouting[appName as keyof typeof AppsRouting] as Record<string, AppPageType>;
 
   if (!routingConfig) {
-    return {
-      notFound: true,
-    } as NotFound;
+    notFound();
   }
+
   const mainPage = pages[0];
   const appPage = routingConfig.layoutHandler || (routingConfig[mainPage] as AppPageType);
 
   if (!appPage) {
-    return {
-      notFound: true,
-    } as NotFound;
+    notFound();
   }
+
   return { notFound: false, Component: appPage.default, ...appPage } as Found;
 }
 
-const AppPage: AppPageType["default"] = function AppPage(props) {
-  const appName = props.appName;
-  const params = useParamsWithFallback();
-  const pages = (params.pages || []) as string[];
+const getPageProps = async ({ params }: { params: Record<string, string | string[]> }) => {
+  const p = paramsSchema.safeParse(params);
+
+  if (!p.success) {
+    return notFound();
+  }
+
+  const { slug: appName, pages } = p.data;
+
   const route = getRoute(appName, pages);
 
-  const componentProps = {
-    ...props,
-    pages: pages.slice(1),
-  };
-
-  if (!route || route.notFound) {
-    throw new Error("Route can't be undefined");
-  }
-  return <route.Component {...componentProps} />;
-};
-
-AppPage.isBookingPage = ({ router }) => {
-  const route = getRoute(router.query.slug as string, router.query.pages as string[]);
-  if (route.notFound) {
-    return false;
-  }
-  const isBookingPage = route.Component.isBookingPage;
-  if (typeof isBookingPage === "function") {
-    return isBookingPage({ router });
-  }
-
-  return !!isBookingPage;
-};
-
-AppPage.getLayout = (page, router) => {
-  const route = getRoute(router.query.slug as string, router.query.pages as string[]);
-  if (route.notFound) {
-    return null;
-  }
-  if (!route.Component.getLayout) {
-    return page;
-  }
-  return route.Component.getLayout(page, router);
-};
-
-AppPage.PageWrapper = PageWrapper;
-
-export default AppPage;
-
-export async function getServerSideProps(
-  context: GetServerSidePropsContext<{
-    slug: string;
-    pages: string[];
-    appPages?: string[];
-  }>
-) {
-  const { params, req, res } = context;
-  if (!params) {
-    return {
-      notFound: true,
-    };
-  }
-  const appName = params.slug;
-  const pages = params.pages;
-  const route = getRoute(appName, pages);
   if (route.notFound) {
     return route;
   }
+
   if (route.getServerSideProps) {
     // TODO: Document somewhere that right now it is just a convention that filename should have appPages in it's name.
     // appPages is actually hardcoded here and no matter the fileName the same variable would be used.
     // We can write some validation logic later on that ensures that [...appPages].tsx file exists
     params.appPages = pages.slice(1);
-    const session = await getServerSession({ req, res });
+
+    // @ts-expect-error pasing headers and cookies should be enough
+    const session = await getServerSession({ req: { headers: headers(), cookies: cookies() } });
     const user = session?.user;
     const app = await getAppWithMetadata({ slug: appName });
     if (!app) {
@@ -138,39 +87,43 @@ export async function getServerSideProps(
     }
 
     const result = await route.getServerSideProps(
-      context as GetServerSidePropsContext<{
+      {
+        params: {
+          ...params,
+          appPages: pages.slice(1),
+        },
+      } as GetServerSidePropsContext<{
         slug: string;
         pages: string[];
         appPages: string[];
       }>,
       prisma,
       user,
-      ssrInit
+      ssrInit,
     );
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     //@ts-ignore
     if (result.notFound) {
-      return {
-        notFound: true,
-      };
+      notFound();
     }
+
     if (result.redirect) {
-      return {
-        redirect: result.redirect,
-      };
+      redirect(result.redirect.destination);
     }
+
     return {
-      props: {
-        appName,
-        appUrl: app.simplePath || `/apps/${appName}`,
-        ...result.props,
-      },
+      appName,
+      appUrl: app.simplePath || `/apps/${appName}`,
+      ...result.props,
     };
   } else {
     return {
-      props: {
-        appName,
-      },
+      appName,
     };
   }
+};
+
+export default async function Page({ params }: { params: Record<string, string | string[]> }) {
+  const pageProps = await getPageProps({ params });
+  return <LegacyPage {...pageProps} />;
 }
