@@ -27,7 +27,6 @@ const getProps = async ({ params }: { params: Params }) => {
   const req = { cookies: cookies(), headers: headers() };
 
   const session = await getServerSession({
-    // @ts-expect-error emulate req
     req,
   });
 

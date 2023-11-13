@@ -15,7 +15,6 @@ export async function ssrInit(options?: { noI18nPreload: boolean }) {
     cookies: cookies(),
   };
 
-  // @ts-expect-error req object incompatible
   const locale = await getLocale(req);
 
   const i18n = (await serverSideTranslations(locale, ["common", "vital"])) || "en";

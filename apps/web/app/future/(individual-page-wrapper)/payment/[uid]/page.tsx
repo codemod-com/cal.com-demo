@@ -29,7 +29,6 @@ const querySchema = z.object({
 async function getData(params: Params) {
   const req = { headers: headers(), cookies: cookies() };
 
-  // @ts-expect-error req
   const session = await getServerSession({ req });
 
   if (!session?.user?.id) {
