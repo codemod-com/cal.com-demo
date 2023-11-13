@@ -7,8 +7,8 @@ import { getServerSession } from "@calcom/features/auth/lib/getServerSession";
 
 async function getPageProps() {
   const ssr = await ssrInit();
-  // @ts-expect-error type 'ReadonlyHeaders' is not assignable to type 'IncomingHttpHeaders'.
-  const session = await getServerSession({ req: { headers: headers(), cookies: cookies() } });
+  const req = { headers: headers(), cookies: cookies() };
+  const session = await getServerSession({ req });
 
   let appStore;
   if (session?.user?.id) {
