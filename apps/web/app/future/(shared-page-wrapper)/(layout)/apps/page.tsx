@@ -10,8 +10,8 @@ import type { AppCategories } from "@calcom/prisma/enums";
 
 const getPageProps = async () => {
   const ssr = await ssrInit();
-  // @ts-expect-error headers and cookies are enough
-  const session = await getServerSession({ req: { headers: headers(), cookies: cookies() } });
+  const req = { headers: headers(), cookies: cookies() };
+  const session = await getServerSession({ req });
 
   let appStore, userAdminTeams: UserAdminTeams;
   if (session?.user?.id) {

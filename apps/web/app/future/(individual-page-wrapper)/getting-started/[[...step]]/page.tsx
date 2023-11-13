@@ -11,7 +11,6 @@ import PageWrapper from "@components/PageWrapperAppDir";
 async function getData() {
   const req = { headers: headers(), cookies: cookies() };
 
-  // @ts-expect-error emulate req
   const session = await getServerSession({ req });
 
   if (!session?.user?.id) {

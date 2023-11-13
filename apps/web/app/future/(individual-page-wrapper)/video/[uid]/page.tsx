@@ -80,7 +80,6 @@ async function getProps({ params }: { params: Params }) {
     headers: headers(),
   };
 
-  // @ts-expect-error emulate req
   const session = await getServerSession({ req });
 
   // set meetingPassword to null for guests

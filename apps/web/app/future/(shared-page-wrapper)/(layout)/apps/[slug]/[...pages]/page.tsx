@@ -1,4 +1,5 @@
 import LegacyPage from "@pages/apps/[slug]/[...pages]";
+import { ssrInit } from "app/_trpc/ssrInit";
 import type { GetServerSidePropsContext } from "next";
 import { cookies, headers } from "next/headers";
 import { notFound, redirect } from "next/navigation";
@@ -12,7 +13,6 @@ import prisma from "@calcom/prisma";
 import type { AppGetServerSideProps } from "@calcom/types/AppGetServerSideProps";
 
 import type { AppProps } from "@lib/app-providers";
-import { ssrInit } from "app/_trpc/ssrInit";
 
 type AppPageType = {
   getServerSideProps: AppGetServerSideProps;
@@ -76,8 +76,8 @@ const getPageProps = async ({ params }: { params: Record<string, string | string
     // We can write some validation logic later on that ensures that [...appPages].tsx file exists
     params.appPages = pages.slice(1);
 
-    // @ts-expect-error pasing headers and cookies should be enough
-    const session = await getServerSession({ req: { headers: headers(), cookies: cookies() } });
+    const req = { headers: headers(), cookies: cookies() };
+    const session = await getServerSession({ req });
     const user = session?.user;
     const app = await getAppWithMetadata({ slug: appName });
     if (!app) {
@@ -99,7 +99,7 @@ const getPageProps = async ({ params }: { params: Record<string, string | string
       }>,
       prisma,
       user,
-      ssrInit,
+      ssrInit
     );
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     //@ts-ignore

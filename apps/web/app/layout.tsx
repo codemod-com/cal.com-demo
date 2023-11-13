@@ -1,4 +1,4 @@
-import { headers as nextHeaders, cookies as nextCookies } from "next/headers";
+import { headers, cookies } from "next/headers";
 import Script from "next/script";
 import React from "react";
 
@@ -19,18 +19,14 @@ export const generateMetadata = () =>
     },
   });
 
-const getInitialProps = async (
-  url: string,
-  headers: ReturnType<typeof nextHeaders>,
-  cookies: ReturnType<typeof nextCookies>
-) => {
+const getInitialProps = async (url: string) => {
   const { pathname, searchParams } = new URL(url);
 
   const isEmbed = pathname.endsWith("/embed") || (searchParams?.get("embedType") ?? null) !== null;
   const embedColorScheme = searchParams?.get("ui.color-scheme");
 
-  // @ts-expect-error we cannot access ctx.req in app dir, however headers and cookies are only properties needed to extract the locale
-  const newLocale = await getLocale({ headers, cookies });
+  const req = { headers: headers(), cookies: cookies() };
+  const newLocale = await getLocale(req);
   let direction = "ltr";
 
   try {
@@ -52,17 +48,16 @@ const getFallbackProps = () => ({
 });
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const headers = nextHeaders();
-  const cookies = nextCookies();
+  const h = headers();
 
-  const fullUrl = headers.get("x-url") ?? "";
-  const nonce = headers.get("x-csp") ?? "";
+  const fullUrl = h.get("x-url") ?? "";
+  const nonce = h.get("x-csp") ?? "";
 
   const isSSG = !fullUrl;
 
   const { locale, direction, isEmbed, embedColorScheme } = isSSG
     ? getFallbackProps()
-    : await getInitialProps(fullUrl, headers, cookies);
+    : await getInitialProps(fullUrl);
 
   return (
     <html

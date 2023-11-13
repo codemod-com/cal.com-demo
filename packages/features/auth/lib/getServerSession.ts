@@ -2,6 +2,8 @@ import { LRUCache } from "lru-cache";
 import type { GetServerSidePropsContext, NextApiRequest, NextApiResponse } from "next";
 import type { AuthOptions, Session } from "next-auth";
 import { getToken } from "next-auth/jwt";
+import { type ReadonlyHeaders } from "next/dist/server/web/spec-extension/adapters/headers";
+import { type ReadonlyRequestCookies } from "next/dist/server/web/spec-extension/adapters/request-cookies";
 
 import checkLicense from "@calcom/features/ee/common/server/checkLicense";
 import { CAL_URL } from "@calcom/lib/constants";
@@ -25,13 +27,19 @@ const CACHE = new LRUCache<string, Session>({ max: 1000 });
  * frequently enough on the client-side to keep the session alive.
  */
 export async function getServerSession(options: {
-  req: NextApiRequest | GetServerSidePropsContext["req"];
+  req:
+    | NextApiRequest
+    | GetServerSidePropsContext["req"]
+    | {
+        cookies: ReadonlyRequestCookies;
+        headers: ReadonlyHeaders;
+      };
   res?: NextApiResponse | GetServerSidePropsContext["res"];
   authOptions?: AuthOptions;
 }) {
   const { req, authOptions: { secret } = {} } = options;
   const token = await getToken({
-    req,
+    req: req as NextApiRequest | GetServerSidePropsContext["req"],
     secret,
   });
 
