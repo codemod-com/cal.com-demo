@@ -6,7 +6,9 @@ import { notFound, redirect } from "next/navigation";
 import z from "zod";
 
 import { getAppWithMetadata } from "@calcom/app-store/_appRegistry";
-import RoutingFormsRoutingConfig from "@calcom/app-store/routing-forms/pages/app-routing.config";
+import RoutingFormsRoutingConfig, {
+  serverSidePropsConfig,
+} from "@calcom/app-store/routing-forms/pages/app-routing.config";
 import TypeformRoutingConfig from "@calcom/app-store/typeform/pages/app-routing.config";
 import { getServerSession } from "@calcom/features/auth/lib/getServerSession";
 import prisma from "@calcom/prisma";
@@ -48,11 +50,18 @@ function getRoute(appName: string, pages: string[]) {
   const mainPage = pages[0];
   const appPage = routingConfig.layoutHandler || (routingConfig[mainPage] as AppPageType);
 
+  const getServerSidePropsHandler = serverSidePropsConfig[mainPage];
+
   if (!appPage) {
     notFound();
   }
 
-  return { notFound: false, Component: appPage.default, ...appPage } as Found;
+  return {
+    notFound: false,
+    Component: appPage.default,
+    ...appPage,
+    getServerSideProps: getServerSidePropsHandler,
+  } as Found;
 }
 
 const getPageProps = async ({ params }: { params: Record<string, string | string[]> }) => {
@@ -80,14 +89,16 @@ const getPageProps = async ({ params }: { params: Record<string, string | string
     const session = await getServerSession({ req });
     const user = session?.user;
     const app = await getAppWithMetadata({ slug: appName });
+
     if (!app) {
-      return {
-        notFound: true,
-      };
+      notFound();
     }
 
     const result = await route.getServerSideProps(
+      // @ts-expect-error req
       {
+        query: {},
+        req,
         params: {
           ...params,
           appPages: pages.slice(1),
@@ -103,6 +114,7 @@ const getPageProps = async ({ params }: { params: Record<string, string | string
     );
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     //@ts-ignore
+
     if (result.notFound) {
       notFound();
     }
