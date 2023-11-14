@@ -1,3 +1,4 @@
+import { type GetServerSidePropsContext } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { headers, cookies } from "next/headers";
 import superjson from "superjson";
@@ -22,9 +23,8 @@ export async function ssrInit(options?: { noI18nPreload: boolean }) {
   const ssr = createTRPCNextLayout({
     router: appRouter,
     transformer: superjson,
-    // @ts-expect-error req object incompatible
     createContext() {
-      return { prisma, session: null, locale, i18n, req };
+      return { prisma, session: null, locale, i18n, req: req as unknown as GetServerSidePropsContext["req"] };
     },
   });
 
