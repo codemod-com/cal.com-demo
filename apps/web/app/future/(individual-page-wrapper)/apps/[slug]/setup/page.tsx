@@ -1,12 +1,14 @@
 import SetupPage from "@pages/apps/[slug]/setup";
+import type { GetServerSidePropsContext } from "next";
 import { cookies, headers } from "next/headers";
 import { notFound, redirect } from "next/navigation";
 
 import { getServerSideProps } from "@calcom/app-store/_pages/setup/_getServerSideProps";
 
 const getPageProps = async ({ params }: { params: Record<string, string | string[]> }) => {
-  // @ts-expect-error @TODO check
-  const result = await getServerSideProps({ params, req: { headers: headers(), cookies: cookies() } });
+  const req = { headers: headers(), cookies: cookies() };
+
+  const result = await getServerSideProps({ params, req } as unknown as GetServerSidePropsContext);
 
   if (!result || "notFound" in result) {
     notFound();
