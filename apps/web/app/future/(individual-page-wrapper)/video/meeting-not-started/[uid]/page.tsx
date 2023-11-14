@@ -1,6 +1,7 @@
 import Page from "@pages/video/meeting-not-started/[uid]";
 import { _generateMetadata } from "app/_utils";
 import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 
 import prisma, { bookingMinimalSelect } from "@calcom/prisma";
 
@@ -27,12 +28,7 @@ async function getProps({ params }: { params: Params }) {
   });
 
   if (!booking) {
-    return {
-      redirect: {
-        destination: "/video/no-meeting-found",
-        permanent: false,
-      },
-    };
+    return redirect("/video/no-meeting-found");
   }
 
   const bookingObj = Object.assign({}, booking, {
