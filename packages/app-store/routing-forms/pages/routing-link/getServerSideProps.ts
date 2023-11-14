@@ -1,5 +1,3 @@
-"use client";
-
 import { orgDomainConfig } from "@calcom/features/ee/organizations/lib/orgDomains";
 import type { AppGetServerSidePropsContext, AppPrisma } from "@calcom/types/AppGetServerSideProps";
 
