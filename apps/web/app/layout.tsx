@@ -9,6 +9,12 @@ import { prepareRootMetadata } from "@lib/metadata";
 
 import "../styles/globals.css";
 
+// ES2020 typescript doesn't have complete types for Intl.Locale
+// issue: https://github.com/microsoft/TypeScript/issues/42944
+interface CustomLocale extends Intl.Locale {
+  textInfo?: { direction: "ltr" | "rtl" };
+}
+
 export const generateMetadata = () =>
   prepareRootMetadata({
     twitterCreator: "@calcom",
@@ -30,9 +36,8 @@ const getInitialProps = async (url: string) => {
   let direction = "ltr";
 
   try {
-    const intlLocale = new Intl.Locale(newLocale);
-    // @ts-expect-error INFO: Typescript does not know about the Intl.Locale textInfo attribute
-    direction = intlLocale.textInfo?.direction;
+    const intlLocale = new Intl.Locale(newLocale) as CustomLocale;
+    direction = intlLocale.textInfo?.direction ?? "ltr";
   } catch (e) {
     console.error(e);
   }
