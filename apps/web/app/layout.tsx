@@ -1,3 +1,4 @@
+import { dir } from "i18next";
 import { headers, cookies } from "next/headers";
 import Script from "next/script";
 import React from "react";
@@ -8,12 +9,6 @@ import { IS_PRODUCTION } from "@calcom/lib/constants";
 import { prepareRootMetadata } from "@lib/metadata";
 
 import "../styles/globals.css";
-
-// ES2020 typescript doesn't have complete types for Intl.Locale
-// issue: https://github.com/microsoft/TypeScript/issues/42944
-interface CustomLocale extends Intl.Locale {
-  textInfo?: { direction: "ltr" | "rtl" };
-}
 
 export const generateMetadata = () =>
   prepareRootMetadata({
@@ -33,14 +28,7 @@ const getInitialProps = async (url: string) => {
 
   const req = { headers: headers(), cookies: cookies() };
   const newLocale = await getLocale(req);
-  let direction = "ltr";
-
-  try {
-    const intlLocale = new Intl.Locale(newLocale) as CustomLocale;
-    direction = intlLocale.textInfo?.direction ?? "ltr";
-  } catch (e) {
-    console.error(e);
-  }
+  const direction = dir(newLocale);
 
   return { isEmbed, embedColorScheme, locale: newLocale, direction };
 };
