@@ -67,7 +67,3 @@ export const getServerSideProps = async function getServerSideProps(
     },
   };
 };
-
-export default function () {
-  return "";
-}
