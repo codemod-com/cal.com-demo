@@ -1,3 +1,4 @@
+import { dir } from "i18next";
 import { headers, cookies } from "next/headers";
 import Script from "next/script";
 import React from "react";
@@ -27,15 +28,7 @@ const getInitialProps = async (url: string) => {
 
   const req = { headers: headers(), cookies: cookies() };
   const newLocale = await getLocale(req);
-  let direction = "ltr";
-
-  try {
-    const intlLocale = new Intl.Locale(newLocale);
-    // @ts-expect-error INFO: Typescript does not know about the Intl.Locale textInfo attribute
-    direction = intlLocale.textInfo?.direction;
-  } catch (e) {
-    console.error(e);
-  }
+  const direction = dir(newLocale);
 
   return { isEmbed, embedColorScheme, locale: newLocale, direction };
 };
