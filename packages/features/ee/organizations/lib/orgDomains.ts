@@ -1,5 +1,6 @@
 import type { Prisma } from "@prisma/client";
 import type { IncomingMessage } from "http";
+import { type ReadonlyHeaders } from "next/dist/server/web/spec-extension/adapters/headers";
 
 import { IS_PRODUCTION } from "@calcom/lib/constants";
 import { ALLOWED_HOSTNAMES, RESERVED_SUBDOMAINS, WEBAPP_URL } from "@calcom/lib/constants";
@@ -52,12 +53,22 @@ export function getOrgSlug(hostname: string, forcedSlug?: string) {
   return null;
 }
 
-export function orgDomainConfig(req: IncomingMessage | undefined, fallback?: string | string[]) {
-  const forcedSlugHeader = req?.headers?.["x-cal-force-slug"];
+export function orgDomainConfig(
+  headers: IncomingMessage["headers"] | ReadonlyHeaders | undefined,
+  fallback?: string | string[]
+) {
+  const forcedSlugHeader =
+    (typeof headers?.get === "function"
+      ? headers.get("x-cal-force-slug")
+      : (headers as IncomingMessage["headers"])?.["x-cal-force-slug"]) ?? undefined;
 
   const forcedSlug = forcedSlugHeader instanceof Array ? forcedSlugHeader[0] : forcedSlugHeader;
 
-  const hostname = req?.headers?.host || "";
+  const hostname =
+    (typeof headers?.get === "function"
+      ? headers.get("host")
+      : (headers as IncomingMessage["headers"])?.host) ?? "";
+
   return getOrgDomainConfigFromHostname({
     hostname,
     fallback,
