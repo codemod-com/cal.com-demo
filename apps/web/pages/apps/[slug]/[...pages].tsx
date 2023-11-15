@@ -50,7 +50,6 @@ function getRoute(appName: string, pages: string[]) {
   }
   const mainPage = pages[0];
   const appPage = routingConfig.layoutHandler || (routingConfig[mainPage] as AppPageType);
-
   if (!appPage) {
     return {
       notFound: true,
@@ -62,7 +61,7 @@ function getRoute(appName: string, pages: string[]) {
 const AppPage: AppPageType["default"] = function AppPage(props) {
   const appName = props.appName;
   const params = useParamsWithFallback();
-  const pages = (params.pages || []) as string[];
+  const pages = Array.isArray(params.pages) ? params.pages : params.pages?.split("/") ?? [];
   const route = getRoute(appName, pages);
 
   const componentProps = {
