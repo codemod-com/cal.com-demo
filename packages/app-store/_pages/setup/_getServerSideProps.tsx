@@ -21,9 +21,3 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
 
   return props;
 };
-
-// Hack to avoid
-// Error: Attempted to call getServerSideProps() from the server but getServerSideProps is on the client. It's not possible to invoke a client function from the server, it can only be rendered as a Component or passed to props of a Client Component.
-export default function () {
-  return "";
-}
