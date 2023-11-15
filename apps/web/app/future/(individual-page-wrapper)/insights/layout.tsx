@@ -20,9 +20,7 @@ const getProps = async () => {
     return notFound();
   }
 
-  return {
-    props: {},
-  };
+  return {};
 };
 
 export default async function InsightsLayout({ children }: InsightsLayoutProps) {
