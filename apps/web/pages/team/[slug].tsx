@@ -1,3 +1,5 @@
+"use client";
+
 // This route is reachable by
 // 1. /team/[slug]
 // 2. / (when on org domain e.g. http://calcom.cal.com/. This is through a rewrite from next.config.js)
@@ -270,7 +272,10 @@ function TeamPage({
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
   const slug = Array.isArray(context.query?.slug) ? context.query.slug.pop() : context.query.slug;
-  const { isValidOrgDomain, currentOrgDomain } = orgDomainConfig(context.req, context.params?.orgSlug);
+  const { isValidOrgDomain, currentOrgDomain } = orgDomainConfig(
+    context.req?.headers,
+    context.params?.orgSlug
+  );
   const isOrgContext = isValidOrgDomain && currentOrgDomain;
 
   // Provided by Rewrite from next.config.js

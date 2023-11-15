@@ -88,7 +88,10 @@ async function getDynamicGroupPageProps(context: GetServerSidePropsContext) {
 
   const { ssrInit } = await import("@server/lib/ssr");
   const ssr = await ssrInit(context);
-  const { currentOrgDomain, isValidOrgDomain } = orgDomainConfig(context.req, context.params?.orgSlug);
+  const { currentOrgDomain, isValidOrgDomain } = orgDomainConfig(
+    context.req?.headers,
+    context.params?.orgSlug
+  );
 
   const users = await prisma.user.findMany({
     where: {

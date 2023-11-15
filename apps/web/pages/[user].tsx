@@ -286,7 +286,10 @@ export type UserPageProps = {
 
 export const getServerSideProps: GetServerSideProps<UserPageProps> = async (context) => {
   const ssr = await ssrInit(context);
-  const { currentOrgDomain, isValidOrgDomain } = orgDomainConfig(context.req, context.params?.orgSlug);
+  const { currentOrgDomain, isValidOrgDomain } = orgDomainConfig(
+    context.req?.headers,
+    context.params?.orgSlug
+  );
   const usernameList = getUsernameList(context.query.user as string);
   const isOrgContext = isValidOrgDomain && currentOrgDomain;
   const dataFetchStart = Date.now();
