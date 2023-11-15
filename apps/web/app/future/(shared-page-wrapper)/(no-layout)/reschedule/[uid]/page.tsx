@@ -1,6 +1,6 @@
-"use client";
-
-import type { GetServerSidePropsContext } from "next";
+import type { Params } from "next/dist/shared/lib/router/utils/route-matcher";
+import { cookies, headers } from "next/headers";
+import { redirect, notFound } from "next/navigation";
 import { URLSearchParams } from "url";
 import { z } from "zod";
 
@@ -9,17 +9,23 @@ import { getDefaultEvent } from "@calcom/lib/defaultEvents";
 import { maybeGetBookingUidFromSeat } from "@calcom/lib/server/maybeGetBookingUidFromSeat";
 import prisma, { bookingMinimalSelect } from "@calcom/prisma";
 
-export default function Type() {
-  // Just redirect to the schedule page to reschedule it.
+type PageProps = Readonly<{
+  params: Params;
+}>;
+
+export default async function Page({ params }: PageProps) {
+  await getProps(params);
+
   return null;
 }
 
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const session = await getServerSession(context);
+async function getProps(params: Params) {
+  const req = { headers: headers(), cookies: cookies() };
+  const session = await getServerSession({ req });
 
   const { uid: bookingUid, seatReferenceUid } = z
     .object({ uid: z.string(), seatReferenceUid: z.string().optional() })
-    .parse(context.query);
+    .parse(params);
 
   const { uid, seatReferenceUid: maybeSeatReferenceUid } = await maybeGetBookingUidFromSeat(
     prisma,
@@ -70,18 +76,12 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const dynamicEventSlugRef = booking?.dynamicEventSlugRef || "";
 
   if (!booking) {
-    return {
-      notFound: true,
-    } as const;
+    return notFound();
   }
 
   if (!booking?.eventType && !booking?.dynamicEventSlugRef) {
     // TODO: Show something in UI to let user know that this booking is not rescheduleable
-    return {
-      notFound: true,
-    } as {
-      notFound: true;
-    };
+    return notFound();
   }
 
   // if booking event type is for a seated event and no seat reference uid is provided, throw not found
@@ -89,12 +89,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     const userId = session?.user?.id;
 
     if (!userId && !seatReferenceUid) {
-      return {
-        redirect: {
-          destination: `/auth/login?callbackUrl=/reschedule/${bookingUid}`,
-          permanent: false,
-        },
-      };
+      return redirect(`/auth/login?callbackUrl=/reschedule/${bookingUid}`);
     }
     const userIsHost = booking?.eventType.hosts.find((host) => {
       if (host.user.id === userId) return true;
@@ -103,11 +98,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     const userIsOwnerOfEventType = booking?.eventType.owner?.id === userId;
 
     if (!userIsHost && !userIsOwnerOfEventType) {
-      return {
-        notFound: true,
-      } as {
-        notFound: true;
-      };
+      return notFound();
     }
   }
 
@@ -124,12 +115,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
   destinationUrl.set("rescheduleUid", seatReferenceUid || bookingUid);
 
-  return {
-    redirect: {
-      destination: `/${eventPage}?${destinationUrl.toString()}${
-        eventType.seatsPerTimeSlot ? "&bookingUid=null" : ""
-      }`,
-      permanent: false,
-    },
-  };
+  return redirect(
+    `/${eventPage}?${destinationUrl.toString()}${eventType.seatsPerTimeSlot ? "&bookingUid=null" : ""}`
+  );
 }
