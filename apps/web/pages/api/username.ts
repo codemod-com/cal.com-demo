@@ -9,7 +9,7 @@ type Response = {
 };
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<Response>): Promise<void> {
-  const { currentOrgDomain } = orgDomainConfig(req);
+  const { currentOrgDomain } = orgDomainConfig(req?.headers);
   const result = await checkUsername(req.body.username, currentOrgDomain);
   return res.status(200).json(result);
 }
