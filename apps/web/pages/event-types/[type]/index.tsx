@@ -1,4 +1,7 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
+// useAutoAnimate starts failing when not-found page exists. Simplest fix is to replace the hook
+// this cannot be reproduced on latest version of nextjs, so we can restore previous usage after migration
+// import autoAnimate from '@formkit/auto-animate';
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { isValidPhoneNumber } from "libphonenumber-js";

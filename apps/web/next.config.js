@@ -184,6 +184,7 @@ const nextConfig = {
     "@calcom/trpc",
     "@calcom/ui",
     "lucide-react",
+    "@formkit/auto-animate",
   ],
   modularizeImports: {
     "@calcom/ui/components/icon": {
