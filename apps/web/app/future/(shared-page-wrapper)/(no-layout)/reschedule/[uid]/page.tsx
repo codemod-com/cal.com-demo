@@ -91,9 +91,7 @@ async function getProps(params: Params) {
     if (!userId && !seatReferenceUid) {
       return redirect(`/auth/login?callbackUrl=/reschedule/${bookingUid}`);
     }
-    const userIsHost = booking?.eventType.hosts.find((host) => {
-      if (host.user.id === userId) return true;
-    });
+    const userIsHost = booking?.eventType.hosts.find((host) => host.user.id === userId);
 
     const userIsOwnerOfEventType = booking?.eventType.owner?.id === userId;
 
