@@ -9,17 +9,19 @@ import { getDefaultEvent } from "@calcom/lib/defaultEvents";
 import { maybeGetBookingUidFromSeat } from "@calcom/lib/server/maybeGetBookingUidFromSeat";
 import prisma, { bookingMinimalSelect } from "@calcom/prisma";
 
+import getEmbedUrl from "@lib/getEmbedUrl";
+
 type PageProps = Readonly<{
   params: Params;
 }>;
 
 export default async function Page({ params }: PageProps) {
-  await getProps(params);
+  await getData(params, false);
 
   return null;
 }
 
-async function getProps(params: Params) {
+export async function getData(params: Params, isEmbed: boolean) {
   const req = { headers: headers(), cookies: cookies() };
   const session = await getServerSession({ req });
 
@@ -89,7 +91,8 @@ async function getProps(params: Params) {
     const userId = session?.user?.id;
 
     if (!userId && !seatReferenceUid) {
-      return redirect(`/auth/login?callbackUrl=/reschedule/${bookingUid}`);
+      const url = `/auth/login?callbackUrl=/reschedule/${bookingUid}`;
+      return redirect(isEmbed ? getEmbedUrl(params, url) : url);
     }
     const userIsHost = booking?.eventType.hosts.find((host) => host.user.id === userId);
 
@@ -112,8 +115,8 @@ async function getProps(params: Params) {
   const destinationUrl = new URLSearchParams();
 
   destinationUrl.set("rescheduleUid", seatReferenceUid || bookingUid);
-
-  return redirect(
-    `/${eventPage}?${destinationUrl.toString()}${eventType.seatsPerTimeSlot ? "&bookingUid=null" : ""}`
-  );
+  const url = `/${eventPage}?${destinationUrl.toString()}${
+    eventType.seatsPerTimeSlot ? "&bookingUid=null" : ""
+  }`;
+  return redirect(isEmbed ? getEmbedUrl(params, url) : url);
 }
