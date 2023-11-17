@@ -16,6 +16,7 @@ import prisma from "@calcom/prisma";
 import { RedirectType } from "@calcom/prisma/client";
 import { teamMetadataSchema } from "@calcom/prisma/zod-utils";
 
+import { getQuery } from "@lib/getQuery";
 import { getTemporaryOrgRedirect } from "@lib/getTemporaryOrgRedirect";
 
 import PageWrapper from "@components/PageWrapperAppDir";
@@ -28,9 +29,11 @@ export const generateMetadata = async () =>
 
 const log = logger.getSubLogger({ prefix: ["team/[slug]"] });
 
-const getProps = async (params: Params) => {
+const getProps = async (_params: Params) => {
+  const h = headers();
+  const params = getQuery(h.get("x-url") ?? "", _params);
   const slug = Array.isArray(params.slug) ? params.slug.pop() : params.slug;
-  const { isValidOrgDomain, currentOrgDomain } = orgDomainConfig(headers(), params.orgSlug);
+  const { isValidOrgDomain, currentOrgDomain } = orgDomainConfig(h, params.orgSlug);
   const isOrgContext = isValidOrgDomain && currentOrgDomain;
 
   // Provided by Rewrite from next.config.js
