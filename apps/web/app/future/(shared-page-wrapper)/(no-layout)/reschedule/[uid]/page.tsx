@@ -10,6 +10,7 @@ import { maybeGetBookingUidFromSeat } from "@calcom/lib/server/maybeGetBookingUi
 import prisma, { bookingMinimalSelect } from "@calcom/prisma";
 
 import getEmbedUrl from "@lib/getEmbedUrl";
+import { getQuery } from "@lib/getQuery";
 
 type PageProps = Readonly<{
   params: Params;
@@ -24,10 +25,10 @@ export default async function Page({ params }: PageProps) {
 export async function getData(params: Params, isEmbed: boolean) {
   const req = { headers: headers(), cookies: cookies() };
   const session = await getServerSession({ req });
-
+  const query = getQuery(req.headers.get("x-url") ?? "", params);
   const { uid: bookingUid, seatReferenceUid } = z
     .object({ uid: z.string(), seatReferenceUid: z.string().optional() })
-    .parse(params);
+    .parse(query);
 
   const { uid, seatReferenceUid: maybeSeatReferenceUid } = await maybeGetBookingUidFromSeat(
     prisma,
@@ -92,7 +93,7 @@ export async function getData(params: Params, isEmbed: boolean) {
 
     if (!userId && !seatReferenceUid) {
       const url = `/auth/login?callbackUrl=/reschedule/${bookingUid}`;
-      return redirect(isEmbed ? getEmbedUrl(params, url) : url);
+      return redirect(isEmbed ? getEmbedUrl(query, url) : url);
     }
     const userIsHost = booking?.eventType.hosts.find((host) => host.user.id === userId);
 
@@ -118,5 +119,5 @@ export async function getData(params: Params, isEmbed: boolean) {
   const url = `/${eventPage}?${destinationUrl.toString()}${
     eventType.seatsPerTimeSlot ? "&bookingUid=null" : ""
   }`;
-  return redirect(isEmbed ? getEmbedUrl(params, url) : url);
+  return redirect(isEmbed ? getEmbedUrl(query, url) : url);
 }

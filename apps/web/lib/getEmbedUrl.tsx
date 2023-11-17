@@ -3,9 +3,9 @@ import { redirect } from "next/navigation";
 
 import { WEBAPP_URL } from "@calcom/lib/constants";
 
-export default function getEmbedUrl(params: Params, destinationUrl: string) {
-  const embed = params.embed;
-  const layout = params.layout;
+export default function getEmbedUrl(query: Record<string, string | string[]>, destinationUrl: string) {
+  const embed = query.embed;
+  const layout = query.layout;
   if (!embed || !layout) {
     return destinationUrl;
   }
