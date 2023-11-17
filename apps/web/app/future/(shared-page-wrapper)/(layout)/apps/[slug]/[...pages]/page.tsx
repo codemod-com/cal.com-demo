@@ -15,6 +15,7 @@ import prisma from "@calcom/prisma";
 import type { AppGetServerSideProps } from "@calcom/types/AppGetServerSideProps";
 
 import type { AppProps } from "@lib/app-providers";
+import { getQuery } from "@lib/getQuery";
 
 type AppPageType = {
   getServerSideProps: AppGetServerSideProps;
@@ -86,6 +87,10 @@ const getPageProps = async ({ params }: { params: Record<string, string | string
     params.appPages = pages.slice(1);
 
     const req = { headers: headers(), cookies: cookies() };
+    const query = getQuery(req.headers.get("x-url") ?? "", params);
+
+    const ctx = { req, params, query };
+
     const session = await getServerSession({ req });
     const user = session?.user;
     const app = await getAppWithMetadata({ slug: appName });
@@ -97,10 +102,9 @@ const getPageProps = async ({ params }: { params: Record<string, string | string
     const result = await route.getServerSideProps(
       // @ts-expect-error req
       {
-        query: {},
-        req,
+        ...ctx,
         params: {
-          ...params,
+          ...ctx.params,
           appPages: pages.slice(1),
         },
       } as GetServerSidePropsContext<{
