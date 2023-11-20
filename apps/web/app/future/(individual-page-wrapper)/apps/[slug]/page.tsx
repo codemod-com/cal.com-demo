@@ -1,5 +1,6 @@
 import AppPage from "@pages/apps/[slug]/index";
 import { Prisma } from "@prisma/client";
+import { _generateMetadata } from "app/_utils";
 import fs from "fs";
 import matter from "gray-matter";
 import { notFound } from "next/navigation";
@@ -8,7 +9,7 @@ import { z } from "zod";
 
 import { getAppWithMetadata } from "@calcom/app-store/_appRegistry";
 import { getAppAssetFullPath } from "@calcom/app-store/getAppAssetFullPath";
-import { IS_PRODUCTION } from "@calcom/lib/constants";
+import { APP_NAME, IS_PRODUCTION } from "@calcom/lib/constants";
 import prisma from "@calcom/prisma";
 
 const sourceSchema = z.object({
@@ -27,6 +28,15 @@ const sourceSchema = z.object({
       .optional(),
   }),
 });
+
+export const generateMetadata = async ({ params }: { params: Record<string, string | string[]> }) => {
+  const { data } = await getPageProps({ params });
+
+  return await _generateMetadata(
+    () => `${data.name} | ${APP_NAME}`,
+    () => data.description
+  );
+};
 
 export const generateStaticParams = async () => {
   try {

@@ -1,9 +1,18 @@
 import LegacyPage from "@pages/apps/categories/index";
 import { ssrInit } from "app/_trpc/ssrInit";
+import { _generateMetadata } from "app/_utils";
 import { cookies, headers } from "next/headers";
 
 import { getAppRegistry, getAppRegistryWithCredentials } from "@calcom/app-store/_appRegistry";
 import { getServerSession } from "@calcom/features/auth/lib/getServerSession";
+import { APP_NAME } from "@calcom/lib/constants";
+
+export const generateMetadata = async () => {
+  return await _generateMetadata(
+    () => `Categories | ${APP_NAME}`,
+    () => ""
+  );
+};
 
 async function getPageProps() {
   const ssr = await ssrInit();

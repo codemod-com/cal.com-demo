@@ -1,11 +1,20 @@
 import CategoryPage from "@pages/apps/categories/[category]";
 import { Prisma } from "@prisma/client";
+import { _generateMetadata } from "app/_utils";
 import { notFound } from "next/navigation";
 import z from "zod";
 
 import { getAppRegistry } from "@calcom/app-store/_appRegistry";
+import { APP_NAME } from "@calcom/lib/constants";
 import prisma from "@calcom/prisma";
 import { AppCategories } from "@calcom/prisma/enums";
+
+export const generateMetadata = async () => {
+  return await _generateMetadata(
+    () => `${APP_NAME} | ${APP_NAME}`,
+    () => ""
+  );
+};
 
 export const getStaticParams = async () => {
   const paths = Object.keys(AppCategories);
