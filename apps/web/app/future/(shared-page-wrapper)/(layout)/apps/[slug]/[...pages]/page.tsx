@@ -1,5 +1,6 @@
 import LegacyPage from "@pages/apps/[slug]/[...pages]";
 import { ssrInit } from "app/_trpc/ssrInit";
+import { _generateMetadata } from "app/_utils";
 import type { GetServerSidePropsContext } from "next";
 import { cookies, headers } from "next/headers";
 import { notFound, redirect } from "next/navigation";
@@ -11,6 +12,7 @@ import RoutingFormsRoutingConfig, {
 } from "@calcom/app-store/routing-forms/pages/app-routing.config";
 import TypeformRoutingConfig from "@calcom/app-store/typeform/pages/app-routing.config";
 import { getServerSession } from "@calcom/features/auth/lib/getServerSession";
+import { APP_NAME } from "@calcom/lib/constants";
 import prisma from "@calcom/prisma";
 import type { AppGetServerSideProps } from "@calcom/types/AppGetServerSideProps";
 
@@ -40,6 +42,30 @@ const paramsSchema = z.object({
   slug: z.string(),
   pages: z.array(z.string()),
 });
+
+export const generateMetadata = async ({ params }: { params: Record<string, string | string[]> }) => {
+  const p = paramsSchema.safeParse(params);
+
+  if (!p.success) {
+    return notFound();
+  }
+
+  const mainPage = p.data.pages[0];
+
+  if (mainPage === "forms") {
+    return await _generateMetadata(
+      () => `Forms | ${APP_NAME}`,
+      () => ""
+    );
+  }
+
+  const { form } = await getPageProps({ params });
+
+  return await _generateMetadata(
+    () => `${form.name} | ${APP_NAME}`,
+    () => form.description
+  );
+};
 
 function getRoute(appName: string, pages: string[]) {
   const routingConfig = AppsRouting[appName as keyof typeof AppsRouting] as Record<string, AppPageType>;
