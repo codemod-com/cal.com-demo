@@ -1,12 +1,21 @@
 import AppsPage from "@pages/apps";
 import { ssrInit } from "app/_trpc/ssrInit";
+import { _generateMetadata } from "app/_utils";
 import { cookies, headers } from "next/headers";
 
 import { getAppRegistry, getAppRegistryWithCredentials } from "@calcom/app-store/_appRegistry";
 import { getServerSession } from "@calcom/features/auth/lib/getServerSession";
 import type { UserAdminTeams } from "@calcom/features/ee/teams/lib/getUserAdminTeams";
 import getUserAdminTeams from "@calcom/features/ee/teams/lib/getUserAdminTeams";
+import { APP_NAME } from "@calcom/lib/constants";
 import type { AppCategories } from "@calcom/prisma/enums";
+
+export const generateMetadata = async () => {
+  return await _generateMetadata(
+    () => `Apps | ${APP_NAME}`,
+    () => ""
+  );
+};
 
 const getPageProps = async () => {
   const ssr = await ssrInit();
