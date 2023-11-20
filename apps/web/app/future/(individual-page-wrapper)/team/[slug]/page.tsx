@@ -21,11 +21,21 @@ import { getTemporaryOrgRedirect } from "@lib/getTemporaryOrgRedirect";
 
 import PageWrapper from "@components/PageWrapperAppDir";
 
-export const generateMetadata = async () =>
-  await _generateMetadata(
-    () => "Nameless Team",
-    () => "Nameless Team"
+export const generateMetadata = async () => {
+  const params = getQuery(headers().get("x-url") ?? "", {});
+  const { isValidOrgDomain, currentOrgDomain } = orgDomainConfig(headers(), params.orgSlug);
+  const isOrgProfile = params.isOrgProfile === "1";
+
+  const team = await getTeamWithMembers({
+    orgSlug: currentOrgDomain,
+    isTeamView: true,
+    isOrgView: isValidOrgDomain && isOrgProfile,
+  });
+  return await _generateMetadata(
+    () => team?.name ?? "Nameless Team",
+    () => team?.name ?? "Nameless Team"
   );
+};
 
 const log = logger.getSubLogger({ prefix: ["team/[slug]"] });
 
