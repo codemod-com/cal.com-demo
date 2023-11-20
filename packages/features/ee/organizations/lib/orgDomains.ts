@@ -57,17 +57,17 @@ export function orgDomainConfig(
   headers: IncomingMessage["headers"] | ReadonlyHeaders | undefined,
   fallback?: string | string[]
 ) {
+  const isReadonlyHeaders = (
+    headers: IncomingMessage["headers"] | ReadonlyHeaders | undefined
+  ): headers is ReadonlyHeaders => typeof headers?.get === "function";
+
   const forcedSlugHeader =
-    (typeof headers?.get === "function"
-      ? headers.get("x-cal-force-slug")
-      : (headers as IncomingMessage["headers"])?.["x-cal-force-slug"]) ?? undefined;
+    (isReadonlyHeaders(headers) ? headers.get("x-cal-force-slug") : headers?.["x-cal-force-slug"]) ??
+    undefined;
 
   const forcedSlug = forcedSlugHeader instanceof Array ? forcedSlugHeader[0] : forcedSlugHeader;
 
-  const hostname =
-    (typeof headers?.get === "function"
-      ? headers.get("host")
-      : (headers as IncomingMessage["headers"])?.host) ?? "";
+  const hostname = (isReadonlyHeaders(headers) ? headers.get("host") : headers?.host) ?? "";
 
   return getOrgDomainConfigFromHostname({
     hostname,
