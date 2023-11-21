@@ -29,7 +29,7 @@ const querySchema = z
 
 async function getIdentityData(req: NextApiRequest) {
   const { username, teamname, orgId, orgSlug } = querySchema.parse(req.query);
-  const { currentOrgDomain, isValidOrgDomain } = orgDomainConfig(req);
+  const { currentOrgDomain, isValidOrgDomain } = orgDomainConfig(req?.headers);
 
   const org = isValidOrgDomain ? currentOrgDomain : null;
 
