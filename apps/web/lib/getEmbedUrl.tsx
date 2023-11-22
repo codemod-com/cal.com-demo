@@ -1,4 +1,3 @@
-import { type Params } from "next/dist/shared/lib/router/utils/route-matcher";
 import { redirect } from "next/navigation";
 
 import { WEBAPP_URL } from "@calcom/lib/constants";

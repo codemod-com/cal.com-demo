@@ -1,6 +1,6 @@
 import { ssrInit } from "app/_trpc/ssrInit";
+import type { Params } from "app/_types";
 import { _generateMetadata } from "app/_utils";
-import type { Params } from "next/dist/shared/lib/router/utils/route-matcher";
 import { cookies, headers } from "next/headers";
 import { redirect, notFound } from "next/navigation";
 import { z } from "zod";
