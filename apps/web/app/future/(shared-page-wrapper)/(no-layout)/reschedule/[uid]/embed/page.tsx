@@ -1,4 +1,4 @@
-import type { Params } from "next/dist/shared/lib/router/utils/route-matcher";
+import type { Params } from "app/_types";
 
 import { getData } from "../page";
 
