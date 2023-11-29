@@ -101,6 +101,8 @@ export const config = {
     "/apps/routing_forms/:path*",
     "/event-types",
     "/future/event-types/",
+    "/video/:path*",
+    "/future/video/:path*",
   ],
 };
 

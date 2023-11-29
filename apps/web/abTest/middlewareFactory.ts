@@ -5,6 +5,7 @@ import z from "zod";
 
 const ROUTES: [URLPattern, boolean][] = [
   ["/event-types", process.env.APP_ROUTER_EVENT_TYPES_ENABLED === "1"] as const,
+  ["/video/:path*", process.env.APP_ROUTER_VIDEO_ENABLED === "1"] as const,
 ].map(([pathname, enabled]) => [
   new URLPattern({
     pathname,
