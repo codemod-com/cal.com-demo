@@ -1,7 +1,7 @@
 "use client";
 
 import { Troubleshooter } from "@calcom/features/troubleshooter/Troubleshooter";
-import { getLayout } from "@calcom/features/troubleshooter/layout";
+import { getLayout } from "@calcom/features/troubleshooter/TroubleshooterLayoutAppDir";
 import { useLocale } from "@calcom/lib/hooks/useLocale";
 import { HeadSeo } from "@calcom/ui";
 
