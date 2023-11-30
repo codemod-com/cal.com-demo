@@ -1,3 +1,5 @@
+"use client";
+
 import type { DailyEventObjectRecordingStarted } from "@daily-co/daily-js";
 import DailyIframe from "@daily-co/daily-js";
 import MarkdownIt from "markdown-it";
