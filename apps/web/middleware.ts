@@ -130,6 +130,8 @@ export const config = {
     "/future/apps/categories/",
     "/apps/categories/:category/",
     "/future/apps/categories/:category/",
+    "/teams",
+    "/future/teams/",
   ],
 };
 
