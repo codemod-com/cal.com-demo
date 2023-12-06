@@ -1,7 +1,7 @@
 import OldPage from "@pages/teams/index";
 import { _generateMetadata } from "app/_utils";
 import { WithLayout } from "app/layoutHOC";
-import type { GetServerSidePropsContext } from "next";
+import { type GetServerSidePropsContext } from "next";
 import { redirect } from "next/navigation";
 
 import { getLayout } from "@calcom/features/MainLayoutAppDir";

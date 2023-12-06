@@ -1,7 +1,7 @@
 import LegacyPage from "@pages/apps/categories/index";
 import { _generateMetadata } from "app/_utils";
 import { WithLayout } from "app/layoutHOC";
-import type { GetServerSidePropsContext } from "next";
+import { type GetServerSidePropsContext } from "next";
 
 import { getAppRegistry, getAppRegistryWithCredentials } from "@calcom/app-store/_appRegistry";
 import { getServerSession } from "@calcom/features/auth/lib/getServerSession";

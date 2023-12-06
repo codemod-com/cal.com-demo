@@ -1,6 +1,6 @@
 import { _generateMetadata } from "app/_utils";
 import { WithLayout } from "app/layoutHOC";
-import type { GetServerSidePropsContext } from "next";
+import { type GetServerSidePropsContext } from "next";
 import { notFound } from "next/navigation";
 import { z } from "zod";
 

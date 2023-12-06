@@ -144,6 +144,9 @@ export const config = {
     "/future/video/:path*",
     "/teams",
     "/future/teams/",
+
+    "/payment/:uid/",
+    "/future/payment/:uid/",
   ],
 };
 
