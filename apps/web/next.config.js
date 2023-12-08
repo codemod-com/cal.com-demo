@@ -155,7 +155,16 @@ const matcherConfigUserTypeEmbedRoute = {
 /** @type {import("next").NextConfig} */
 const nextConfig = {
   experimental: {
-    serverComponentsExternalPackages: ["next-i18next"],
+    serverComponentsExternalPackages: [
+      "next-i18next",
+      "auth0",
+      "typeorm",
+      "@boxyhq",
+      "@ewsjs",
+      "handlebars",
+      "ews-javascript-api",
+      "react-awesome-query-builder",
+    ],
   },
   i18n: {
     ...i18n,
@@ -184,6 +193,7 @@ const nextConfig = {
     "@calcom/trpc",
     "@calcom/ui",
     "lucide-react",
+    "@formkit/auto-animate",
   ],
   modularizeImports: {
     "@calcom/ui/components/icon": {
@@ -468,6 +478,11 @@ const nextConfig = {
       {
         source: "/bookings",
         destination: "/bookings/upcoming",
+        permanent: true,
+      },
+      {
+        source: "/future/bookings",
+        destination: "/future/bookings/upcoming",
         permanent: true,
       },
       {
