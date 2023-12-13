@@ -1,6 +1,5 @@
+import Workflows from "@pages/workflows";
 import { _generateMetadata } from "app/_utils";
-
-import Workflows from "@calcom/features/ee/workflows/pages/index";
 
 import type { CalPageWrapper } from "@components/PageWrapper";
 

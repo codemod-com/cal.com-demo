@@ -1,20 +1,36 @@
+import LegacyPage from "@pages/workflows/[workflow]";
+import type { Params } from "app/_types";
+import { _generateMetadata } from "app/_utils";
 import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import { z } from "zod";
 
-import Workflow from "@calcom/features/ee/workflows/pages/workflow";
+import { APP_NAME } from "@calcom/lib/constants";
 
 import PageWrapper from "@components/PageWrapperAppDir";
 
-type Params = { workflow: string };
-
-type WorkflowPageProps = {
+type PageProps = {
   params: Params;
 };
 
 const querySchema = z.object({
   workflow: z.string(),
 });
+
+export const generateMetadata = async ({ params }: { params: Params }) => {
+  // const req = {
+  //   headers: headers(),
+  //   cookies: cookies(),
+  // };
+
+  // const ctx = await createContext({ req });
+  // const workflow = await getServerCaller(ctx).viewer.workflows.get({ id: Number(params.workflow) });
+
+  return await _generateMetadata(
+    () => `untitled | ${APP_NAME}`,
+    () => ""
+  );
+};
 
 async function getProps({ params }: { params: Params }) {
   const safeParams = querySchema.safeParse(params);
@@ -26,16 +42,22 @@ async function getProps({ params }: { params: Params }) {
   return { workflow: safeParams.data.workflow };
 }
 
-export default async function WorkflowPage({ params }: WorkflowPageProps) {
+export const generateStaticParams = () => [];
+
+export default async function WorkflowPage({ params }: PageProps) {
   const props = await getProps({ params });
   const h = headers();
   const nonce = h.get("x-nonce") ?? undefined;
 
   return (
     <PageWrapper getLayout={null} requiresLicense={false} nonce={nonce} themeBasis={null} {...props}>
-      <Workflow />
+      {/* @ts-expect-error page does not require any props */}
+      <LegacyPage />
     </PageWrapper>
   );
 }
 
-export const dynamicParams = true;
+export const dynamic = "force-static";
+// generate segments on demand
+export const dynamicParams = "true";
+export const revalidate = 10;
