@@ -10,6 +10,33 @@ import { selectSecondAvailableTimeSlotNextMonth, todo } from "./lib/testUtils";
 test.afterEach(({ users }) => users.deleteAll());
 
 test.describe("Workflow tests", () => {
+  test("should point to the future/workflows", async ({ page, users, context }) => {
+    await context.addCookies([
+      {
+        name: "x-calcom-future-routes-override",
+        value: "1",
+        url: "http://localhost:3000",
+      },
+    ]);
+    const user = await users.create();
+
+    await user.apiLogin();
+
+    await page.goto("/workflows");
+
+    await page.waitForLoadState();
+
+    const dataNextJsRouter = await page.evaluate(() =>
+      window.document.documentElement.getAttribute("data-nextjs-router")
+    );
+
+    expect(dataNextJsRouter).toEqual("app");
+
+    const locator = page.getByRole("heading", { name: "Workflows" });
+
+    await expect(locator).toBeVisible();
+  });
+
   test.describe("User Workflows", () => {
     // Fixme: This test is failing because the listing isn't immediately updated after the workflow is created
     test.fixme(
