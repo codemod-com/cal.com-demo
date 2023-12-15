@@ -1,7 +1,8 @@
+import { X } from "lucide-react";
+
 import { useFilterContext } from "@calcom/features/insights/context/provider";
 import { useLocale } from "@calcom/lib/hooks/useLocale";
 import { Button, Tooltip } from "@calcom/ui";
-import { X } from "@calcom/ui/components/icon";
 
 import { DateSelect } from "./DateSelect";
 import { Download } from "./Download/index";

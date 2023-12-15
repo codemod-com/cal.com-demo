@@ -1,4 +1,5 @@
 import { useAutoAnimate } from "@formkit/auto-animate/react";
+import { Clock } from "lucide-react";
 import { useRouter, usePathname } from "next/navigation";
 import { useCallback } from "react";
 
@@ -12,7 +13,6 @@ import { HttpError } from "@calcom/lib/http-error";
 import type { RouterOutputs } from "@calcom/trpc/react";
 import { trpc } from "@calcom/trpc/react";
 import { EmptyScreen, showToast, ToggleGroup } from "@calcom/ui";
-import { Clock } from "@calcom/ui/components/icon";
 
 import { withQuery } from "@lib/QueryCell";
 

@@ -1,3 +1,4 @@
+import { ArrowRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 import type { FormEvent } from "react";
 import { useRef, useState } from "react";
@@ -11,7 +12,6 @@ import turndown from "@calcom/lib/turndownService";
 import { trpc } from "@calcom/trpc/react";
 import type { Ensure } from "@calcom/types/utils";
 import { Button, Editor, ImageUploader, Label, showToast } from "@calcom/ui";
-import { ArrowRight } from "@calcom/ui/components/icon";
 
 type FormData = {
   bio: string;

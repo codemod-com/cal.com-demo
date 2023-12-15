@@ -1,4 +1,5 @@
 import type { Prisma } from "@prisma/client";
+import { Clock, Users, RefreshCw, Clipboard, Plus, User, Lock } from "lucide-react";
 import { useMemo } from "react";
 import type { z } from "zod";
 
@@ -11,7 +12,6 @@ import type { baseEventTypeSelect } from "@calcom/prisma";
 import { SchedulingType } from "@calcom/prisma/enums";
 import type { EventTypeModel } from "@calcom/prisma/zod";
 import { Badge } from "@calcom/ui";
-import { Clock, Users, RefreshCw, Clipboard, Plus, User, Lock } from "@calcom/ui/components/icon";
 
 export type EventTypeDescriptionProps = {
   eventType: Pick<

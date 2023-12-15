@@ -1,11 +1,11 @@
 import { useMutation } from "@tanstack/react-query";
+import { ArrowLeft, RotateCw } from "lucide-react";
 import { useState } from "react";
 
 import { classNames } from "@calcom/lib";
 import { useLocale } from "@calcom/lib/hooks/useLocale";
 import { trpc } from "@calcom/trpc/react";
 import { showToast, Switch } from "@calcom/ui";
-import { ArrowLeft, RotateCw } from "@calcom/ui/components/icon";
 
 interface ICalendarSwitchProps {
   title: string;

@@ -1,3 +1,4 @@
+import { Plus } from "lucide-react";
 import { useForm, useFieldArray } from "react-hook-form";
 
 import dayjs from "@calcom/dayjs";
@@ -19,7 +20,6 @@ import {
   showToast,
   Alert,
 } from "@calcom/ui";
-import { Plus } from "@calcom/ui/components/icon";
 
 import type { SliderUser } from "./AvailabilitySliderTable";
 

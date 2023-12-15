@@ -1,3 +1,4 @@
+import { Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 
@@ -15,7 +16,6 @@ import {
   InputField,
   showToast,
 } from "@calcom/ui";
-import { Plus } from "@calcom/ui/components/icon";
 
 export function NewScheduleButton({
   name = "new-schedule",

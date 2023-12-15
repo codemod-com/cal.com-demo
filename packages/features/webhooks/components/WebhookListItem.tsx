@@ -1,3 +1,5 @@
+import { Edit, MoreHorizontal, Trash, Zap } from "lucide-react";
+
 import classNames from "@calcom/lib/classNames";
 import { useLocale } from "@calcom/lib/hooks/useLocale";
 import type { WebhookTriggerEvents } from "@calcom/prisma/enums";
@@ -15,7 +17,6 @@ import {
   Switch,
   Tooltip,
 } from "@calcom/ui";
-import { Edit, MoreHorizontal, Trash, Zap } from "@calcom/ui/components/icon";
 
 type WebhookProps = {
   id: string;

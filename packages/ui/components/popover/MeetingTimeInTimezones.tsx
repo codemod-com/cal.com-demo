@@ -1,4 +1,5 @@
 import * as Popover from "@radix-ui/react-popover";
+import { Globe } from "lucide-react";
 
 import {
   formatTime,
@@ -7,8 +8,6 @@ import {
   sortByTimezone,
   isSupportedTimeZone,
 } from "@calcom/lib/date-fns";
-
-import { Globe } from "../icon";
 
 type Attendee = {
   id: number;

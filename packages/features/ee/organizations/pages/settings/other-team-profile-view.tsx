@@ -1,5 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { Prisma } from "@prisma/client";
+import { ExternalLink, Link as LinkIcon, Trash2 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -34,7 +35,6 @@ import {
   TextField,
   Editor,
 } from "@calcom/ui";
-import { ExternalLink, Link as LinkIcon, Trash2 } from "@calcom/ui/components/icon";
 
 import { getLayout } from "../../../../settings/layouts/SettingsLayout";
 import { extractDomainFromWebsiteUrl } from "../../../organizations/lib/utils";

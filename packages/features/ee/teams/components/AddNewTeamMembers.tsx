@@ -1,3 +1,4 @@
+import { ArrowRight, Plus, Trash2 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
@@ -23,7 +24,6 @@ import {
   SkeletonContainer,
   SkeletonText,
 } from "@calcom/ui";
-import { ArrowRight, Plus, Trash2 } from "@calcom/ui/components/icon";
 
 type TeamMember = RouterOutputs["viewer"]["teams"]["get"]["members"][number];
 

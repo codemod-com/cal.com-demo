@@ -1,3 +1,4 @@
+import { Edit, Trash, Lock } from "lucide-react";
 import { useState, useRef, useMemo, useCallback, useEffect } from "react";
 
 import { WEBAPP_URL } from "@calcom/lib/constants";
@@ -13,7 +14,6 @@ import {
   TextField,
   Avatar,
 } from "@calcom/ui";
-import { Edit, Trash, Lock } from "@calcom/ui/components/icon";
 
 import { withLicenseRequired } from "../../common/components/LicenseRequired";
 

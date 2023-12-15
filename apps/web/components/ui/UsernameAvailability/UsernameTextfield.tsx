@@ -1,6 +1,7 @@
 import classNames from "classnames";
 // eslint-disable-next-line no-restricted-imports
 import { debounce, noop } from "lodash";
+import { Check, Edit2 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import type { RefCallback } from "react";
 import { useEffect, useMemo, useState } from "react";
@@ -11,7 +12,6 @@ import type { TRPCClientErrorLike } from "@calcom/trpc/client";
 import { trpc } from "@calcom/trpc/react";
 import type { AppRouter } from "@calcom/trpc/server/routers/_app";
 import { Button, Dialog, DialogClose, DialogContent, TextField, DialogFooter } from "@calcom/ui";
-import { Check, Edit2 } from "@calcom/ui/components/icon";
 
 interface ICustomUsernameProps {
   currentUsername: string | undefined;

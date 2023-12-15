@@ -1,4 +1,5 @@
 import DailyIframe from "@daily-co/daily-js";
+import { ChevronRight } from "lucide-react";
 import MarkdownIt from "markdown-it";
 import type { GetServerSidePropsContext } from "next";
 import Head from "next/head";
@@ -13,7 +14,6 @@ import { useLocale } from "@calcom/lib/hooks/useLocale";
 import { markdownToSafeHTML } from "@calcom/lib/markdownToSafeHTML";
 import prisma, { bookingMinimalSelect } from "@calcom/prisma";
 import type { inferSSRProps } from "@calcom/types/inferSSRProps";
-import { ChevronRight } from "@calcom/ui/components/icon";
 
 import PageWrapper from "@components/PageWrapper";
 

@@ -1,3 +1,4 @@
+import { Link, Search } from "lucide-react";
 import type { Dispatch, SetStateAction } from "react";
 import { useState } from "react";
 
@@ -5,7 +6,6 @@ import classNames from "@calcom/lib/classNames";
 import { useLocale } from "@calcom/lib/hooks/useLocale";
 import type { SVGComponent } from "@calcom/types/SVGComponent";
 import { Alert, Button, Dialog, DialogClose, DialogContent, DialogFooter, Input } from "@calcom/ui";
-import { Link, Search } from "@calcom/ui/components/icon";
 
 interface ISearchDialog {
   isOpenDialog: boolean;

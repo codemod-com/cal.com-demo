@@ -1,9 +1,9 @@
+import { Loader } from "lucide-react";
 import type { ComponentProps } from "react";
 import React, { Suspense } from "react";
 
 import Shell from "@calcom/features/shell/Shell";
 import { ErrorBoundary } from "@calcom/ui";
-import { Loader } from "@calcom/ui/components/icon";
 
 export default function TroubleshooterLayout({
   children,

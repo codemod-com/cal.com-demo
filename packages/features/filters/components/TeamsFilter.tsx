@@ -1,3 +1,4 @@
+import { Layers, User } from "lucide-react";
 import { useSession } from "next-auth/react";
 import type { ReactNode, InputHTMLAttributes } from "react";
 import { forwardRef } from "react";
@@ -10,7 +11,6 @@ import { teamMetadataSchema } from "@calcom/prisma/zod-utils";
 import { trpc } from "@calcom/trpc/react";
 import type { RouterOutputs } from "@calcom/trpc/react";
 import { AnimatedPopover, Avatar, Divider, Tooltip, VerticalDivider } from "@calcom/ui";
-import { Layers, User } from "@calcom/ui/components/icon";
 
 import { filterQuerySchema } from "../lib/getTeamsFiltersFromQuery";
 

@@ -1,3 +1,4 @@
+import { Plus } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 
 import { useBookerUrl } from "@calcom/lib/hooks/useBookerUrl";
@@ -14,7 +15,6 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@calcom/ui";
-import { Plus } from "@calcom/ui/components/icon";
 
 export interface Option {
   teamId: number | null | undefined; // if undefined, then it's a profile

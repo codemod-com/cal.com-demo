@@ -1,4 +1,5 @@
 import classNames from "classnames";
+import { ExternalLink, MoreHorizontal } from "lucide-react";
 
 import TeamPill, { TeamRole } from "@calcom/ee/teams/components/TeamPill";
 import { useBookerUrl } from "@calcom/lib/hooks/useBookerUrl";
@@ -15,7 +16,6 @@ import {
   DropdownMenuTrigger,
   Tooltip,
 } from "@calcom/ui";
-import { ExternalLink, MoreHorizontal } from "@calcom/ui/components/icon";
 
 interface Props {
   member: RouterOutputs["viewer"]["organizations"]["listOtherTeamMembers"]["rows"][number];

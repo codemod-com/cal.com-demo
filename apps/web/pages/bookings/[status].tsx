@@ -1,4 +1,5 @@
 import { useAutoAnimate } from "@formkit/auto-animate/react";
+import { Calendar } from "lucide-react";
 import type { GetStaticPaths, GetStaticProps } from "next";
 import { Fragment, useState } from "react";
 import React from "react";
@@ -19,7 +20,6 @@ import { trpc } from "@calcom/trpc/react";
 import { HorizontalTabs } from "@calcom/ui";
 import type { VerticalTabItemProps, HorizontalTabItemProps } from "@calcom/ui";
 import { Alert, Button, EmptyScreen } from "@calcom/ui";
-import { Calendar } from "@calcom/ui/components/icon";
 
 import { useInViewObserver } from "@lib/hooks/useInViewObserver";
 import useMeQuery from "@lib/hooks/useMeQuery";

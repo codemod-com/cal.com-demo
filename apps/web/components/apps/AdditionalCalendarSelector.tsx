@@ -1,3 +1,4 @@
+import { Plus } from "lucide-react";
 import type { FunctionComponent, SVGProps } from "react";
 
 import { InstallAppButton } from "@calcom/app-store/components";
@@ -11,7 +12,6 @@ import {
   DropdownMenuItem,
   DropdownItem,
 } from "@calcom/ui";
-import { Plus } from "@calcom/ui/components/icon";
 
 import { QueryCell } from "@lib/QueryCell";
 

@@ -1,4 +1,5 @@
 import { useAutoAnimate } from "@formkit/auto-animate/react";
+import { ArrowDown, ArrowUp, X, Plus, Trash2 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Controller, useFieldArray, useFormContext, useForm } from "react-hook-form";
 import type { UseFormReturn, SubmitHandler } from "react-hook-form";
@@ -24,7 +25,6 @@ import {
   Switch,
   showToast,
 } from "@calcom/ui";
-import { ArrowDown, ArrowUp, X, Plus, Trash2 } from "@calcom/ui/components/icon";
 
 import { fieldTypesConfigMap } from "./fieldTypes";
 import { fieldsThatSupportLabelAsSafeHtml } from "./fieldsThatSupportLabelAsSafeHtml";

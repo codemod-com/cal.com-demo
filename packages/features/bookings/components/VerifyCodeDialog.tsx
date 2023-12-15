@@ -1,3 +1,4 @@
+import { Info } from "lucide-react";
 import type { Dispatch, SetStateAction } from "react";
 import { useState, useEffect, useCallback } from "react";
 import useDigitInput from "react-digit-input";
@@ -5,7 +6,6 @@ import useDigitInput from "react-digit-input";
 import { useLocale } from "@calcom/lib/hooks/useLocale";
 import { trpc } from "@calcom/trpc/react";
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, Label, Input } from "@calcom/ui";
-import { Info } from "@calcom/ui/components/icon";
 
 export const VerifyCodeDialog = ({
   isOpenDialog,

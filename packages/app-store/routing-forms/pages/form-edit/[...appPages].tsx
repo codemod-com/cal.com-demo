@@ -1,4 +1,5 @@
 import { useAutoAnimate } from "@formkit/auto-animate/react";
+import { Plus, FileText, X, ArrowUp, ArrowDown } from "lucide-react";
 import { useEffect, useState } from "react";
 import type { UseFormReturn } from "react-hook-form";
 import { useWatch } from "react-hook-form";
@@ -18,7 +19,6 @@ import {
   Skeleton,
   TextField,
 } from "@calcom/ui";
-import { Plus, FileText, X, ArrowUp, ArrowDown } from "@calcom/ui/components/icon";
 
 import type { inferSSRProps } from "@lib/types/inferSSRProps";
 

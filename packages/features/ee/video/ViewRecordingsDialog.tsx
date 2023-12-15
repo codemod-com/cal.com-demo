@@ -1,3 +1,4 @@
+import { Download } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState, Suspense } from "react";
 
@@ -11,7 +12,6 @@ import { trpc } from "@calcom/trpc/react";
 import type { PartialReference } from "@calcom/types/EventManager";
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader } from "@calcom/ui";
 import { Button } from "@calcom/ui";
-import { Download } from "@calcom/ui/components/icon";
 
 import RecordingListSkeleton from "./components/RecordingListSkeleton";
 

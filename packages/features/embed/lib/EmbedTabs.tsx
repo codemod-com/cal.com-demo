@@ -1,3 +1,4 @@
+import { Code, Trello } from "lucide-react";
 import { forwardRef } from "react";
 import type { MutableRefObject } from "react";
 
@@ -6,7 +7,6 @@ import { APP_NAME } from "@calcom/lib/constants";
 import { useBookerUrl } from "@calcom/lib/hooks/useBookerUrl";
 import { useLocale } from "@calcom/lib/hooks/useLocale";
 import { TextArea } from "@calcom/ui";
-import { Code, Trello } from "@calcom/ui/components/icon";
 
 import type { EmbedType, PreviewState, EmbedFramework } from "../types";
 import { Codes, doWeNeedCalOriginProp } from "./EmbedCodes";

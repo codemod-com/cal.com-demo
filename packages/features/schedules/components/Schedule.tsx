@@ -1,3 +1,4 @@
+import { Copy, Plus, Trash } from "lucide-react";
 import { Fragment, useCallback, useEffect, useMemo, useState, useRef } from "react";
 import type {
   ArrayPath,
@@ -30,7 +31,6 @@ import {
   Switch,
   CheckboxField,
 } from "@calcom/ui";
-import { Copy, Plus, Trash } from "@calcom/ui/components/icon";
 
 export type { TimeRange };
 

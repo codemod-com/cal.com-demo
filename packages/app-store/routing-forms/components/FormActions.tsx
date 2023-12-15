@@ -1,4 +1,5 @@
 import type { App_RoutingForms_Form } from "@prisma/client";
+import { MoreHorizontal } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { createContext, forwardRef, useContext, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -32,7 +33,6 @@ import {
   TextAreaField,
   TextField,
 } from "@calcom/ui";
-import { MoreHorizontal } from "@calcom/ui/components/icon";
 
 import getFieldIdentifier from "../lib/getFieldIdentifier";
 import type { SerializableForm } from "../types/types";

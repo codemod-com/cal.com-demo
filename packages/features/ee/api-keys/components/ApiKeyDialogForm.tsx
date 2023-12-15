@@ -1,3 +1,4 @@
+import { Clipboard } from "lucide-react";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 
@@ -7,7 +8,6 @@ import LicenseRequired from "@calcom/ee/common/components/LicenseRequired";
 import { useLocale } from "@calcom/lib/hooks/useLocale";
 import { trpc } from "@calcom/trpc/react";
 import { Button, DialogFooter, Form, showToast, Switch, TextField, Tooltip, SelectField } from "@calcom/ui";
-import { Clipboard } from "@calcom/ui/components/icon";
 
 export default function ApiKeyDialogForm({
   defaultValues,
@@ -202,10 +202,12 @@ export default function ApiKeyDialogForm({
                   );
                 }}
               />
-              {!watchNeverExpires && <span className="text-subtle mt-2 text-xs">
-                {t("api_key_expires_on")}
-                <span className="font-bold"> {dayjs(expiryDate).format("DD-MM-YYYY")}</span>
-              </span>}
+              {!watchNeverExpires && (
+                <span className="text-subtle mt-2 text-xs">
+                  {t("api_key_expires_on")}
+                  <span className="font-bold"> {dayjs(expiryDate).format("DD-MM-YYYY")}</span>
+                </span>
+              )}
             </div>
           )}
 

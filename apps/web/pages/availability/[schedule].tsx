@@ -1,3 +1,4 @@
+import { Info, MoreVertical, ArrowLeft, Plus, Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
@@ -29,7 +30,6 @@ import {
   Tooltip,
   VerticalDivider,
 } from "@calcom/ui";
-import { Info, MoreVertical, ArrowLeft, Plus, Trash } from "@calcom/ui/components/icon";
 
 import PageWrapper from "@components/PageWrapper";
 import { SelectSkeletonLoader } from "@components/availability/SkeletonLoader";

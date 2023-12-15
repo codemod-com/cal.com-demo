@@ -1,5 +1,6 @@
+import { Bell, Link as LinkIcon } from "lucide-react";
+
 import { SkeletonText } from "@calcom/ui";
-import { Bell, Link as LinkIcon } from "@calcom/ui/components/icon";
 
 function SkeletonLoader() {
   return (

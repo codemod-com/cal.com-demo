@@ -1,3 +1,26 @@
+import {
+  ArrowLeft,
+  ArrowRight,
+  BarChart,
+  Calendar,
+  ChevronDown,
+  Clock,
+  Copy,
+  Download,
+  ExternalLink,
+  FileText,
+  Grid,
+  HelpCircle,
+  Link as LinkIcon,
+  LogOut,
+  Map,
+  Moon,
+  MoreHorizontal,
+  Settings,
+  User as UserIcon,
+  Users,
+  Zap,
+} from "lucide-react";
 import type { User as UserAuth } from "next-auth";
 import { signOut, useSession } from "next-auth/react";
 import dynamic from "next/dynamic";
@@ -64,29 +87,6 @@ import {
   Tooltip,
   useCalcomTheme,
 } from "@calcom/ui";
-import {
-  ArrowLeft,
-  ArrowRight,
-  BarChart,
-  Calendar,
-  ChevronDown,
-  Clock,
-  Copy,
-  Download,
-  ExternalLink,
-  FileText,
-  Grid,
-  HelpCircle,
-  Link as LinkIcon,
-  LogOut,
-  Map,
-  Moon,
-  MoreHorizontal,
-  Settings,
-  User as UserIcon,
-  Users,
-  Zap,
-} from "@calcom/ui/components/icon";
 import { Discord } from "@calcom/ui/components/icon/Discord";
 import { IS_VISUAL_REGRESSION_TESTING } from "@calcom/web/constants";
 

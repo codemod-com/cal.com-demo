@@ -1,8 +1,8 @@
+import { Edit, Plus, X } from "lucide-react";
 import { useState } from "react";
 
 import { useLocale } from "@calcom/lib/hooks/useLocale";
 import { Button } from "@calcom/ui";
-import { Edit, Plus, X } from "@calcom/ui/components/icon";
 
 import { SearchDialog } from "./SearchDialog";
 

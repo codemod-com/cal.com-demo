@@ -1,3 +1,4 @@
+import { Globe, MoreHorizontal, Trash, Star, Copy } from "lucide-react";
 import Link from "next/link";
 import { Fragment } from "react";
 
@@ -15,7 +16,6 @@ import {
   DropdownMenuTrigger,
   showToast,
 } from "@calcom/ui";
-import { Globe, MoreHorizontal, Trash, Star, Copy } from "@calcom/ui/components/icon";
 
 export function ScheduleListItem({
   schedule,

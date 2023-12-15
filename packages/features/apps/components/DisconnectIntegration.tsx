@@ -1,10 +1,10 @@
+import { Trash } from "lucide-react";
 import { useState } from "react";
 
 import { useLocale } from "@calcom/lib/hooks/useLocale";
 import { trpc } from "@calcom/trpc/react";
 import type { ButtonProps } from "@calcom/ui";
 import { Button, ConfirmationDialogContent, Dialog, DialogTrigger, showToast } from "@calcom/ui";
-import { Trash } from "@calcom/ui/components/icon";
 
 export default function DisconnectIntegration({
   credentialId,

@@ -1,12 +1,13 @@
 "use client";
 
+import { X, Check, CheckCheck } from "lucide-react";
+
 import NoSSR from "@calcom/core/components/NoSSR";
 import LicenseRequired from "@calcom/ee/common/components/LicenseRequired";
 import { extractDomainFromWebsiteUrl } from "@calcom/ee/organizations/lib/utils";
 import { useLocale } from "@calcom/lib/hooks/useLocale";
 import { trpc } from "@calcom/trpc/react";
 import { Meta, DropdownActions, showToast, Table, Badge } from "@calcom/ui";
-import { X, Check, CheckCheck } from "@calcom/ui/components/icon";
 
 import { getLayout } from "../../../../../settings/layouts/SettingsLayout";
 

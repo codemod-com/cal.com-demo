@@ -2,6 +2,19 @@
 
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import type { User } from "@prisma/client";
+import {
+  Clipboard,
+  Code,
+  Copy,
+  Edit,
+  Edit2,
+  ExternalLink,
+  Link as LinkIcon,
+  MoreHorizontal,
+  Trash,
+  Upload,
+  Users,
+} from "lucide-react";
 import { Trans } from "next-i18next";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -57,19 +70,6 @@ import {
   Tooltip,
   ArrowButton,
 } from "@calcom/ui";
-import {
-  Clipboard,
-  Code,
-  Copy,
-  Edit,
-  Edit2,
-  ExternalLink,
-  Link as LinkIcon,
-  MoreHorizontal,
-  Trash,
-  Upload,
-  Users,
-} from "@calcom/ui/components/icon";
 
 import useMeQuery from "@lib/hooks/useMeQuery";
 

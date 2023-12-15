@@ -1,3 +1,4 @@
+import { User } from "lucide-react";
 import { useState } from "react";
 
 import { useFilterQuery } from "@calcom/features/bookings/lib/useFilterQuery";
@@ -10,7 +11,6 @@ import { WEBAPP_URL } from "@calcom/lib/constants";
 import { useLocale } from "@calcom/lib/hooks/useLocale";
 import { trpc } from "@calcom/trpc/react";
 import { AnimatedPopover, Avatar, Divider, FilterSearchField } from "@calcom/ui";
-import { User } from "@calcom/ui/components/icon";
 
 export const PeopleFilter = () => {
   const { t } = useLocale();

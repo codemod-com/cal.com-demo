@@ -1,9 +1,9 @@
 import { useAutoAnimate } from "@formkit/auto-animate/react";
+import { UserPlus, X } from "lucide-react";
 import type { Props } from "react-select";
 
 import { useLocale } from "@calcom/lib/hooks/useLocale";
 import { Avatar, EmptyScreen, Label, Select } from "@calcom/ui";
-import { UserPlus, X } from "@calcom/ui/components/icon";
 
 export type CheckedUserSelectOption = {
   avatar: string;

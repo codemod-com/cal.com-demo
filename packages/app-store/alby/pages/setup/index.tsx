@@ -1,4 +1,5 @@
 import { auth, Client, webln } from "@getalby/sdk";
+import { Info } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useCallback, useEffect } from "react";
@@ -8,7 +9,6 @@ import { useCompatSearchParams } from "@calcom/lib/hooks/useCompatSearchParams";
 import { useLocale } from "@calcom/lib/hooks/useLocale";
 import { trpc } from "@calcom/trpc";
 import { Badge, Button, showToast } from "@calcom/ui";
-import { Info } from "@calcom/ui/components/icon";
 
 import { albyCredentialKeysSchema } from "../../lib/albyCredentialKeysSchema";
 

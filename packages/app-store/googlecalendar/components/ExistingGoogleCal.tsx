@@ -1,8 +1,8 @@
+import { AlertCircle, ArrowRight, Check } from "lucide-react";
 import Link from "next/link";
 
 import { CAL_URL } from "@calcom/lib/constants";
 import { useLocale } from "@calcom/lib/hooks/useLocale";
-import { AlertCircle, ArrowRight, Check } from "@calcom/ui/components/icon";
 
 const ExistingGoogleCal = ({ gCalInstalled, appName }: { gCalInstalled?: boolean; appName: string }) => {
   const { t } = useLocale();

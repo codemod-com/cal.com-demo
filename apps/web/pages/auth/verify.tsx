@@ -1,3 +1,4 @@
+import { AlertTriangle, Check, MailOpen } from "lucide-react";
 import { signIn } from "next-auth/react";
 import Head from "next/head";
 import { usePathname, useRouter } from "next/navigation";
@@ -9,7 +10,6 @@ import { useCompatSearchParams } from "@calcom/lib/hooks/useCompatSearchParams";
 import { useRouterQuery } from "@calcom/lib/hooks/useRouterQuery";
 import { trpc } from "@calcom/trpc/react";
 import { Button, showToast } from "@calcom/ui";
-import { AlertTriangle, Check, MailOpen } from "@calcom/ui/components/icon";
 
 import Loader from "@components/Loader";
 import PageWrapper from "@components/PageWrapper";

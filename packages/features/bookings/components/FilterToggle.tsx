@@ -1,9 +1,9 @@
+import { Filter } from "lucide-react";
 import type { Dispatch, SetStateAction } from "react";
 
 import { useFilterQuery } from "@calcom/features/bookings/lib/useFilterQuery";
 import { useLocale } from "@calcom/lib/hooks/useLocale";
 import { Tooltip, Badge, Button } from "@calcom/ui";
-import { Filter } from "@calcom/ui/components/icon";
 
 export interface FilterToggleProps {
   setIsFiltersVisible: Dispatch<SetStateAction<boolean>>;

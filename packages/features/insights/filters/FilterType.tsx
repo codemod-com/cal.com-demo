@@ -1,3 +1,5 @@
+import { Plus, Link, User, Check } from "lucide-react";
+
 import { useLocale } from "@calcom/lib/hooks/useLocale";
 import type { SVGComponent } from "@calcom/types/SVGComponent";
 import {
@@ -8,7 +10,6 @@ import {
   DropdownMenuTrigger,
   Tooltip,
 } from "@calcom/ui";
-import { Plus, Link, User, Check } from "@calcom/ui/components/icon";
 
 import { useFilterContext } from "../context/provider";
 

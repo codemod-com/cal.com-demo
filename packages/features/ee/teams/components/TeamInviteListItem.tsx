@@ -1,3 +1,5 @@
+import { Ban, Check, MoreHorizontal, X } from "lucide-react";
+
 import classNames from "@calcom/lib/classNames";
 import { WEBAPP_URL } from "@calcom/lib/constants";
 import { useLocale } from "@calcom/lib/hooks/useLocale";
@@ -13,7 +15,6 @@ import {
   DropdownMenuTrigger,
   showToast,
 } from "@calcom/ui";
-import { Ban, Check, MoreHorizontal, X } from "@calcom/ui/components/icon";
 
 interface Props {
   team: {

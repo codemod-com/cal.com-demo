@@ -1,3 +1,4 @@
+import { AlertCircle } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import type { ReactNode } from "react";
 import { useEffect, useRef, useState } from "react";
@@ -10,7 +11,6 @@ import { useCompatSearchParams } from "@calcom/lib/hooks/useCompatSearchParams";
 import { useLocale } from "@calcom/lib/hooks/useLocale";
 import { useTypedQuery } from "@calcom/lib/hooks/useTypedQuery";
 import { Badge, ListItemText, Avatar } from "@calcom/ui";
-import { AlertCircle } from "@calcom/ui/components/icon";
 
 type ShouldHighlight =
   | {

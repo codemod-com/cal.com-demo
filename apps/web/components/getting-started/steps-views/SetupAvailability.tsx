@@ -1,3 +1,4 @@
+import { ArrowRight } from "lucide-react";
 import { useForm } from "react-hook-form";
 
 import { Schedule } from "@calcom/features/schedules";
@@ -7,7 +8,6 @@ import type { TRPCClientErrorLike } from "@calcom/trpc/react";
 import { trpc } from "@calcom/trpc/react";
 import type { AppRouter } from "@calcom/trpc/server/routers/_app";
 import { Button, Form } from "@calcom/ui";
-import { ArrowRight } from "@calcom/ui/components/icon";
 
 interface ISetupAvailabilityProps {
   nextStep: () => void;

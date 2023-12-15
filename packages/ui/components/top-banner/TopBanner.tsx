@@ -1,9 +1,9 @@
 import classNames from "classnames";
+import type { LucideIcon, LucideProps } from "lucide-react";
+import { AlertTriangle, Info } from "lucide-react";
 import type { ComponentType, ReactNode } from "react";
 
 import { TOP_BANNER_HEIGHT } from "@calcom/lib/constants";
-import type { LucideIcon, LucideProps } from "@calcom/ui/components/icon";
-import { AlertTriangle, Info } from "@calcom/ui/components/icon";
 
 export type TopBannerProps = {
   Icon?: ComponentType<LucideProps> & LucideIcon;

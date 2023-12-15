@@ -1,3 +1,4 @@
+import { Calendar } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Fragment, useEffect, useState } from "react";
@@ -18,7 +19,6 @@ import {
   SkeletonContainer,
   SkeletonText,
 } from "@calcom/ui";
-import { Calendar } from "@calcom/ui/components/icon";
 
 import { useLocalSet } from "../hooks/useLocalSet";
 import { useOverlayCalendarStore } from "./store";

@@ -1,3 +1,5 @@
+import { MoreHorizontal, Edit2, Trash } from "lucide-react";
+
 import dayjs from "@calcom/dayjs";
 import { classNames } from "@calcom/lib";
 import { useLocale } from "@calcom/lib/hooks/useLocale";
@@ -13,7 +15,6 @@ import {
   DropdownMenuTrigger,
   showToast,
 } from "@calcom/ui";
-import { MoreHorizontal, Edit2, Trash } from "@calcom/ui/components/icon";
 
 export type TApiKeys = RouterOutputs["viewer"]["apiKeys"]["list"][number];
 

@@ -1,3 +1,4 @@
+import { BookOpen, Check, ChevronRight, FileText, Shield } from "lucide-react";
 import type { GetStaticPropsContext } from "next";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -10,7 +11,6 @@ import {
 import { DOCS_URL, IS_CALCOM, JOIN_DISCORD, WEBSITE_URL } from "@calcom/lib/constants";
 import { useLocale } from "@calcom/lib/hooks/useLocale";
 import { HeadSeo } from "@calcom/ui";
-import { BookOpen, Check, ChevronRight, FileText, Shield } from "@calcom/ui/components/icon";
 import { Discord } from "@calcom/ui/components/icon/Discord";
 
 import PageWrapper from "@components/PageWrapper";

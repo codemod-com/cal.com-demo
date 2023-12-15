@@ -1,3 +1,4 @@
+import { ChevronRight, ExternalLink } from "lucide-react";
 import Link from "next/link";
 import { Fragment } from "react";
 
@@ -6,7 +7,6 @@ import { useLocale } from "@calcom/lib/hooks/useLocale";
 import { useUrlMatchesCurrentUrl } from "@calcom/lib/hooks/useUrlMatchesCurrentUrl";
 import type { SVGComponent } from "@calcom/types/SVGComponent";
 
-import { ChevronRight, ExternalLink } from "../../icon";
 import { Skeleton } from "../../skeleton";
 
 export type VerticalTabItemProps = {

@@ -1,3 +1,4 @@
+import { Calendar, Plus } from "lucide-react";
 import { useReducer } from "react";
 
 import DisconnectIntegrationModal from "@calcom/features/apps/components/DisconnectIntegrationModal";
@@ -5,7 +6,6 @@ import { getLayout } from "@calcom/features/settings/layouts/SettingsLayout";
 import { useLocale } from "@calcom/lib/hooks/useLocale";
 import { trpc } from "@calcom/trpc/react";
 import { Button, EmptyScreen, Meta, SkeletonContainer, SkeletonText } from "@calcom/ui";
-import { Calendar, Plus } from "@calcom/ui/components/icon";
 
 import { QueryCell } from "@lib/QueryCell";
 

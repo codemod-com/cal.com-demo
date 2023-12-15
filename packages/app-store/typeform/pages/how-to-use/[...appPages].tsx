@@ -1,8 +1,8 @@
+import { ExternalLink } from "lucide-react";
 import Link from "next/link";
 
 import { useLocale } from "@calcom/lib/hooks/useLocale";
 import { Button } from "@calcom/ui";
-import { ExternalLink } from "@calcom/ui/components/icon";
 
 export default function HowToUse() {
   const { t } = useLocale();

@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { AlertCircle } from "lucide-react";
 import type { Dispatch, SetStateAction } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -17,7 +18,6 @@ import {
   Button,
   DialogClose,
 } from "@calcom/ui";
-import { AlertCircle } from "@calcom/ui/components/icon";
 
 type LocationTypeSetLinkDialogFormProps = {
   link?: string;

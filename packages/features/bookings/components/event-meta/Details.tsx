@@ -1,3 +1,4 @@
+import { Clock, CheckSquare, RefreshCcw } from "lucide-react";
 import { Fragment } from "react";
 import React from "react";
 
@@ -5,7 +6,6 @@ import { useBookerStore } from "@calcom/features/bookings/Booker/store";
 import classNames from "@calcom/lib/classNames";
 import getPaymentAppData from "@calcom/lib/getPaymentAppData";
 import { useLocale } from "@calcom/lib/hooks/useLocale";
-import { Clock, CheckSquare, RefreshCcw } from "@calcom/ui/components/icon";
 
 import type { PublicEvent } from "../../types";
 import { EventDetailBlocks } from "../../types";

@@ -1,3 +1,4 @@
+import { Trash, Plus } from "lucide-react";
 import dynamic from "next/dynamic";
 import type { ChangeEvent } from "react";
 import type {
@@ -9,7 +10,6 @@ import type {
 } from "react-awesome-query-builder";
 
 import { Button as CalButton, TextField, TextArea } from "@calcom/ui";
-import { Trash, Plus } from "@calcom/ui/components/icon";
 
 const Select = dynamic(
   async () => (await import("@calcom/ui")).SelectWithValidation

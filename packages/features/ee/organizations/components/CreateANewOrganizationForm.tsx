@@ -1,3 +1,4 @@
+import { ArrowRight } from "lucide-react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -10,7 +11,6 @@ import slugify from "@calcom/lib/slugify";
 import { telemetryEventTypes, useTelemetry } from "@calcom/lib/telemetry";
 import { trpc } from "@calcom/trpc/react";
 import { Button, Form, TextField, Alert } from "@calcom/ui";
-import { ArrowRight } from "@calcom/ui/components/icon";
 
 function extractDomainFromEmail(email: string) {
   let out = "";

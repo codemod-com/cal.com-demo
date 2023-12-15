@@ -1,4 +1,5 @@
 import { m } from "framer-motion";
+import { Calendar, Globe, User } from "lucide-react";
 import dynamic from "next/dynamic";
 import { shallow } from "zustand/shallow";
 
@@ -8,7 +9,6 @@ import { SeatsAvailabilityText } from "@calcom/features/bookings/components/Seat
 import { EventMetaBlock } from "@calcom/features/bookings/components/event-meta/Details";
 import { useTimePreferences } from "@calcom/features/bookings/lib";
 import { useLocale } from "@calcom/lib/hooks/useLocale";
-import { Calendar, Globe, User } from "@calcom/ui/components/icon";
 
 import { fadeInUp } from "../config";
 import { useBookerStore } from "../store";

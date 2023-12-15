@@ -1,3 +1,4 @@
+import { Plus, Info } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
@@ -7,7 +8,6 @@ import { useCompatSearchParams } from "@calcom/lib/hooks/useCompatSearchParams";
 import { useLocale } from "@calcom/lib/hooks/useLocale";
 import { trpc } from "@calcom/trpc/react";
 import { Avatar, Button, Select } from "@calcom/ui";
-import { Plus, Info } from "@calcom/ui/components/icon";
 
 import PageWrapper from "@components/PageWrapper";
 

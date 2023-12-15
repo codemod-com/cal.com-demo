@@ -1,3 +1,4 @@
+import { MoreHorizontal, Trash, Video } from "lucide-react";
 import { useCallback, useState } from "react";
 
 import { AppSettings } from "@calcom/app-store/_components/AppSettings";
@@ -21,7 +22,6 @@ import {
   DropdownMenuItem,
   Alert,
 } from "@calcom/ui";
-import { MoreHorizontal, Trash, Video } from "@calcom/ui/components/icon";
 
 import AppListCard from "@components/AppListCard";
 

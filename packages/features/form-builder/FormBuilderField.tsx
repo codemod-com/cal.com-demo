@@ -1,4 +1,5 @@
 import { ErrorMessage } from "@hookform/error-message";
+import { Info } from "lucide-react";
 import type { TFunction } from "next-i18next";
 import { Controller, useFormContext } from "react-hook-form";
 import type { z } from "zod";
@@ -6,7 +7,6 @@ import type { z } from "zod";
 import { classNames } from "@calcom/lib";
 import { useLocale } from "@calcom/lib/hooks/useLocale";
 import { Label } from "@calcom/ui";
-import { Info } from "@calcom/ui/components/icon";
 import InfoBadge from "@calcom/web/components/ui/InfoBadge";
 
 import { Components, isValidValueProp } from "./Components";

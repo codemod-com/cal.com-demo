@@ -1,5 +1,6 @@
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import type { AppCategories } from "@prisma/client";
+import { ChevronLeft, ChevronRight, Search } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import type { UIEvent } from "react";
 import { useEffect, useRef, useState } from "react";
@@ -12,7 +13,6 @@ import type { AppFrontendPayload as App } from "@calcom/types/App";
 import type { CredentialFrontendPayload as Credential } from "@calcom/types/Credential";
 
 import { EmptyScreen } from "../empty-screen";
-import { ChevronLeft, ChevronRight, Search } from "../icon";
 import { AppCard } from "./AppCard";
 
 export function useShouldShowArrows() {

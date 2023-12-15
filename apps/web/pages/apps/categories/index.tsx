@@ -1,5 +1,6 @@
 "use client";
 
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import type { GetServerSidePropsContext } from "next";
 import Link from "next/link";
 
@@ -9,7 +10,6 @@ import Shell from "@calcom/features/shell/Shell";
 import { useLocale } from "@calcom/lib/hooks/useLocale";
 import type { inferSSRProps } from "@calcom/types/inferSSRProps";
 import { SkeletonText } from "@calcom/ui";
-import { ArrowLeft, ArrowRight } from "@calcom/ui/components/icon";
 
 import PageWrapper from "@components/PageWrapper";
 

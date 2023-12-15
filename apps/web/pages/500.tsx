@@ -1,10 +1,10 @@
+import { Copy } from "lucide-react";
 import Head from "next/head";
 
 import { APP_NAME } from "@calcom/lib/constants";
 import { useCompatSearchParams } from "@calcom/lib/hooks/useCompatSearchParams";
 import { useLocale } from "@calcom/lib/hooks/useLocale";
 import { Button, showToast } from "@calcom/ui";
-import { Copy } from "@calcom/ui/components/icon";
 
 import PageWrapper from "@components/PageWrapper";
 

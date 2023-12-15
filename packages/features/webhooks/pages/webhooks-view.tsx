@@ -1,3 +1,4 @@
+import { Link as LinkIcon } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
@@ -15,7 +16,6 @@ import {
   SkeletonContainer,
   SkeletonText,
 } from "@calcom/ui";
-import { Link as LinkIcon } from "@calcom/ui/components/icon";
 
 import { getLayout } from "../../settings/layouts/SettingsLayout";
 import { WebhookListItem } from "../components";

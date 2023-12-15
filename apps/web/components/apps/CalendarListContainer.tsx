@@ -1,3 +1,4 @@
+import { Calendar } from "lucide-react";
 import Link from "next/link";
 import { Fragment } from "react";
 
@@ -16,7 +17,6 @@ import {
   ShellSubHeading,
   Label,
 } from "@calcom/ui";
-import { Calendar } from "@calcom/ui/components/icon";
 
 import { QueryCell } from "@lib/QueryCell";
 

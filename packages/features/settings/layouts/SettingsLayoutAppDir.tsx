@@ -1,6 +1,20 @@
 "use client";
 
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@radix-ui/react-collapsible";
+import {
+  ArrowLeft,
+  ChevronDown,
+  ChevronRight,
+  CreditCard,
+  Key,
+  Loader,
+  Lock,
+  Menu,
+  Plus,
+  Terminal,
+  User,
+  Users,
+} from "lucide-react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -19,20 +33,6 @@ import { IdentityProvider, MembershipRole, UserPermissionRole } from "@calcom/pr
 import { trpc } from "@calcom/trpc/react";
 import type { VerticalTabItemProps } from "@calcom/ui";
 import { Badge, Button, ErrorBoundary, Skeleton, useMeta, VerticalTabItem } from "@calcom/ui";
-import {
-  ArrowLeft,
-  ChevronDown,
-  ChevronRight,
-  CreditCard,
-  Key,
-  Loader,
-  Lock,
-  Menu,
-  Plus,
-  Terminal,
-  User,
-  Users,
-} from "@calcom/ui/components/icon";
 
 const tabs: VerticalTabItemProps[] = [
   {

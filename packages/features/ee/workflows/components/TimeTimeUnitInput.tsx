@@ -1,3 +1,4 @@
+import { ChevronDown } from "lucide-react";
 import { useState } from "react";
 import type { UseFormReturn } from "react-hook-form";
 
@@ -10,7 +11,6 @@ import {
   DropdownMenuTrigger,
   TextField,
 } from "@calcom/ui";
-import { ChevronDown } from "@calcom/ui/components/icon";
 
 import { getWorkflowTimeUnitOptions } from "../lib/getOptions";
 import type { FormValues } from "../pages/workflow";

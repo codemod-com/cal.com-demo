@@ -1,16 +1,8 @@
+import type { LucideIcon } from "lucide-react";
+import { Calendar, Video, CreditCard, Share2, BarChart, Grid, Mail, Contact } from "lucide-react";
+
 import { WEBAPP_URL } from "@calcom/lib/constants";
 import type { AppCategories } from "@calcom/prisma/enums";
-import type { LucideIcon } from "@calcom/ui/components/icon";
-import {
-  Calendar,
-  Video,
-  CreditCard,
-  Share2,
-  BarChart,
-  Grid,
-  Mail,
-  Contact,
-} from "@calcom/ui/components/icon";
 
 function getHref(baseURL: string, category: string, useQueryParam: boolean) {
   const baseUrlParsed = new URL(baseURL, WEBAPP_URL);

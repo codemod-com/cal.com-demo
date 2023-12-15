@@ -1,3 +1,5 @@
+import { Clipboard } from "lucide-react";
+
 import type { SSOConnection } from "@calcom/ee/sso/lib/saml";
 import { APP_NAME } from "@calcom/lib/constants";
 import { useLocale } from "@calcom/lib/hooks/useLocale";
@@ -11,7 +13,6 @@ import {
   DialogTrigger,
   Label,
 } from "@calcom/ui";
-import { Clipboard } from "@calcom/ui/components/icon";
 
 export default function ConnectionInfo({
   teamId,

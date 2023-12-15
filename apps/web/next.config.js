@@ -186,7 +186,7 @@ const nextConfig = {
     "lucide-react",
   ],
   modularizeImports: {
-    "@calcom/ui/components/icon": {
+    "lucide-react": {
       transform: "lucide-react/dist/esm/icons/{{ kebabCase member }}",
       preventFullImport: true,
     },

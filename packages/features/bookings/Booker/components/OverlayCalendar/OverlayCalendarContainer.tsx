@@ -1,3 +1,4 @@
+import { Settings } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { useCallback, useEffect } from "react";
@@ -11,7 +12,6 @@ import { useLocale } from "@calcom/lib/hooks/useLocale";
 import { localStorage } from "@calcom/lib/webstorage";
 import { trpc } from "@calcom/trpc/react";
 import { Button, Switch } from "@calcom/ui";
-import { Settings } from "@calcom/ui/components/icon";
 
 import { useBookerStore } from "../../store";
 import { OverlayCalendarContinueModal } from "../OverlayCalendar/OverlayCalendarContinueModal";

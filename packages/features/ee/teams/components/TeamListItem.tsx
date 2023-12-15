@@ -1,3 +1,15 @@
+import {
+  Check,
+  Edit2,
+  ExternalLink,
+  Globe,
+  Link as LinkIcon,
+  LogOut,
+  MoreHorizontal,
+  Send,
+  Trash,
+  X,
+} from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -28,18 +40,6 @@ import {
   showToast,
   Tooltip,
 } from "@calcom/ui";
-import {
-  Check,
-  Edit2,
-  ExternalLink,
-  Globe,
-  Link as LinkIcon,
-  LogOut,
-  MoreHorizontal,
-  Send,
-  Trash,
-  X,
-} from "@calcom/ui/components/icon";
 
 import { useOrgBranding } from "../../organizations/context/provider";
 import { TeamRole } from "./TeamPill";

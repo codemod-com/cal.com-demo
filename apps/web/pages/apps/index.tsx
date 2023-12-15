@@ -1,3 +1,4 @@
+import { Search } from "lucide-react";
 import type { GetServerSidePropsContext } from "next";
 import type { ChangeEventHandler } from "react";
 import { useState } from "react";
@@ -20,7 +21,6 @@ import {
   PopularAppsSlider,
   RecentAppsSlider,
 } from "@calcom/ui";
-import { Search } from "@calcom/ui/components/icon";
 
 import PageWrapper from "@components/PageWrapper";
 import AppsLayout from "@components/apps/layouts/AppsLayout";

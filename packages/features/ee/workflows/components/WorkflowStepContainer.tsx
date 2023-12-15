@@ -1,4 +1,5 @@
 import type { WorkflowStep } from "@prisma/client";
+import { ArrowDown, MoreHorizontal, Trash2, HelpCircle, Info } from "lucide-react";
 import type { Dispatch, SetStateAction } from "react";
 import { useRef, useState, useEffect } from "react";
 import type { UseFormReturn } from "react-hook-form";
@@ -39,7 +40,6 @@ import {
   Input,
   Tooltip,
 } from "@calcom/ui";
-import { ArrowDown, MoreHorizontal, Trash2, HelpCircle, Info } from "@calcom/ui/components/icon";
 
 import {
   isAttendeeAction,

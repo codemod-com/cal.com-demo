@@ -1,3 +1,4 @@
+import { Plus } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -25,7 +26,6 @@ import {
 } from "@calcom/ui";
 
 import { Button } from "../button";
-import { Plus } from "../icon";
 import { showToast } from "../toast";
 
 interface AppCardProps {

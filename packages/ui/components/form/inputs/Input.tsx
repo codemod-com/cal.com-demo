@@ -1,3 +1,4 @@
+import { Eye, EyeOff, Search } from "lucide-react";
 import type { ReactNode } from "react";
 import React, { forwardRef, useCallback, useId, useState } from "react";
 import { useFormContext } from "react-hook-form";
@@ -6,7 +7,6 @@ import classNames from "@calcom/lib/classNames";
 import { useLocale } from "@calcom/lib/hooks/useLocale";
 
 import { Alert, Input, InputField, Tooltip } from "../../..";
-import { Eye, EyeOff, Search } from "../../icon";
 import { Label } from "./Label";
 import type { InputFieldProps } from "./types";
 

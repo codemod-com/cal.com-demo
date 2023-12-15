@@ -1,4 +1,5 @@
 import type { App_RoutingForms_Form, Team } from "@prisma/client";
+import { ExternalLink, Link as LinkIcon, Download, Code, Trash, MessageCircle } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import type { UseFormReturn } from "react-hook-form";
@@ -35,14 +36,6 @@ import {
   Tooltip,
   VerticalDivider,
 } from "@calcom/ui";
-import {
-  ExternalLink,
-  Link as LinkIcon,
-  Download,
-  Code,
-  Trash,
-  MessageCircle,
-} from "@calcom/ui/components/icon";
 
 import { RoutingPages } from "../lib/RoutingPages";
 import { getSerializableForm } from "../lib/getSerializableForm";

@@ -1,4 +1,4 @@
-import { ArrowUp, ArrowDown } from "@calcom/ui/components/icon";
+import { ArrowUp, ArrowDown } from "lucide-react";
 
 export type ArrowButtonProps = {
   arrowDirection: "up" | "down";

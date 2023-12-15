@@ -1,3 +1,4 @@
+import { BookOpen, Check, ExternalLink, File, Flag, Mail, Shield } from "lucide-react";
 import Link from "next/link";
 import type { IframeHTMLAttributes } from "react";
 import React, { useState } from "react";
@@ -11,7 +12,6 @@ import { useLocale } from "@calcom/lib/hooks/useLocale";
 import { trpc } from "@calcom/trpc/react";
 import type { App as AppType } from "@calcom/types/App";
 import { Badge, Button, showToast, SkeletonButton, SkeletonText } from "@calcom/ui";
-import { BookOpen, Check, ExternalLink, File, Flag, Mail, Shield } from "@calcom/ui/components/icon";
 
 import { InstallAppButtonChild } from "./InstallAppButtonChild";
 

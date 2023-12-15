@@ -1,6 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 // eslint-disable-next-line no-restricted-imports
 import { noop } from "lodash";
+import { AlertCircle, Edit } from "lucide-react";
 import type { FC } from "react";
 import { useReducer, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -31,7 +32,6 @@ import {
   Switch,
   TextField,
 } from "@calcom/ui";
-import { AlertCircle, Edit } from "@calcom/ui/components/icon";
 
 import AppListCard from "../../../apps/web/components/AppListCard";
 

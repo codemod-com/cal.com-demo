@@ -1,11 +1,11 @@
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
+import { CheckCircle } from "lucide-react";
 import Link from "next/link";
 import type { ComponentProps } from "react";
 import { forwardRef } from "react";
 
 import { classNames } from "@calcom/lib";
 import type { SVGComponent } from "@calcom/types/SVGComponent";
-import { CheckCircle } from "@calcom/ui/components/icon";
 
 import type { ButtonColor } from "../../button/Button";
 

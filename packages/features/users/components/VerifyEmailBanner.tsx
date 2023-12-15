@@ -1,8 +1,9 @@
+import { Mail } from "lucide-react";
+
 import { APP_NAME } from "@calcom/lib/constants";
 import { useLocale } from "@calcom/lib/hooks/useLocale";
 import { trpc } from "@calcom/trpc";
 import { TopBanner, showToast } from "@calcom/ui";
-import { Mail } from "@calcom/ui/components/icon";
 
 import { useFlagMap } from "../../flags/context/provider";
 

@@ -1,6 +1,7 @@
+import { Pencil } from "lucide-react";
+
 import { useLocale } from "@calcom/lib/hooks/useLocale";
 import { SheetClose, Button } from "@calcom/ui";
-import { Pencil } from "@calcom/ui/components/icon";
 
 import { useEditMode } from "./store";
 

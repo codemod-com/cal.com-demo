@@ -1,4 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
+import { Clock } from "lucide-react";
 import type { Dispatch, SetStateAction } from "react";
 import { useState } from "react";
 
@@ -7,7 +8,6 @@ import { useLocale } from "@calcom/lib/hooks/useLocale";
 import logger from "@calcom/lib/logger";
 import { trpc } from "@calcom/trpc/react";
 import { Button, Dialog, DialogContent, DialogFooter, DialogHeader, showToast } from "@calcom/ui";
-import { Clock } from "@calcom/ui/components/icon";
 
 interface IConfirmDialogWipe {
   isOpenDialog: boolean;

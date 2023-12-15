@@ -1,5 +1,6 @@
 import type { DehydratedState } from "@tanstack/react-query";
 import classNames from "classnames";
+import { Verified, ArrowRight } from "lucide-react";
 import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Link from "next/link";
 import { Toaster } from "react-hot-toast";
@@ -27,7 +28,6 @@ import { RedirectType, type EventType, type User } from "@calcom/prisma/client";
 import { baseEventTypeSelect } from "@calcom/prisma/selects";
 import { EventTypeMetaDataSchema, teamMetadataSchema } from "@calcom/prisma/zod-utils";
 import { HeadSeo, UnpublishedEntity } from "@calcom/ui";
-import { Verified, ArrowRight } from "@calcom/ui/components/icon";
 
 import type { EmbedProps } from "@lib/withEmbedSsr";
 

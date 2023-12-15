@@ -1,9 +1,10 @@
+import { BarChart, CreditCard, Globe, Lock, Paintbrush, Users } from "lucide-react";
+
 import { getLayout } from "@calcom/features/MainLayout";
 import { ShellMain } from "@calcom/features/shell/Shell";
 import { UpgradeTip } from "@calcom/features/tips";
 import { useLocale } from "@calcom/lib/hooks/useLocale";
 import { Button, ButtonGroup } from "@calcom/ui";
-import { BarChart, CreditCard, Globe, Lock, Paintbrush, Users } from "@calcom/ui/components/icon";
 
 import PageWrapper from "@components/PageWrapper";
 

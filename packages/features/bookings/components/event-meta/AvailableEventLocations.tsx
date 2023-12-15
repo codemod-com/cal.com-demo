@@ -1,3 +1,5 @@
+import { Link } from "lucide-react";
+
 import type {
   DefaultEventLocationType,
   EventLocationTypeFromApp,
@@ -8,7 +10,6 @@ import { classNames } from "@calcom/lib";
 import { useLocale } from "@calcom/lib/hooks/useLocale";
 import invertLogoOnDark from "@calcom/lib/invertLogoOnDark";
 import { Tooltip } from "@calcom/ui";
-import { Link } from "@calcom/ui/components/icon";
 
 const excludeNullValues = (value: unknown) => !!value;
 

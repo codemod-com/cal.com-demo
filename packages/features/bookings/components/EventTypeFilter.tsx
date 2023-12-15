@@ -1,3 +1,4 @@
+import { Link } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { Fragment, useState } from "react";
 
@@ -10,7 +11,6 @@ import type { RouterOutputs } from "@calcom/trpc/react";
 import { trpc } from "@calcom/trpc/react";
 import { AnimatedPopover } from "@calcom/ui";
 import { Divider } from "@calcom/ui";
-import { Link } from "@calcom/ui/components/icon";
 
 import { groupBy } from "../groupBy";
 import { useFilterQuery } from "../lib/useFilterQuery";

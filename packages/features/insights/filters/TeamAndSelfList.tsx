@@ -1,3 +1,4 @@
+import { Layers, User } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useEffect } from "react";
 
@@ -9,7 +10,6 @@ import { getPlaceholderAvatar } from "@calcom/lib/defaultAvatarImage";
 import { useLocale } from "@calcom/lib/hooks/useLocale";
 import { trpc } from "@calcom/trpc";
 import { AnimatedPopover, Avatar, Divider } from "@calcom/ui";
-import { Layers, User } from "@calcom/ui/components/icon";
 
 import { useFilterContext } from "../context/provider";
 

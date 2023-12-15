@@ -1,6 +1,7 @@
 import { ErrorMessage } from "@hookform/error-message";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { isValidPhoneNumber } from "libphonenumber-js";
+import { MapPin } from "lucide-react";
 import { Trans } from "next-i18next";
 import Link from "next/link";
 import { useEffect } from "react";
@@ -20,7 +21,6 @@ import type { RouterOutputs } from "@calcom/trpc/react";
 import { trpc } from "@calcom/trpc/react";
 import { Input } from "@calcom/ui";
 import { Button, Dialog, DialogContent, DialogFooter, Form, PhoneInput } from "@calcom/ui";
-import { MapPin } from "@calcom/ui/components/icon";
 
 import { QueryCell } from "@lib/QueryCell";
 

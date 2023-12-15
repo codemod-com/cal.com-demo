@@ -1,5 +1,6 @@
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { ErrorMessage } from "@hookform/error-message";
+import { Plus, X, Check, CornerDownRight } from "lucide-react";
 import { Trans } from "next-i18next";
 import Link from "next/link";
 import type { EventTypeSetupProps, FormValues } from "pages/event-types/[type]";
@@ -30,7 +31,6 @@ import {
   Button,
   showToast,
 } from "@calcom/ui";
-import { Plus, X, Check, CornerDownRight } from "@calcom/ui/components/icon";
 
 import CheckboxField from "@components/ui/form/CheckboxField";
 import type { SingleValueLocationOption } from "@components/ui/form/LocationSelect";

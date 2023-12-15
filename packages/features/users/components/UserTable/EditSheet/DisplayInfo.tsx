@@ -1,8 +1,9 @@
+import { ClipboardCheck, Clipboard } from "lucide-react";
+
 import { classNames } from "@calcom/lib";
 import { useCopy } from "@calcom/lib/hooks/useCopy";
 import type { BadgeProps } from "@calcom/ui";
 import { Badge, Button, Label } from "@calcom/ui";
-import { ClipboardCheck, Clipboard } from "@calcom/ui/components/icon";
 
 type DisplayInfoType<T extends boolean> = {
   label: string;

@@ -1,10 +1,10 @@
+import { Check } from "lucide-react";
 import type { GroupBase, InputProps, OptionProps, ControlProps } from "react-select";
 import { components as reactSelectComponents } from "react-select";
 
 import { classNames } from "@calcom/lib";
 
 import { UpgradeTeamsBadge, UpgradeOrgsBadge } from "../../badge";
-import { Check } from "../../icon";
 import type { SelectProps } from "./Select";
 
 export const InputComponent = <

@@ -1,13 +1,13 @@
 "use client";
 
+import { Clipboard } from "lucide-react";
+import { Plus } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 import { useLocale } from "@calcom/lib/hooks/useLocale";
 import { trpc } from "@calcom/trpc";
 import { Meta, Form, Button, TextField, showToast, Tooltip, ImageUploader, Avatar } from "@calcom/ui";
-import { Clipboard } from "@calcom/ui/components/icon";
-import { Plus } from "@calcom/ui/components/icon";
 
 type FormValues = {
   name: string;

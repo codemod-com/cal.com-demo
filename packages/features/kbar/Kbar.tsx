@@ -10,6 +10,7 @@ import {
   useRegisterActions,
 } from "kbar";
 import type { Action } from "kbar";
+import { Search, ArrowUp, ArrowDown, CornerDownLeft, Command } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useMemo } from "react";
 
@@ -19,7 +20,6 @@ import { isMac } from "@calcom/lib/isMac";
 import type { RouterOutputs } from "@calcom/trpc/react";
 import { trpc } from "@calcom/trpc/react";
 import { Tooltip } from "@calcom/ui";
-import { Search, ArrowUp, ArrowDown, CornerDownLeft, Command } from "@calcom/ui/components/icon";
 
 type shortcutArrayType = {
   shortcuts?: string[];

@@ -1,10 +1,10 @@
+import { X } from "lucide-react";
 import React, { forwardRef, useId, useState } from "react";
 
 import classNames from "@calcom/lib/classNames";
 import { useLocale } from "@calcom/lib/hooks/useLocale";
 
 import { Skeleton } from "../../..";
-import { X } from "../../icon";
 import { HintsOrErrors } from "./HintOrErrors";
 import { Label } from "./Label";
 import type { InputFieldProps, InputProps } from "./types";

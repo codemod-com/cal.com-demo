@@ -1,9 +1,8 @@
 /* eslint-disable playwright/missing-playwright-await */
 import { render, screen, fireEvent } from "@testing-library/react";
+import { Plus } from "lucide-react";
 import { useState } from "react";
 import { vi } from "vitest";
-
-import { Plus } from "@calcom/ui/components/icon";
 
 import { Button, buttonClasses } from "./Button";
 

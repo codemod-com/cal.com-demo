@@ -1,3 +1,4 @@
+import { Plus } from "lucide-react";
 import type { GetServerSidePropsContext } from "next";
 
 import { getLayout } from "@calcom/features/MainLayout";
@@ -8,7 +9,6 @@ import { WEBAPP_URL } from "@calcom/lib/constants";
 import { useLocale } from "@calcom/lib/hooks/useLocale";
 import { trpc } from "@calcom/trpc/react";
 import { Button } from "@calcom/ui";
-import { Plus } from "@calcom/ui/components/icon";
 
 import PageWrapper from "@components/PageWrapper";
 

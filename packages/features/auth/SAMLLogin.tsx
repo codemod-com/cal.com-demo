@@ -1,3 +1,4 @@
+import { Lock } from "lucide-react";
 import { signIn } from "next-auth/react";
 import type { Dispatch, SetStateAction } from "react";
 import { useFormContext } from "react-hook-form";
@@ -7,7 +8,6 @@ import { HOSTED_CAL_FEATURES } from "@calcom/lib/constants";
 import { useLocale } from "@calcom/lib/hooks/useLocale";
 import { trpc } from "@calcom/trpc/react";
 import { Button } from "@calcom/ui";
-import { Lock } from "@calcom/ui/components/icon";
 
 interface Props {
   samlTenantID: string;

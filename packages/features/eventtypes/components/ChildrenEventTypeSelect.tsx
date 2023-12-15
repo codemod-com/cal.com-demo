@@ -1,4 +1,5 @@
 import { useAutoAnimate } from "@formkit/auto-animate/react";
+import { ExternalLink, X } from "lucide-react";
 import type { Props } from "react-select";
 
 import { useOrgBranding } from "@calcom/features/ee/organizations/context/provider";
@@ -8,7 +9,6 @@ import { CAL_URL } from "@calcom/lib/constants";
 import { useLocale } from "@calcom/lib/hooks/useLocale";
 import { MembershipRole } from "@calcom/prisma/enums";
 import { Avatar, Badge, Button, ButtonGroup, Select, Switch, Tooltip } from "@calcom/ui";
-import { ExternalLink, X } from "@calcom/ui/components/icon";
 
 export type ChildrenEventType = {
   value: string;

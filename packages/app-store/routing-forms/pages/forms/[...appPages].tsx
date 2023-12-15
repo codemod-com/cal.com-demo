@@ -1,5 +1,22 @@
 // TODO: i18n
 import { useAutoAnimate } from "@formkit/auto-animate/react";
+import {
+  BarChart,
+  CheckCircle,
+  Code,
+  Copy,
+  Download,
+  Edit,
+  ExternalLink,
+  FileText,
+  GitMerge,
+  Link as LinkIcon,
+  Mail,
+  Menu,
+  MessageCircle,
+  Shuffle,
+  Trash,
+} from "lucide-react";
 import { useEffect } from "react";
 import { useFormContext } from "react-hook-form";
 
@@ -33,23 +50,6 @@ import {
   Tooltip,
   ArrowButton,
 } from "@calcom/ui";
-import {
-  BarChart,
-  CheckCircle,
-  Code,
-  Copy,
-  Download,
-  Edit,
-  ExternalLink,
-  FileText,
-  GitMerge,
-  Link as LinkIcon,
-  Mail,
-  Menu,
-  MessageCircle,
-  Shuffle,
-  Trash,
-} from "@calcom/ui/components/icon";
 
 import type { inferSSRProps } from "@lib/types/inferSSRProps";
 

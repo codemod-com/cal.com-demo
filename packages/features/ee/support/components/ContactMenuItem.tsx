@@ -1,8 +1,9 @@
+import { ExternalLink } from "lucide-react";
+
 import { JOIN_DISCORD } from "@calcom/lib/constants";
 import { useHasPaidPlan } from "@calcom/lib/hooks/useHasPaidPlan";
 import { useLocale } from "@calcom/lib/hooks/useLocale";
 import { UpgradeTeamsBadge } from "@calcom/ui";
-import { ExternalLink } from "@calcom/ui/components/icon";
 
 import FreshChatMenuItem from "../lib/freshchat/FreshChatMenuItem";
 import HelpscoutMenuItem from "../lib/helpscout/HelpscoutMenuItem";

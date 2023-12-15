@@ -1,3 +1,4 @@
+import { Copy, Edit, Info } from "lucide-react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import type { EventTypeSetupProps, FormValues } from "pages/event-types/[type]";
@@ -34,7 +35,6 @@ import {
   TextField,
   Tooltip,
 } from "@calcom/ui";
-import { Copy, Edit, Info } from "@calcom/ui/components/icon";
 import { IS_VISUAL_REGRESSION_TESTING } from "@calcom/web/constants";
 
 import RequiresConfirmationController from "./RequiresConfirmationController";

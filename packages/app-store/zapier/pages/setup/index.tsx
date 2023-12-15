@@ -1,3 +1,4 @@
+import { Clipboard } from "lucide-react";
 import { Trans } from "next-i18next";
 import Link from "next/link";
 import { useState } from "react";
@@ -6,7 +7,6 @@ import { Toaster } from "react-hot-toast";
 import { useLocale } from "@calcom/lib/hooks/useLocale";
 import { trpc } from "@calcom/trpc/react";
 import { Button, Tooltip, showToast } from "@calcom/ui";
-import { Clipboard } from "@calcom/ui/components/icon";
 
 export interface IZapierSetupProps {
   inviteLink?: string;

@@ -1,5 +1,7 @@
 "use client";
 
+import type { LucideIcon } from "lucide-react";
+import { BarChart, Calendar, Contact, CreditCard, Grid, Mail, Plus, Share2, Video } from "lucide-react";
 import { useReducer } from "react";
 import { z } from "zod";
 
@@ -10,18 +12,6 @@ import { AppCategories } from "@calcom/prisma/enums";
 import { trpc } from "@calcom/trpc/react";
 import type { AppGetServerSidePropsContext } from "@calcom/types/AppGetServerSideProps";
 import { Button, EmptyScreen, AppSkeletonLoader as SkeletonLoader, ShellSubHeading } from "@calcom/ui";
-import type { LucideIcon } from "@calcom/ui/components/icon";
-import {
-  BarChart,
-  Calendar,
-  Contact,
-  CreditCard,
-  Grid,
-  Mail,
-  Plus,
-  Share2,
-  Video,
-} from "@calcom/ui/components/icon";
 
 import { QueryCell } from "@lib/QueryCell";
 

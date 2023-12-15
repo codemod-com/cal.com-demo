@@ -1,4 +1,5 @@
 import { BuildingIcon, PaperclipIcon, UserIcon, Users } from "lucide-react";
+import { Link } from "lucide-react";
 import { Trans } from "next-i18next";
 import { useMemo, useState, useRef } from "react";
 import type { FormEvent } from "react";
@@ -25,7 +26,6 @@ import {
   Select,
   TextAreaField,
 } from "@calcom/ui";
-import { Link } from "@calcom/ui/components/icon";
 
 import type { PendingMember } from "../lib/types";
 import { GoogleWorkspaceInviteButton } from "./GoogleWorkspaceInviteButton";

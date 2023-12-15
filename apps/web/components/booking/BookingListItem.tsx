@@ -1,3 +1,4 @@
+import { Ban, Check, Clock, CreditCard, MapPin, RefreshCcw, Send, X } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -30,7 +31,6 @@ import {
   TextAreaField,
   Tooltip,
 } from "@calcom/ui";
-import { Ban, Check, Clock, CreditCard, MapPin, RefreshCcw, Send, X } from "@calcom/ui/components/icon";
 
 import { ChargeCardDialog } from "@components/dialog/ChargeCardDialog";
 import { EditLocationDialog } from "@components/dialog/EditLocationDialog";

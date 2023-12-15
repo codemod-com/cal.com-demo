@@ -1,5 +1,6 @@
 // eslint-disable-next-line no-restricted-imports
 import { get } from "lodash";
+import { Lock } from "lucide-react";
 import React from "react";
 import type z from "zod";
 
@@ -7,7 +8,6 @@ import type { Prisma } from "@calcom/prisma/client";
 import { SchedulingType } from "@calcom/prisma/enums";
 import type { _EventTypeModel } from "@calcom/prisma/zod/eventtype";
 import { Tooltip } from "@calcom/ui";
-import { Lock } from "@calcom/ui/components/icon";
 
 export const LockedIndicator = (label: string) => (
   <Tooltip content={<>{label}</>}>
