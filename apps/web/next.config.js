@@ -208,6 +208,8 @@ const nextConfig = {
   },
   webpack: (config, { webpack, buildId, isServer, nextRuntime }) => {
     if (isServer && nextRuntime) {
+      // removes the terser plugin for server-side code
+      // https://github.com/vercel/next.js/blob/1c65c557504e1e422c29c60ceafd15402441b884/packages/next/src/build/webpack-config.ts#L1023
       config.optimization.minimizer.splice(0, 1);
     }
 
