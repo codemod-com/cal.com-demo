@@ -12,7 +12,6 @@ const {
   orgUserTypeRoutePath,
   orgUserTypeEmbedRoutePath,
 } = require("./pagesAndRewritePaths");
-const { TerserPlugin } = require("next/dist/build/webpack/plugins/terser-webpack-plugin/src");
 
 if (!process.env.NEXTAUTH_SECRET) throw new Error("Please set NEXTAUTH_SECRET");
 if (!process.env.CALENDSO_ENCRYPTION_KEY) throw new Error("Please set CALENDSO_ENCRYPTION_KEY");
@@ -155,10 +154,8 @@ const matcherConfigUserTypeEmbedRoute = {
 
 /** @type {import("next").NextConfig} */
 const nextConfig = {
-  productionBrowserSourceMaps: false,
   experimental: {
     serverComponentsExternalPackages: ["next-i18next"],
-    serverSourceMaps: false,
   },
   i18n: {
     ...i18n,
