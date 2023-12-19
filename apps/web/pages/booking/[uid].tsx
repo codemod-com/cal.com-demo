@@ -1,3 +1,6 @@
+import { buildLegacyCtx } from "@lib/buildLegacyCtx.ts";
+import { headers, cookies } from "next/headers";
+import { notFound, redirect } from "next/navigation";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@radix-ui/react-collapsible";
 import classNames from "classnames";
 import { createEvent } from "ics";
@@ -60,6 +63,14 @@ import EventReservationSchema from "@components/schemas/EventReservationSchema";
 
 import { ssrInit } from "@server/lib/ssr";
 
+type Params = {
+  [key: string]: string | string[] | undefined
+};
+
+type PageProps = {
+  params: Params
+};
+
 const useBrandColors = ({
   brandColor,
   darkBrandColor,
@@ -94,7 +105,14 @@ const querySchema = z.object({
   seatReferenceUid: z.string().optional(),
 });
 
-export default function Success(props: SuccessProps) {
+export default async function Success(
+  {
+    params: pageParams,
+    searchParams: pageSearchParams
+  }: PageProps
+) {
+  const legacyCtx = buildLegacyCtx(headers(), cookies(), pageParams, pageSearchParams);
+  const props = await getData(legacyCtx);
   const { t } = useLocale();
   const router = useRouter();
   const routerQuery = useRouterQuery();
@@ -313,7 +331,7 @@ export default function Success(props: SuccessProps) {
   const rescheduleProviderName = guessEventLocationType(rescheduleLocation)?.label;
 
   return (
-    <div className={isEmbed ? "" : "h-screen"} data-testid="success-page">
+    (<div className={isEmbed ? "" : "h-screen"} data-testid="success-page">
       {!isEmbed && (
         <EventReservationSchema
           reservationId={bookingInfo.uid}
@@ -373,7 +391,7 @@ export default function Success(props: SuccessProps) {
                   )}>
                   {giphyImage && !needsConfirmation && !isCancelled && (
                     // eslint-disable-next-line @next/next/no-img-element
-                    <img src={giphyImage} alt="Gif from Giphy" />
+                    (<img src={giphyImage} alt="Gif from Giphy" />)
                   )}
                   {!giphyImage && !needsConfirmation && !isCancelled && (
                     <Check className="h-5 w-5 text-green-600 dark:text-green-400" />
@@ -826,7 +844,7 @@ export default function Success(props: SuccessProps) {
           </div>
         </div>
       </main>
-    </div>
+    </div>)
   );
 }
 
@@ -1237,6 +1255,20 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       requiresLoginToUpdate,
     },
   };
+}
+
+const getData = async (ctx: GetServerSidePropsContext) => {
+    const result = await getServerSideProps(ctx);
+    
+    if("redirect" in result) {
+        redirect(result.redirect.destination);	
+    }
+    
+    if("notFound" in result) {
+        notFound();
+    }
+    
+    return "props" in result ? result.props : {};
 }
 
 async function getRecurringBookings(recurringEventId: string | null) {
