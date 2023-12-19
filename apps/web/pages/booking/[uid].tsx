@@ -1,3 +1,4 @@
+'use client';
 import { buildLegacyCtx } from "@lib/buildLegacyCtx.ts";
 import { headers, cookies } from "next/headers";
 import { notFound, redirect } from "next/navigation";
