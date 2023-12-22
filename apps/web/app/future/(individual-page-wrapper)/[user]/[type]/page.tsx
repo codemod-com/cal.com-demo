@@ -15,17 +15,49 @@ import { getUsernameList } from "@calcom/lib/defaultEvents";
 import slugify from "@calcom/lib/slugify";
 import prisma from "@calcom/prisma";
 import { RedirectType } from "@calcom/prisma/client";
+import { trpc } from "@calcom/trpc";
 
 import { buildLegacyCtx } from "@lib/buildLegacyCtx";
 import { getTemporaryOrgRedirect } from "@lib/getTemporaryOrgRedirect";
 
 import PageWrapper from "@components/PageWrapperAppDir";
 
-export const generateMetadata = async () =>
-  await _generateMetadata(
-    () => "",
-    () => ""
+export const generateMetadata = async ({ params }: { params: Record<string, string | string[]> }) => {
+  const context = buildLegacyCtx(headers(), cookies(), params);
+  // @ts-expect-error `req` of type '{ headers: ReadonlyHeaders; cookies: ReadonlyRequestCookies; }' is not assignable to `req` in `GetServerSidePropsContext`
+  const session = await getServerSession(context);
+  const ssr = await ssrInit();
+
+  const { rescheduleUid, bookingUid } = context.query;
+  const { user: usernames, type: slug } = paramsSchema.parse(context.params);
+  // @ts-expect-error `req` of type '{ headers: ReadonlyHeaders; cookies: ReadonlyRequestCookies; }' is not assignable to `req` in `GetServerSidePropsContext`
+  const { currentOrgDomain, isValidOrgDomain } = orgDomainConfig(context.req, context.params?.orgSlug);
+  const org = isValidOrgDomain ? currentOrgDomain : null;
+  const eventData = await ssr.viewer.public.event.fetch({
+    username: usernames.join("+"),
+    eventSlug: slug,
+    org,
+  });
+  const username = usernames[0];
+  const { data: event } = trpc.viewer.public.event.useQuery(
+    { username, eventSlug: slug, isTeamEvent: false, org: eventData?.entity.orgSlug ?? null },
+    { refetchOnWindowFocus: false }
   );
+  let booking: GetBookingType | null = null;
+  if (rescheduleUid) {
+    booking = await getBookingForReschedule(`${rescheduleUid}`, session?.user?.id);
+  } else if (bookingUid) {
+    booking = await getBookingForSeatedEvent(`${bookingUid}`);
+  }
+
+  const profileName = event?.profile?.name ?? "";
+  const title = event?.title ?? "";
+
+  return await _generateMetadata(
+    (t) => `${rescheduleUid && !!booking ? t("reschedule") : ""} ${title} | ${profileName}`,
+    (t) => `${rescheduleUid ? t("reschedule") : ""} ${title}`
+  );
+};
 
 const paramsSchema = z.object({
   type: z.string().transform((s) => slugify(s)),
