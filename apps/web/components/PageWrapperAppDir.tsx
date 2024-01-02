@@ -50,7 +50,7 @@ function PageWrapper(props: PageWrapperProps) {
     nonce,
   };
 
-  const getLayout: (page: React.ReactElement) => ReactNode = props.getLayout ?? ((page) => page);
+  const getLayout: (page: ReactNode) => ReactNode = props.getLayout ?? ((page) => page);
 
   return (
     <AppProviders {...providerProps}>
