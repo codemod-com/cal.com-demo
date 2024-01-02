@@ -10,17 +10,4 @@ export const generateMetadata = async () =>
     () => "admin_description"
   );
 
-<<<<<<< HEAD
-export default WithLayout({ getLayout, Page: LegacyPage });
-=======
-export default async function Page() {
-  const h = headers();
-  const nonce = h.get("x-nonce") ?? undefined;
-
-  return (
-    <PageWrapper getLayout={getLayout} requiresLicense={false} nonce={nonce} themeBasis={null}>
-      <LegacyPage />
-    </PageWrapper>
-  );
-}
->>>>>>> e2795b137 (remove-route-groups)
+export default WithLayout({ getLayout, Page: LegacyPage })<"P">;
