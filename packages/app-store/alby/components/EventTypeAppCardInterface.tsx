@@ -16,23 +16,12 @@ import { PaypalPaymentOptions as paymentOptions } from "../zod";
 
 type Option = { value: string; label: string };
 
-<<<<<<< HEAD
 const EventTypeAppCard: EventTypeAppCardComponent = function EventTypeAppCard({
   app,
   eventType,
   eventTypeFormMetadata,
 }) {
   const { asPath } = useRouter();
-=======
-const EventTypeAppCard: EventTypeAppCardComponent = function EventTypeAppCard({ app, eventType }) {
-  const searchParams = useSearchParams();
-  /** TODO "pathname" no longer contains square-bracket expressions. Rewrite the code relying on them if required. **/
-  const pathname = usePathname();
-  const asPath = useMemo(
-    () => `${pathname}${searchParams ? `?${searchParams.toString()}` : ""}`,
-    [pathname, searchParams]
-  );
->>>>>>> 574e4e098 (the /intuita/app-router-migration squashed commit)
   const { getAppData, setAppData } = useAppContextWithSchema<typeof appDataSchema>();
   const price = getAppData("price");
   const currency = getAppData("currency");
