@@ -60,7 +60,7 @@ export default function Custom404() {
     });
 
     const [routerUsername] = pathname?.replace("%20", "-").split(/[?#]/) ?? [];
-    if (!isValidOrgDomain || !currentOrgDomain) {
+    if (routerUsername && (!isValidOrgDomain || !currentOrgDomain)) {
       const splitPath = routerUsername.split("/");
       if (splitPath[1] === "team" && splitPath.length === 3) {
         // Accessing a non-existent team
