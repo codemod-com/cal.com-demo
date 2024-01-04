@@ -9,8 +9,10 @@ export type EmbedProps = {
   isEmbed?: boolean;
 };
 
-export default function withEmbedSsrAppDir(getData: (context: GetServerSidePropsContext) => Promise<any>) {
-  return async (context: GetServerSidePropsContext): Promise<any> => {
+export default function withEmbedSsrAppDir<T extends Record<string, any>>(
+  getData: (context: GetServerSidePropsContext) => Promise<T>
+) {
+  return async (context: GetServerSidePropsContext): Promise<T> => {
     const { embed, layout } = context.query;
 
     try {
