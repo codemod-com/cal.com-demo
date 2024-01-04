@@ -1,9 +1,8 @@
 import OldPage from "@pages/booking/[uid]";
-import { ssrInit } from "_app/_trpc/ssrInit";
-import type { Params, SearchParams } from "_app/_types";
-import { _generateMetadata } from "_app/_utils";
+import { ssrInit } from "app/_trpc/ssrInit";
+import { _generateMetadata } from "app/_utils";
+import { WithLayout } from "app/layoutHOC";
 import type { GetServerSidePropsContext } from "next";
-import { headers, cookies } from "next/headers";
 import { notFound } from "next/navigation";
 import { z } from "zod";
 
@@ -16,8 +15,6 @@ import prisma from "@calcom/prisma";
 import { customInputSchema, EventTypeMetaDataSchema } from "@calcom/prisma/zod-utils";
 
 import { getRecurringBookings, handleSeatsEventTypeOnBooking, getEventTypesFromDB } from "@lib/booking";
-
-import PageWrapper from "@components/PageWrapperAppDir";
 
 const stringToBoolean = z
   .string()
@@ -43,12 +40,7 @@ export const generateMetadata = async () =>
     () => ""
   );
 
-type PageProps = {
-  params: Params;
-  searchParams: SearchParams;
-};
-
-const getData = async (context: GetServerSidePropsContext) => {
+export const getData = async (context: GetServerSidePropsContext) => {
   const ssr = await ssrInit();
   const session = await getServerSession(context);
   let tz: string | null = null;
@@ -207,22 +199,5 @@ const getData = async (context: GetServerSidePropsContext) => {
   };
 };
 
-const Page = async ({ params, searchParams }: PageProps) => {
-  const h = headers();
-  const nonce = h.get("x-nonce") ?? undefined;
-
-  const legacyCtx = {
-    req: { headers: headers(), cookies: cookies() },
-    query: { ...searchParams, ...params },
-  };
-  // @ts-expect-error Argument of type '{ req: { headers: ReadonlyHeaders; cookies: ReadonlyRequestCookies; }; }' is not assignable to parameter of type 'GetServerSidePropsContext'.
-  const props = await getData(legacyCtx);
-
-  return (
-    <PageWrapper getLayout={null} requiresLicense={false} nonce={nonce} themeBasis={null}>
-      <OldPage {...props} />
-    </PageWrapper>
-  );
-};
-
-export default Page;
+// @ts-expect-error Argument of type '{ req: { headers: ReadonlyHeaders; cookies: ReadonlyRequestCookies; }; }' is not assignable to parameter of type 'GetServerSidePropsContext'.
+export default WithLayout({ getLayout: null, getData, Page: OldPage });
