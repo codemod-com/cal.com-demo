@@ -1,17 +1,11 @@
 import LegacyPage from "@pages/workflows/[workflow]";
 import type { Params } from "app/_types";
 import { _generateMetadata } from "app/_utils";
-import { headers } from "next/headers";
+import { WithLayout } from "app/layoutHOC";
 import { notFound } from "next/navigation";
 import { z } from "zod";
 
 import { APP_NAME } from "@calcom/lib/constants";
-
-import PageWrapper from "@components/PageWrapperAppDir";
-
-type PageProps = {
-  params: Params;
-};
 
 const querySchema = z.object({
   workflow: z.string(),
@@ -44,19 +38,8 @@ async function getProps({ params }: { params: Params }) {
 
 export const generateStaticParams = () => [];
 
-export default async function WorkflowPage({ params }: PageProps) {
-  const props = await getProps({ params });
-  const h = headers();
-  const nonce = h.get("x-nonce") ?? undefined;
-
-  return (
-    <PageWrapper getLayout={null} requiresLicense={false} nonce={nonce} themeBasis={null} {...props}>
-      {/* @ts-expect-error page does not require any props */}
-      <LegacyPage />
-    </PageWrapper>
-  );
-}
-
+// @ts-expect-error export default WithLayout({ getLayout: null, getData: getProps, Page: LegacyPage })
+export default WithLayout({ getLayout: null, getData: getProps, Page: LegacyPage })<"P">;
 export const dynamic = "force-static";
 // generate segments on demand
 export const dynamicParams = "true";
