@@ -1,8 +1,8 @@
 import OldPage from "@pages/[user]/[type]";
 import { ssrInit } from "app/_trpc/ssrInit";
 import { _generateMetadata } from "app/_utils";
+import { WithLayout } from "app/layoutHOC";
 import { type GetServerSidePropsContext } from "next";
-import type { Params } from "next/dist/shared/lib/router/utils/route-matcher";
 import { headers, cookies } from "next/headers";
 import { notFound, redirect } from "next/navigation";
 import { z } from "zod";
@@ -19,8 +19,6 @@ import { trpc } from "@calcom/trpc";
 
 import { buildLegacyCtx } from "@lib/buildLegacyCtx";
 import { getTemporaryOrgRedirect } from "@lib/getTemporaryOrgRedirect";
-
-import PageWrapper from "@components/PageWrapperAppDir";
 
 export const generateMetadata = async ({ params }: { params: Record<string, string | string[]> }) => {
   const context = buildLegacyCtx(headers(), cookies(), params);
@@ -219,28 +217,5 @@ const getPageProps = async (context: Omit<GetServerSidePropsContext, "res" | "re
   return isDynamicGroup ? await getDynamicGroupPageProps(context) : await getUserPageProps(context);
 };
 
-type PageProps = Readonly<{
-  params: Params;
-}>;
-
-const Page = async ({ params }: PageProps) => {
-  const h = headers();
-  const nonce = h.get("x-nonce") ?? undefined;
-
-  const legacyCtx = buildLegacyCtx(headers(), cookies(), params);
-  // @ts-expect-error `req` of type '{ headers: ReadonlyHeaders; cookies: ReadonlyRequestCookies; }' is not assignable to `req` in `GetServerSidePropsContext`
-  const props = await getPageProps(legacyCtx);
-
-  return (
-    <PageWrapper
-      getLayout={null}
-      requiresLicense={false}
-      nonce={nonce}
-      themeBasis={null}
-      dehydratedState={props.trpcState}>
-      <OldPage {...props} />
-    </PageWrapper>
-  );
-};
-
-export default Page;
+// @ts-expect-error getData arg
+export default WithLayout({ getData: getPageProps, Page: OldPage, getLayout: null });
