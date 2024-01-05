@@ -144,6 +144,7 @@ export const config = {
     "/future/video/:path*",
     "/enterprise",
     "/future/enterprise",
+    "/future/signup",
   ],
 };
 

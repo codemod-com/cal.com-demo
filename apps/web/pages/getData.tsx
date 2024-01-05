@@ -7,7 +7,7 @@ import { z } from "zod";
 import { getOrgUsernameFromEmail } from "@calcom/features/auth/signup/utils/getOrgUsernameFromEmail";
 import { checkPremiumUsername } from "@calcom/features/ee/common/lib/checkPremiumUsername";
 import { getFeatureFlagMap } from "@calcom/features/flags/server/utils";
-import { IS_SELF_HOSTED, WEBAPP_URL } from "@calcom/lib/constants";
+import { IS_SELF_HOSTED } from "@calcom/lib/constants";
 import slugify from "@calcom/lib/slugify";
 import { teamMetadataSchema } from "@calcom/prisma/zod-utils";
 
@@ -108,12 +108,12 @@ export const getData = async (
     },
   });
 
-  if (existingUser) {
-    return unifiedRedirect({
-      permanent: false,
-      destination: `/auth/login?callbackUrl=${WEBAPP_URL}/${ctx.query.callbackUrl}`,
-    });
-  }
+  // if (existingUser) {
+  //   return unifiedRedirect({
+  //     permanent: false,
+  //     destination: `/auth/login?callbackUrl=${WEBAPP_URL}/${ctx.query.callbackUrl}`,
+  //   });
+  // }
 
   const guessUsernameFromEmail = (email: string) => {
     const [username] = email.split("@");
