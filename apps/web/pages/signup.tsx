@@ -2,6 +2,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { CalendarHeart, Info, Link2, ShieldCheckIcon, StarIcon, Users } from "lucide-react";
 import type { GetServerSidePropsContext, Redirect } from "next";
 import { signIn } from "next-auth/react";
+import { HeadersAdapter } from "next/dist/server/web/spec-extension/adapters/headers";
+import { RequestCookiesAdapter } from "next/dist/server/web/spec-extension/adapters/request-cookies";
+import { RequestCookies } from "next/dist/server/web/spec-extension/cookies";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import type { notFound, redirect } from "next/navigation";
@@ -32,7 +35,7 @@ import { signupSchema as apiSignupSchema } from "@calcom/prisma/zod-utils";
 import type { inferSSRProps } from "@calcom/types/inferSSRProps";
 import { Button, HeadSeo, PasswordField, TextField, Form, Alert, showToast } from "@calcom/ui";
 
-import type { buildLegacyCtx } from "@lib/buildLegacyCtx";
+import { buildLegacyCtx } from "@lib/buildLegacyCtx";
 
 import PageWrapper from "@components/PageWrapper";
 
@@ -530,7 +533,7 @@ const querySchema = z.object({
 
 export const getData = async (
   ctx: ReturnType<typeof buildLegacyCtx>,
-  unifiedSsrInit: () => Promise<ReturnType<typeof ssrInit>>,
+  unifiedSsrInit: () => ReturnType<typeof ssrInit>,
   unifiedNotFound: () => { notFound: true } | ReturnType<typeof notFound>,
   unifiedRedirect: (r: Redirect) => { redirect: Redirect } | ReturnType<typeof redirect>
 ) => {
@@ -676,9 +679,15 @@ export const getData = async (
 };
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
+  const headers = HeadersAdapter.from(ctx.req.headers);
+  const requestCookies = new RequestCookies(headers);
+  const readonlyRequestCookies = RequestCookiesAdapter.seal(requestCookies);
+
+  const legacyContext = buildLegacyCtx(headers, readonlyRequestCookies, ctx.params ?? {});
+
   return getData(
-    ctx,
-    ssrInit(ctx),
+    legacyContext,
+    () => ssrInit(ctx),
     () => ({ notFound: true }),
     (redirect) => ({ redirect })
   );
