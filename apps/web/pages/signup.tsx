@@ -19,7 +19,6 @@ import { getPremiumPlanPriceValue } from "@calcom/app-store/stripepayment/lib/ut
 import { getOrgUsernameFromEmail } from "@calcom/features/auth/signup/utils/getOrgUsernameFromEmail";
 import { checkPremiumUsername } from "@calcom/features/ee/common/lib/checkPremiumUsername";
 import { getOrgFullOrigin } from "@calcom/features/ee/organizations/lib/orgDomains";
-import { isSAMLLoginEnabled } from "@calcom/features/ee/sso/lib/saml";
 import { useFlagMap } from "@calcom/features/flags/context/provider";
 import { getFeatureFlagMap } from "@calcom/features/flags/server/utils";
 import { classNames } from "@calcom/lib";
@@ -541,6 +540,10 @@ export const getData = async (
   const flags = await getFeatureFlagMap(prisma);
   const ssr = await unifiedSsrInit();
   const token = z.string().optional().parse(ctx.query.token);
+
+  // somehow it used to work before the refactoring
+  // if imported normally, it fails client-side b/c of the prisma import
+  const { isSAMLLoginEnabled } = await import("@calcom/features/ee/sso/lib/saml");
 
   const props = {
     isGoogleLoginEnabled: IS_GOOGLE_LOGIN_ENABLED,
