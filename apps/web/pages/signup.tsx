@@ -35,7 +35,7 @@ import { buildLegacyCtx } from "@lib/buildLegacyCtx";
 
 import PageWrapper from "@components/PageWrapper";
 
-import { getData } from "../server/lib/getData";
+import { getData } from "../server/lib/signupGetData";
 import { ssrInit } from "../server/lib/ssr";
 
 const signupSchema = apiSignupSchema.extend({
@@ -530,7 +530,8 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     legacyContext,
     async () => ssr.dehydrate(),
     () => ({ notFound: true }),
-    (redirect) => ({ redirect })
+    (redirect) => ({ redirect }),
+    "trpcState"
   );
 };
 

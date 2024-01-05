@@ -4,7 +4,7 @@ import { notFound, redirect } from "next/navigation";
 
 import type { LegacyCtx } from "@lib/buildLegacyCtx";
 
-import { getData } from "@server/lib/getData";
+import { getData } from "@server/lib/signupGetData";
 
 const getDataBuilder = async (ctx: LegacyCtx) => {
   const ssr = await ssrInit();
@@ -13,7 +13,8 @@ const getDataBuilder = async (ctx: LegacyCtx) => {
     ctx,
     () => ssr.dehydrate(),
     () => notFound(),
-    (r) => redirect(r.destination)
+    (r) => redirect(r.destination),
+    "dehydratedState"
   );
 
   if ("props" in data) {

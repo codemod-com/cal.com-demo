@@ -3,8 +3,8 @@ import { _generateMetadata } from "app/_utils";
 
 export const generateMetadata = async () =>
   await _generateMetadata(
-    (t) => t("create_your_org"),
-    (t) => t("create_your_org_description")
+    (t) => t("sign_up"),
+    (t) => t("sign_up")
   );
 
 export default Signup;

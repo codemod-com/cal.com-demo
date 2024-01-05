@@ -7,7 +7,7 @@ import { z } from "zod";
 import { getOrgUsernameFromEmail } from "@calcom/features/auth/signup/utils/getOrgUsernameFromEmail";
 import { checkPremiumUsername } from "@calcom/features/ee/common/lib/checkPremiumUsername";
 import { getFeatureFlagMap } from "@calcom/features/flags/server/utils";
-import { IS_SELF_HOSTED } from "@calcom/lib/constants";
+import { IS_SELF_HOSTED, WEBAPP_URL } from "@calcom/lib/constants";
 import slugify from "@calcom/lib/slugify";
 import { teamMetadataSchema } from "@calcom/prisma/zod-utils";
 
@@ -29,7 +29,8 @@ export const getData = async (
   ctx: ReturnType<typeof buildLegacyCtx>,
   getTrpcState: () => Promise<DehydratedState>,
   unifiedNotFound: () => { notFound: true } | ReturnType<typeof notFound>,
-  unifiedRedirect: (r: Redirect) => { redirect: Redirect } | ReturnType<typeof redirect>
+  unifiedRedirect: (r: Redirect) => { redirect: Redirect } | ReturnType<typeof redirect>,
+  trpcStateKey: "trpcState" | "dehydratedState"
 ) => {
   const prisma = await import("@calcom/prisma").then((mod) => mod.default);
   const flags = await getFeatureFlagMap(prisma);
@@ -42,7 +43,7 @@ export const getData = async (
   const props = {
     isGoogleLoginEnabled: IS_GOOGLE_LOGIN_ENABLED,
     isSAMLLoginEnabled,
-    trpcState: await getTrpcState(),
+    [trpcStateKey]: await getTrpcState(),
     prepopulateFormValues: undefined,
   };
 
