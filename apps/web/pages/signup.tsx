@@ -35,8 +35,8 @@ import { buildLegacyCtx } from "@lib/buildLegacyCtx";
 
 import PageWrapper from "@components/PageWrapper";
 
+import { getData } from "../server/lib/getData";
 import { ssrInit } from "../server/lib/ssr";
-import { getData } from "./getData";
 
 const signupSchema = apiSignupSchema.extend({
   apiError: z.string().optional(), // Needed to display API errors doesnt get passed to the API

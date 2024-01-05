@@ -13,7 +13,7 @@ import { teamMetadataSchema } from "@calcom/prisma/zod-utils";
 
 import type { buildLegacyCtx } from "@lib/buildLegacyCtx";
 
-import { IS_GOOGLE_LOGIN_ENABLED } from "../server/lib/constants";
+import { IS_GOOGLE_LOGIN_ENABLED } from "./constants";
 
 const checkValidEmail = (email: string) => z.string().email().safeParse(email).success;
 
@@ -108,12 +108,12 @@ export const getData = async (
     },
   });
 
-  // if (existingUser) {
-  //   return unifiedRedirect({
-  //     permanent: false,
-  //     destination: `/auth/login?callbackUrl=${WEBAPP_URL}/${ctx.query.callbackUrl}`,
-  //   });
-  // }
+  if (existingUser) {
+    return unifiedRedirect({
+      permanent: false,
+      destination: `/auth/login?callbackUrl=${WEBAPP_URL}/${ctx.query.callbackUrl}`,
+    });
+  }
 
   const guessUsernameFromEmail = (email: string) => {
     const [username] = email.split("@");
