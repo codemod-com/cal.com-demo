@@ -1,4 +1,4 @@
-import { getData } from "@pages/signup";
+import { getData } from "@pages/getData";
 import { ssrInit } from "app/_trpc/ssrInit";
 import { WithLayout } from "app/layoutHOC";
 import { notFound, redirect } from "next/navigation";
