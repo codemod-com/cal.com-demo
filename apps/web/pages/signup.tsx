@@ -1,9 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CalendarHeart, Info, Link2, ShieldCheckIcon, StarIcon, Users } from "lucide-react";
-import type { GetServerSidePropsContext } from "next";
+import type { GetServerSidePropsContext, Redirect } from "next";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import type { notFound, redirect } from "next/navigation";
 import { useState, useEffect } from "react";
 import type { SubmitHandler } from "react-hook-form";
 import { useForm, useFormContext } from "react-hook-form";
@@ -30,6 +31,8 @@ import { teamMetadataSchema } from "@calcom/prisma/zod-utils";
 import { signupSchema as apiSignupSchema } from "@calcom/prisma/zod-utils";
 import type { inferSSRProps } from "@calcom/types/inferSSRProps";
 import { Button, HeadSeo, PasswordField, TextField, Form, Alert, showToast } from "@calcom/ui";
+
+import type { buildLegacyCtx } from "@lib/buildLegacyCtx";
 
 import PageWrapper from "@components/PageWrapper";
 
@@ -525,10 +528,15 @@ const querySchema = z.object({
   email: z.string().email().optional(),
 });
 
-export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
+export const getData = async (
+  ctx: ReturnType<typeof buildLegacyCtx>,
+  unifiedSsrInit: () => Promise<ReturnType<typeof ssrInit>>,
+  unifiedNotFound: () => { notFound: true } | ReturnType<typeof notFound>,
+  unifiedRedirect: (r: Redirect) => { redirect: Redirect } | ReturnType<typeof redirect>
+) => {
   const prisma = await import("@calcom/prisma").then((mod) => mod.default);
   const flags = await getFeatureFlagMap(prisma);
-  const ssr = await ssrInit(ctx);
+  const ssr = await unifiedSsrInit();
   const token = z.string().optional().parse(ctx.query.token);
 
   const props = {
@@ -542,9 +550,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const { username: preFillusername, email: prefilEmail } = querySchema.parse(ctx.query);
 
   if ((process.env.NEXT_PUBLIC_DISABLE_SIGNUP === "true" && !token) || flags["disable-signup"]) {
-    return {
-      notFound: true,
-    };
+    return unifiedNotFound();
   }
 
   // no token given, treat as a normal signup without verification token
@@ -584,9 +590,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   });
 
   if (!verificationToken || verificationToken.expires < new Date()) {
-    return {
-      notFound: true,
-    };
+    return unifiedNotFound();
   }
 
   const existingUser = await prisma.user.findFirst({
@@ -605,12 +609,10 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   });
 
   if (existingUser) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: `/auth/login?callbackUrl=${WEBAPP_URL}/${ctx.query.callbackUrl}`,
-      },
-    };
+    return unifiedRedirect({
+      permanent: false,
+      destination: `/auth/login?callbackUrl=${WEBAPP_URL}/${ctx.query.callbackUrl}`,
+    });
   }
 
   const guessUsernameFromEmail = (email: string) => {
@@ -671,6 +673,15 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
         : null,
     },
   };
+};
+
+export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
+  return getData(
+    ctx,
+    ssrInit(ctx),
+    () => ({ notFound: true }),
+    (redirect) => ({ redirect })
+  );
 };
 
 Signup.PageWrapper = PageWrapper;
