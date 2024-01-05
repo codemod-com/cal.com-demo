@@ -1,4 +1,7 @@
+"use client";
+
 import { zodResolver } from "@hookform/resolvers/zod";
+import type { DehydratedState } from "@tanstack/react-query";
 import { CalendarHeart, Info, Link2, ShieldCheckIcon, StarIcon, Users } from "lucide-react";
 import type { GetServerSidePropsContext, Redirect } from "next";
 import { signIn } from "next-auth/react";
@@ -532,13 +535,12 @@ const querySchema = z.object({
 
 export const getData = async (
   ctx: ReturnType<typeof buildLegacyCtx>,
-  unifiedSsrInit: () => ReturnType<typeof ssrInit>,
+  getTrpcState: () => Promise<DehydratedState>,
   unifiedNotFound: () => { notFound: true } | ReturnType<typeof notFound>,
   unifiedRedirect: (r: Redirect) => { redirect: Redirect } | ReturnType<typeof redirect>
 ) => {
   const prisma = await import("@calcom/prisma").then((mod) => mod.default);
   const flags = await getFeatureFlagMap(prisma);
-  const ssr = await unifiedSsrInit();
   const token = z.string().optional().parse(ctx.query.token);
 
   // somehow it used to work before the refactoring
@@ -548,7 +550,7 @@ export const getData = async (
   const props = {
     isGoogleLoginEnabled: IS_GOOGLE_LOGIN_ENABLED,
     isSAMLLoginEnabled,
-    trpcState: ssr.dehydrate(),
+    trpcState: await getTrpcState(),
     prepopulateFormValues: undefined,
   };
 
@@ -688,9 +690,11 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
 
   const legacyContext = buildLegacyCtx(headers, readonlyRequestCookies, ctx.params ?? {});
 
+  const ssr = await ssrInit(ctx);
+
   return getData(
     legacyContext,
-    () => ssrInit(ctx),
+    async () => ssr.dehydrate(),
     () => ({ notFound: true }),
     (redirect) => ({ redirect })
   );
