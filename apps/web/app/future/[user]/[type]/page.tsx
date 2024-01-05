@@ -1,4 +1,4 @@
-import OldPage from "@pages/[user]/[type]";
+import LegacyPage from "@pages/[user]/[type]";
 import { ssrInit } from "app/_trpc/ssrInit";
 import { _generateMetadata } from "app/_utils";
 import { WithLayout } from "app/layoutHOC";
@@ -22,31 +22,14 @@ import { getTemporaryOrgRedirect } from "@lib/getTemporaryOrgRedirect";
 
 export const generateMetadata = async ({ params }: { params: Record<string, string | string[]> }) => {
   const context = buildLegacyCtx(headers(), cookies(), params);
-  // @ts-expect-error `req` of type '{ headers: ReadonlyHeaders; cookies: ReadonlyRequestCookies; }' is not assignable to `req` in `GetServerSidePropsContext`
-  const session = await getServerSession(context);
-  const ssr = await ssrInit();
-
-  const { rescheduleUid, bookingUid } = context.query;
-  const { user: usernames, type: slug } = paramsSchema.parse(context.params);
-  // @ts-expect-error `req` of type '{ headers: ReadonlyHeaders; cookies: ReadonlyRequestCookies; }' is not assignable to `req` in `GetServerSidePropsContext`
-  const { currentOrgDomain, isValidOrgDomain } = orgDomainConfig(context.req, context.params?.orgSlug);
-  const org = isValidOrgDomain ? currentOrgDomain : null;
-  const eventData = await ssr.viewer.public.event.fetch({
-    username: usernames.join("+"),
-    eventSlug: slug,
-    org,
-  });
-  const username = usernames[0];
+  // @ts-expect-error getPageProps arg
+  const pageProps = await getPageProps(context);
+  const { eventData, booking, user, slug } = pageProps;
+  const rescheduleUid = booking?.uid;
   const { data: event } = trpc.viewer.public.event.useQuery(
-    { username, eventSlug: slug, isTeamEvent: false, org: eventData?.entity.orgSlug ?? null },
+    { username: user, eventSlug: slug, isTeamEvent: false, org: eventData.entity.orgSlug ?? null },
     { refetchOnWindowFocus: false }
   );
-  let booking: GetBookingType | null = null;
-  if (rescheduleUid) {
-    booking = await getBookingForReschedule(`${rescheduleUid}`, session?.user?.id);
-  } else if (bookingUid) {
-    booking = await getBookingForSeatedEvent(`${bookingUid}`);
-  }
 
   const profileName = event?.profile?.name ?? "";
   const title = event?.title ?? "";
@@ -123,7 +106,7 @@ async function getDynamicGroupPageProps(context: Omit<GetServerSidePropsContext,
     user: usernames.join("+"),
     slug,
     away: false,
-    trpcState: await ssr.dehydrate(),
+    dehydratedState: await ssr.dehydrate(),
     isBrandingHidden: false,
     isSEOIndexable: true,
     themeBasis: null,
@@ -132,7 +115,7 @@ async function getDynamicGroupPageProps(context: Omit<GetServerSidePropsContext,
   };
 }
 
-async function getUserPageProps(context: Omit<GetServerSidePropsContext, "res" | "resolvedUrl">) {
+async function getUserPageProps(context: GetServerSidePropsContext) {
   const session = await getServerSession(context);
   const { user: usernames, type: slug } = paramsSchema.parse(context.params);
   const username = usernames[0];
@@ -158,6 +141,7 @@ async function getUserPageProps(context: Omit<GetServerSidePropsContext, "res" |
   const user = await prisma.user.findFirst({
     where: {
       username,
+      // @ts-expect-error context.req type
       organization: userOrgQuery(context.req, context.params?.orgSlug),
     },
     select: {
@@ -201,7 +185,7 @@ async function getUserPageProps(context: Omit<GetServerSidePropsContext, "res" |
     away: user?.away,
     user: username,
     slug,
-    trpcState: await ssr.dehydrate(),
+    dehydratedState: await ssr.dehydrate(),
     isBrandingHidden: user?.hideBranding,
     isSEOIndexable: user?.allowSEOIndexing,
     themeBasis: username,
@@ -210,7 +194,7 @@ async function getUserPageProps(context: Omit<GetServerSidePropsContext, "res" |
   };
 }
 
-const getPageProps = async (context: Omit<GetServerSidePropsContext, "res" | "resolvedUrl">) => {
+const getPageProps = async (context: GetServerSidePropsContext) => {
   const { user } = paramsSchema.parse(context.params);
   const isDynamicGroup = user.length > 1;
 
@@ -218,4 +202,4 @@ const getPageProps = async (context: Omit<GetServerSidePropsContext, "res" | "re
 };
 
 // @ts-expect-error getData arg
-export default WithLayout({ getData: getPageProps, Page: OldPage, getLayout: null });
+export default WithLayout({ getData: getPageProps, Page: LegacyPage, getLayout: null });
