@@ -5,7 +5,6 @@ import { ssrInit } from "app/_trpc/ssrInit";
 import { jwtVerify } from "jose";
 import { getCsrfToken } from "next-auth/react";
 import { cookies, headers } from "next/headers";
-import { redirect } from "next/navigation";
 
 import { getServerSession } from "@calcom/features/auth/lib/getServerSession";
 import { isSAMLLoginEnabled, samlProductID, samlTenantID } from "@calcom/features/ee/sso/lib/saml";
@@ -46,10 +45,20 @@ export async function getData(
       if (decryptedJwt.payload) {
         totpEmail = decryptedJwt.payload.email as string;
       } else {
-        return redirect("/auth/error?error=JWT%20Invalid%20Payload");
+        return {
+          redirect: {
+            permanent: false,
+            destination: "/auth/error?error=JWT%20Invalid%20Payload",
+          },
+        };
       }
     } catch (e) {
-      return redirect("/auth/error?error=Invalid%20JWT%3A%20Please%20try%20again");
+      return {
+        redirect: {
+          permanent: false,
+          destination: "/auth/error?error=Invalid%20JWT%3A%20Please%20try%20again",
+        },
+      };
     }
   }
 
@@ -60,20 +69,35 @@ export async function getData(
       try {
         const destination = getSafeRedirectUrl(callbackUrl as string);
         if (destination) {
-          return redirect(destination);
+          return {
+            redirect: {
+              permanent: false,
+              destination: destination,
+            },
+          };
         }
       } catch (e) {
         console.warn(e);
       }
     }
 
-    return redirect("/");
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/",
+      },
+    };
   }
 
   const userCount = await prisma.user.count();
   if (userCount === 0) {
     // Proceed to new onboarding to create first admin user
-    return redirect("/auth/setup");
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/auth/setup",
+      },
+    };
   }
 
   return {

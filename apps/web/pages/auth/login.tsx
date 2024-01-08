@@ -28,7 +28,6 @@ import { ArrowLeft, Lock } from "@calcom/ui/components/icon";
 import { buildLegacyCtx } from "@lib/buildLegacyCtx";
 import type { inferSSRProps } from "@lib/types/inferSSRProps";
 import type { WithNonceProps } from "@lib/withNonce";
-import withNonce from "@lib/withNonce";
 
 import AddToHomescreen from "@components/AddToHomescreen";
 import PageWrapper from "@components/PageWrapper";
@@ -54,7 +53,7 @@ export default function Login({
   samlProductID,
   totpEmail,
 }: // eslint-disable-next-line @typescript-eslint/ban-types
-inferSSRProps<typeof _getServerSideProps> & WithNonceProps<{}>) {
+inferSSRProps<typeof getServerSideProps> & WithNonceProps<{}>) {
   const searchParams = useCompatSearchParams();
   const { t } = useLocale();
   const router = useRouter();
@@ -271,8 +270,7 @@ inferSSRProps<typeof _getServerSideProps> & WithNonceProps<{}>) {
   );
 }
 
-// TODO: Once we understand how to retrieve prop types automatically from getServerSideProps, remove this temporary variable
-const _getServerSideProps = async function getServerSideProps(ctx: GetServerSidePropsContext) {
+const getServerSideProps = async function getServerSideProps(ctx: GetServerSidePropsContext) {
   const headers = HeadersAdapter.from(ctx.req.headers);
   const requestCookies = new RequestCookies(headers);
   const readonlyRequestCookies = RequestCookiesAdapter.seal(requestCookies);
@@ -285,5 +283,3 @@ const _getServerSideProps = async function getServerSideProps(ctx: GetServerSide
 };
 
 Login.PageWrapper = PageWrapper;
-
-export const getServerSideProps = withNonce(_getServerSideProps);

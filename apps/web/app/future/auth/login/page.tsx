@@ -25,4 +25,5 @@ const getDataBuilder = async (ctx: LegacyCtx) => {
   return mapGetServerSidePropsResultForAppDir(data);
 };
 
+// @ts-expect-error getData arg
 export default WithLayout({ getLayout: null, Page: Login, getData: getDataBuilder })<"P">;
