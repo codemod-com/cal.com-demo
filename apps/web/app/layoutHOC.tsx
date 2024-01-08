@@ -9,9 +9,15 @@ type WithLayoutParams<T extends Record<string, any>> = {
   getLayout: ((page: React.ReactElement) => React.ReactNode) | null;
   Page?: (props: T) => React.ReactElement;
   getData?: (arg: ReturnType<typeof buildLegacyCtx>) => Promise<T>;
+  isBookingPage?: boolean;
 };
 
-export function WithLayout<T extends Record<string, any>>({ getLayout, getData, Page }: WithLayoutParams<T>) {
+export function WithLayout<T extends Record<string, any>>({
+  getLayout,
+  getData,
+  Page,
+  isBookingPage,
+}: WithLayoutParams<T>) {
   return async <P extends "P" | "L">(p: P extends "P" ? PageProps : LayoutProps) => {
     const h = headers();
     const nonce = h.get("x-nonce") ?? undefined;
@@ -20,7 +26,13 @@ export function WithLayout<T extends Record<string, any>>({ getLayout, getData, 
     const children = "children" in p ? p.children : null;
 
     return (
-      <PageWrapper getLayout={getLayout} requiresLicense={false} nonce={nonce} themeBasis={null} {...props}>
+      <PageWrapper
+        getLayout={getLayout}
+        requiresLicense={false}
+        nonce={nonce}
+        themeBasis={null}
+        isBookingPage={isBookingPage}
+        {...props}>
         {Page ? <Page {...props} /> : children}
       </PageWrapper>
     );

@@ -2,13 +2,18 @@ import LegacyPage, { getServerSideProps as _getServerSideProps } from "@pages/te
 import { withAppDir } from "app/AppDirSSRHOC";
 import { _generateMetadata } from "app/_utils";
 import { WithLayout } from "app/layoutHOC";
+import type { Metadata } from "next";
 import { cookies, headers } from "next/headers";
 
 import { trpc } from "@calcom/trpc";
 
 import { buildLegacyCtx } from "@lib/buildLegacyCtx";
 
-export const generateMetadata = async ({ params }: { params: Record<string, string | string[]> }) => {
+export const generateMetadata = async ({
+  params,
+}: {
+  params: Record<string, string | string[]>;
+}): Promise<Metadata> => {
   const legacyCtx = buildLegacyCtx(headers(), cookies(), params);
 
   // @ts-expect-error context arg
@@ -30,4 +35,4 @@ export const generateMetadata = async ({ params }: { params: Record<string, stri
 const getData = withAppDir(_getServerSideProps);
 
 // @ts-expect-error getData arg
-export default WithLayout({ Page: LegacyPage, getData, getLayout: null })<"P">;
+export default WithLayout({ Page: LegacyPage, getData, getLayout: null, isBookingPage: true })<"P">;
