@@ -22,4 +22,4 @@ export const generateMetadata = async ({ params }: { params: Record<string, stri
 const getData = withAppDir(_getServerSideProps);
 
 // @ts-expect-error getData arg
-export default WithLayout({ Page: LegacyPage, getData, getLayout: null })<"P">;
+export default WithLayout({ Page: LegacyPage, getData, getLayout: null, isBookingPage: true })<"P">;
