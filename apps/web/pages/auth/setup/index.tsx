@@ -1,3 +1,5 @@
+"use client";
+
 import type { GetServerSidePropsContext } from "next";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";

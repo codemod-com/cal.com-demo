@@ -1,3 +1,5 @@
+"use client";
+
 import { motion } from "framer-motion";
 import type { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import { signIn } from "next-auth/react";

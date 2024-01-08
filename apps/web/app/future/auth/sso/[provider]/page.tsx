@@ -1,75 +1,56 @@
-"use client";
-
+import Provider from "@pages/auth/sso/[provider]";
+import { ssrInit } from "app/_trpc/ssrInit";
+import { WithLayout } from "app/layoutHOC";
 import type { GetServerSidePropsContext } from "next";
-import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import type { ReadonlyHeaders } from "next/dist/server/web/spec-extension/adapters/headers";
+import type { ReadonlyRequestCookies } from "next/dist/server/web/spec-extension/adapters/request-cookies";
+import { cookies, headers } from "next/headers";
+import { redirect } from "next/navigation";
 
 import { getPremiumMonthlyPlanPriceId } from "@calcom/app-store/stripepayment/lib/utils";
 import { getServerSession } from "@calcom/features/auth/lib/getServerSession";
-import { orgDomainConfig } from "@calcom/features/ee/organizations/lib/orgDomains";
+import { getOrgDomainConfigFromHostname } from "@calcom/features/ee/organizations/lib/orgDomains";
 import stripe from "@calcom/features/ee/payments/server/stripe";
 import { hostedCal, isSAMLLoginEnabled, samlProductID, samlTenantID } from "@calcom/features/ee/sso/lib/saml";
 import { ssoTenantProduct } from "@calcom/features/ee/sso/lib/sso";
 import { IS_PREMIUM_USERNAME_ENABLED } from "@calcom/lib/constants";
-import { useCompatSearchParams } from "@calcom/lib/hooks/useCompatSearchParams";
 import { checkUsername } from "@calcom/lib/server/checkUsername";
 import prisma from "@calcom/prisma";
 
 import { asStringOrNull } from "@lib/asStringOrNull";
-import type { inferSSRProps } from "@lib/types/inferSSRProps";
 
-import PageWrapper from "@components/PageWrapper";
+function orgDomainConfig(
+  req: { headers: ReadonlyHeaders; cookies: ReadonlyRequestCookies },
+  fallback?: string | string[]
+) {
+  const forcedSlug = req?.headers?.get("x-cal-force-slug") ?? "";
 
-import { ssrInit } from "@server/lib/ssr";
-
-export type SSOProviderPageProps = inferSSRProps<typeof getServerSideProps>;
-
-export default function Provider(props: SSOProviderPageProps) {
-  const searchParams = useCompatSearchParams();
-  const router = useRouter();
-
-  useEffect(() => {
-    if (props.provider === "saml") {
-      const email = searchParams?.get("email");
-
-      if (!email) {
-        router.push(`/auth/error?error=Email not provided`);
-        return;
-      }
-
-      if (!props.isSAMLLoginEnabled) {
-        router.push(`/auth/error?error=SAML login not enabled`);
-        return;
-      }
-
-      signIn("saml", {}, { tenant: props.tenant, product: props.product });
-    } else {
-      signIn(props.provider);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-  return null;
+  const hostname = req?.headers?.get("host") ?? "";
+  return getOrgDomainConfigFromHostname({
+    hostname,
+    fallback,
+    forcedSlug,
+  });
 }
 
-Provider.PageWrapper = PageWrapper;
+async function getData(context: Omit<GetServerSidePropsContext, "res" | "resolvedUrl">) {
+  const { query } = context;
+  const req = { headers: headers(), cookies: cookies() };
 
-export const getServerSideProps = async (context: GetServerSidePropsContext) => {
   // get query params and typecast them to string
   // (would be even better to assert them instead of typecasting)
-  const providerParam = asStringOrNull(context.query.provider);
-  const emailParam = asStringOrNull(context.query.email);
-  const usernameParam = asStringOrNull(context.query.username);
+  const providerParam = asStringOrNull(query.provider);
+  const emailParam = asStringOrNull(query.email);
+  const usernameParam = asStringOrNull(query.username);
   const successDestination = `/getting-started${usernameParam ? `?username=${usernameParam}` : ""}`;
   if (!providerParam) {
     throw new Error(`File is not named sso/[provider]`);
   }
 
-  const { req, res } = context;
-
-  const session = await getServerSession({ req, res });
-  const ssr = await ssrInit(context);
-  const { currentOrgDomain } = orgDomainConfig(context.req);
+  // @ts-expect-error Type '{ headers: ReadonlyHeaders; cookies: ReadonlyRequestCookies; }' is not assignable to type 'NextApiRequest | IncomingMessage
+  const session = await getServerSession({ req });
+  const ssr = await ssrInit();
+  const { currentOrgDomain } = orgDomainConfig(req);
 
   if (session) {
     // Validating if username is Premium, while this is true an email its required for stripe user confirmation
@@ -82,22 +63,12 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
           successDestination,
         });
         if (stripePremiumUrl) {
-          return {
-            redirect: {
-              destination: stripePremiumUrl,
-              permanent: false,
-            },
-          };
+          return redirect(stripePremiumUrl);
         }
       }
     }
 
-    return {
-      redirect: {
-        destination: successDestination,
-        permanent: false,
-      },
-    };
+    return redirect(successDestination);
   }
 
   let error: string | null = null;
@@ -122,26 +93,19 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
   }
 
   if (error) {
-    return {
-      redirect: {
-        destination: `/auth/error?error=${error}`,
-        permanent: false,
-      },
-    };
+    return redirect(`/auth/error?error=${error}`);
   }
 
   return {
-    props: {
-      trpcState: ssr.dehydrate(),
-      provider: providerParam,
-      isSAMLLoginEnabled,
-      hostedCal,
-      tenant,
-      product,
-      error,
-    },
+    trpcState: ssr.dehydrate(),
+    provider: providerParam,
+    isSAMLLoginEnabled,
+    hostedCal,
+    tenant,
+    product,
+    error,
   };
-};
+}
 
 type GetStripePremiumUsernameUrl = {
   userEmail: string;
@@ -180,3 +144,6 @@ const getStripePremiumUsernameUrl = async ({
 
   return checkoutSession.url;
 };
+
+// @ts-expect-error getData arg
+export default WithLayout({ getLayout: null, Page: Provider, getData })<"P">;

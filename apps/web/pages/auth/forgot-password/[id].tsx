@@ -1,3 +1,5 @@
+"use client";
+
 import type { GetServerSidePropsContext } from "next";
 import { getCsrfToken } from "next-auth/react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
@@ -19,7 +21,7 @@ type Props = {
   csrfToken: string;
 };
 
-export default function Page({ requestId, isRequestExpired, csrfToken }: Props) {
+export default function SetNewUserPassword({ requestId, isRequestExpired, csrfToken }: Props) {
   const { t } = useLocale();
   const formMethods = useForm<{ new_password: string }>();
   const success = formMethods.formState.isSubmitSuccessful;
@@ -142,7 +144,7 @@ export default function Page({ requestId, isRequestExpired, csrfToken }: Props) 
   );
 }
 
-Page.PageWrapper = PageWrapper;
+SetNewUserPassword.PageWrapper = PageWrapper;
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const id = context.params?.id as string;
 
