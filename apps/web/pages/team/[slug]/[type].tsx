@@ -4,7 +4,7 @@ import { Booker } from "@calcom/atoms";
 import { getBookerWrapperClasses } from "@calcom/features/bookings/Booker/utils/getBookerWrapperClasses";
 import { BookerSeo } from "@calcom/features/bookings/components/BookerSeo";
 
-import type { getServerSideProps } from "@lib/team/[slug]/[type]/getServerSideProps";
+import { getServerSideProps } from "@lib/team/[slug]/[type]/getServerSideProps";
 import type { inferSSRProps } from "@lib/types/inferSSRProps";
 import type { EmbedProps } from "@lib/withEmbedSsr";
 
@@ -12,7 +12,8 @@ import PageWrapper from "@components/PageWrapper";
 
 export type PageProps = inferSSRProps<typeof getServerSideProps> & EmbedProps;
 
-export { getServerSideProps } from "@lib/team/[slug]/[type]/getServerSideProps";
+export { getServerSideProps };
+
 export default function Type({
   slug,
   user,

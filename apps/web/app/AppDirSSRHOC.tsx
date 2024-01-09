@@ -2,7 +2,8 @@ import type { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { notFound, redirect } from "next/navigation";
 
 export const withAppDir =
-  (getServerSideProps: GetServerSideProps) => async (context: GetServerSidePropsContext) => {
+  <T extends Record<string, any>>(getServerSideProps: GetServerSideProps<T>) =>
+  async (context: GetServerSidePropsContext): Promise<T> => {
     const ssrResponse = await getServerSideProps(context);
 
     if ("redirect" in ssrResponse) {
@@ -13,5 +14,9 @@ export const withAppDir =
       notFound();
     }
 
-    return ssrResponse.props;
+    return {
+      ...ssrResponse.props,
+      // includes dehydratedState required for future page trpcPropvider
+      ...("trpcState" in ssrResponse.props && { dehydratedState: ssrResponse.props.trpcState }),
+    };
   };

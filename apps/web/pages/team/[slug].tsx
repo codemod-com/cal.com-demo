@@ -23,14 +23,14 @@ import { Avatar, Button, HeadSeo, UnpublishedEntity } from "@calcom/ui";
 import { ArrowRight } from "@calcom/ui/components/icon";
 
 import { useToggleQuery } from "@lib/hooks/useToggleQuery";
-import type { getServerSideProps } from "@lib/team/[slug]/getServerSideProps";
+import { getServerSideProps } from "@lib/team/[slug]/getServerSideProps";
 import type { inferSSRProps } from "@lib/types/inferSSRProps";
 
 import PageWrapper from "@components/PageWrapper";
 import Team from "@components/team/screens/Team";
 import { UserAvatarGroup } from "@components/ui/avatar/UserAvatarGroup";
 
-export { getServerSideProps } from "@lib/team/[slug]/getServerSideProps";
+export { getServerSideProps };
 
 export type PageProps = inferSSRProps<typeof getServerSideProps>;
 function TeamPage({
