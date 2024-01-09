@@ -4,7 +4,8 @@ import { notFound, redirect } from "next/navigation";
 import type { buildLegacyCtx } from "@lib/buildLegacyCtx";
 
 export const withAppDir =
-  (getServerSideProps: GetServerSideProps) => async (context: ReturnType<typeof buildLegacyCtx>) => {
+  <T extends Record<string, any>>(getServerSideProps: GetServerSideProps<T>) =>
+  async (context: ReturnType<typeof buildLegacyCtx>): Promise<T> => {
     const ssrResponse = await getServerSideProps(context);
 
     if ("redirect" in ssrResponse) {

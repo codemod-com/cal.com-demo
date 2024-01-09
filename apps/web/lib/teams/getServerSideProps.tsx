@@ -18,7 +18,6 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
         destination: callbackUrl ? `/auth/login?callbackUrl=${callbackUrl}` : "/auth/login",
         permanent: false,
       },
-      props: {},
     };
   }
 

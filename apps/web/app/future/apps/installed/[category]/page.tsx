@@ -1,14 +1,11 @@
-import LegacyPage from "@pages/apps/installed/[category]";
+import Page from "@pages/apps/installed/[category]";
+import { withAppDir } from "app/AppDirSSRHOC";
 import { _generateMetadata } from "app/_utils";
-import { notFound } from "next/navigation";
-import { z } from "zod";
+import { WithLayout } from "app/layoutHOC";
 
 import { APP_NAME } from "@calcom/lib/constants";
-import { AppCategories } from "@calcom/prisma/enums";
 
-const querySchema = z.object({
-  category: z.nativeEnum(AppCategories),
-});
+import { getServerSideProps } from "@lib/apps/installed/[category]/getServerSideProps";
 
 export const generateMetadata = async () => {
   return await _generateMetadata(
@@ -17,20 +14,5 @@ export const generateMetadata = async () => {
   );
 };
 
-const getPageProps = async ({ params }: { params: Record<string, string | string[]> }) => {
-  const p = querySchema.safeParse(params);
-
-  if (!p.success) {
-    return notFound();
-  }
-
-  return {
-    category: p.data.category,
-  };
-};
-
-export default async function Page({ params }: { params: Record<string, string | string[]> }) {
-  await getPageProps({ params });
-
-  return <LegacyPage />;
-}
+// @ts-expect-error Argument of type '(ctx: AppGetServerSidePropsContext) => Promise<{ redirect: { destination: string; permanent: boolean; }; notFound?: undefined; props?: undefined; }
+export default WithLayout({ getLayout: null, getData: withAppDir(getServerSideProps), Page });

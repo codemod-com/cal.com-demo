@@ -1,8 +1,8 @@
-import type { NextPageContext } from "next";
+import type { GetServerSidePropsContext } from "next";
 
 import prisma, { bookingMinimalSelect } from "@calcom/prisma";
 
-export async function getServerSideProps(context: NextPageContext) {
+export async function getServerSideProps(context: GetServerSidePropsContext) {
   const booking = await prisma.booking.findUnique({
     where: {
       uid: context.query.uid as string,

@@ -17,7 +17,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
 
   if (!page.getServerSideProps) return { props: {} };
 
-  const props = await page.getServerSideProps(ctx);
+  const props = (await page.getServerSideProps(ctx)) ?? {};
 
   return props;
 };
