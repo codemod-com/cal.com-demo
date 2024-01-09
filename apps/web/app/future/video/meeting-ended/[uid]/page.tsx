@@ -11,6 +11,4 @@ export const generateMetadata = async () =>
     () => "Meeting Unavailable"
   );
 
-// @TODO
-// @ts-expect-error getData
 export default WithLayout({ getData: withAppDirSsr(getServerSideProps), Page, getLayout: null })<"P">;

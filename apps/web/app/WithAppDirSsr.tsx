@@ -1,11 +1,9 @@
-import type { GetServerSideProps } from "next";
+import type { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { notFound, redirect } from "next/navigation";
 
-import type { buildLegacyCtx } from "@lib/buildLegacyCtx";
-
 export const withAppDirSsr =
-  <T extends Record<string, any>>(getServerSideProps: GetServerSideProps<T>) =>
-  async (context: ReturnType<typeof buildLegacyCtx>): Promise<T> => {
+  <T extends Record<string, any> | undefined>(getServerSideProps: GetServerSideProps<NonNullable<T>>) =>
+  async (context: GetServerSidePropsContext): Promise<T> => {
     const ssrResponse = await getServerSideProps(context);
 
     if ("redirect" in ssrResponse) {

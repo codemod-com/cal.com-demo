@@ -22,6 +22,4 @@ export const generateMetadata = async ({ params }: PageProps) => {
   );
 };
 
-// @TODO
-// @ts-expect-error getData
 export default WithLayout({ getData: withAppDirSsr(getServerSideProps), Page, getLayout: null })<"P">;
