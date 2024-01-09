@@ -1,5 +1,5 @@
 import Page from "@pages/apps/[slug]/setup";
-import { withAppDir } from "app/AppDirSSRHOC";
+import { withAppDirSsr } from "app/WithAppDirSsr";
 import { _generateMetadata } from "app/_utils";
 import { WithLayout } from "app/layoutHOC";
 
@@ -14,5 +14,5 @@ export const generateMetadata = async ({ params }: { params: Record<string, stri
 };
 
 // @TODO
-// @ts-expect-error getServerSideProps type
-export default WithLayout({ getLayout: null, Page, getData: withAppDir(getServerSideProps) });
+// @ts-expect-error getServerSideProps
+export default WithLayout({ getLayout: null, Page, getData: withAppDirSsr(getServerSideProps) });

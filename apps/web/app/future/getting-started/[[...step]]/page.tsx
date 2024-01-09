@@ -1,7 +1,7 @@
 import Page from "@pages/getting-started/[[...step]]";
-import { withAppDir } from "app/AppDirSSRHOC";
+import { withAppDirSsr } from "app/WithAppDirSsr";
 import { WithLayout } from "app/layoutHOC";
 
 import { getServerSideProps } from "@lib/getting-started/[[...step]]/getServerSideProps";
 
-export default WithLayout({ getLayout: null, getData: withAppDir(getServerSideProps), Page });
+export default WithLayout({ getLayout: null, getData: withAppDirSsr(getServerSideProps), Page });

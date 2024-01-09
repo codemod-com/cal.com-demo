@@ -3,7 +3,7 @@ import { notFound, redirect } from "next/navigation";
 
 import type { buildLegacyCtx } from "@lib/buildLegacyCtx";
 
-export const withAppDir =
+export const withAppDirSsr =
   <T extends Record<string, any>>(getServerSideProps: GetServerSideProps<T>) =>
   async (context: ReturnType<typeof buildLegacyCtx>): Promise<T> => {
     const ssrResponse = await getServerSideProps(context);

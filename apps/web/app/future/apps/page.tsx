@@ -1,5 +1,5 @@
 import AppsPage from "@pages/apps";
-import { withAppDir } from "app/AppDirSSRHOC";
+import { withAppDirSsr } from "app/WithAppDirSsr";
 import { _generateMetadata } from "app/_utils";
 import { WithLayout } from "app/layoutHOC";
 
@@ -15,4 +15,4 @@ export const generateMetadata = async () => {
   );
 };
 
-export default WithLayout({ getLayout, getData: withAppDir(getServerSideProps), Page: AppsPage });
+export default WithLayout({ getLayout, getData: withAppDirSsr(getServerSideProps), Page: AppsPage });
