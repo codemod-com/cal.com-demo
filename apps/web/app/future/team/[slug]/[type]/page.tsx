@@ -35,7 +35,6 @@ const getData = withAppDir(_getServerSideProps);
 
 export default WithLayout({
   Page: LegacyPage,
-  // @ts-expect-error getData arg type is not compatible with PageProps
   getData,
   getLayout: null,
   isBookingPage: true,
