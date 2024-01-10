@@ -4,7 +4,7 @@ import { notFound, redirect } from "next/navigation";
 import type { buildLegacyCtx } from "@lib/buildLegacyCtx";
 
 export const withAppDirSsg =
-  <T extends Record<string, any>>(getStaticProps: GetStaticProps<T>) =>
+  <T extends Record<string, any> | undefined>(getStaticProps: GetStaticProps<NonNullable<T>>) =>
   async (context: ReturnType<typeof buildLegacyCtx>): Promise<T> => {
     const ssgResponse = await getStaticProps(context);
 
@@ -16,9 +16,11 @@ export const withAppDirSsg =
       notFound();
     }
 
+    const props = await Promise.resolve(ssgResponse.props);
+
     return {
       ...ssgResponse.props,
       // includes dehydratedState required for future page trpcPropvider
-      ...("trpcState" in ssgResponse.props && { dehydratedState: ssgResponse.props.trpcState }),
+      ...(typeof props === "object" && "trpcState" in props && { dehydratedState: props.trpcState }),
     };
   };
