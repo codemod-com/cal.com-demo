@@ -6,7 +6,7 @@ import { buildLegacyCtx } from "@lib/buildLegacyCtx";
 
 import PageWrapper from "@components/PageWrapperAppDir";
 
-type WithLayoutParams<T extends Record<string, any>> = {
+export type WithLayoutParams<T extends Record<string, any>> = {
   getLayout: ((page: React.ReactElement) => React.ReactNode) | null;
   Page?: (props: T) => React.ReactElement;
   getData?: (arg: GetServerSidePropsContext) => Promise<T>;
