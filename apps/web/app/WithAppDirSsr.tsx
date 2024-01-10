@@ -14,9 +14,11 @@ export const withAppDirSsr =
       notFound();
     }
 
+    const props = await Promise.resolve(ssrResponse.props);
+
     return {
-      ...ssrResponse.props,
+      ...props,
       // includes dehydratedState required for future page trpcPropvider
-      ...("trpcState" in ssrResponse.props && { dehydratedState: ssrResponse.props.trpcState }),
+      ...("trpcState" in props && { dehydratedState: props.trpcState }),
     };
   };
