@@ -22,8 +22,13 @@ export function WithLayout<T extends Record<string, any>>({
   return async <P extends "P" | "L">(p: P extends "P" ? PageProps : LayoutProps) => {
     const h = headers();
     const nonce = h.get("x-nonce") ?? undefined;
+
+    const searchParams = "searchParams" in p ? p.searchParams : {};
+
     const props = getData
-      ? await getData(buildLegacyCtx(h, cookies(), p.params) as unknown as GetServerSidePropsContext)
+      ? await getData(
+          buildLegacyCtx(h, cookies(), p.params, searchParams) as unknown as GetServerSidePropsContext
+        )
       : ({} as T);
 
     const children = "children" in p ? p.children : null;
