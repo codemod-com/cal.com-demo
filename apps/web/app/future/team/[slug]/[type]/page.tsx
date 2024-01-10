@@ -8,11 +8,11 @@ export const generateMetadata = async () =>
     () => "",
     () => ""
   );
-const getData = withAppDir(_getServerSideProps);
+
+const getData = withAppDir(_getServerSideProps) as any;
 
 export default WithLayout({
   Page: LegacyPage,
-  // @ts-expect-error getData arg
   getData,
   getLayout: null,
   isBookingPage: true,
