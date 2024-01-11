@@ -5,8 +5,10 @@ import { getServerSession } from "@calcom/features/auth/lib/getServerSession";
 import getUserAdminTeams from "@calcom/features/ee/teams/lib/getUserAdminTeams";
 import type { UserAdminTeams } from "@calcom/features/ee/teams/lib/getUserAdminTeams";
 import type { AppCategories } from "@calcom/prisma/enums";
-
+import { inferSSRProps } from "@calcom/types/inferSSRProps";
 import { ssrInit } from "@server/lib/ssr";
+
+export type PageProps = Omit<inferSSRProps<typeof getServerSideProps>, "trpcState">;
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
   const { req, res } = context;

@@ -155,7 +155,7 @@ const matcherConfigUserTypeEmbedRoute = {
 /** @type {import("next").NextConfig} */
 const nextConfig = {
   experimental: {
-    serverComponentsExternalPackages: ["next-i18next"],
+    serverComponentsExternalPackages: ["next-i18next", "@boxyhq/saml-jackson", "handlebars"],
   },
   i18n: {
     ...i18n,
