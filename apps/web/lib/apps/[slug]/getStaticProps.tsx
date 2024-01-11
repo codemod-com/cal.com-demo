@@ -30,7 +30,7 @@ export const sourceSchema = z.object({
 });
 
 export const getStaticProps = async (ctx: GetStaticPropsContext) => {
-  if (typeof ctx.params?.slug !== "string") return { notFound: true };
+  if (typeof ctx.params?.slug !== "string") return { notFound: true } as const;
 
   const appMeta = await getAppWithMetadata({
     slug: ctx.params?.slug,
@@ -54,7 +54,7 @@ export const getStaticProps = async (ctx: GetStaticPropsContext) => {
     };
   }
 
-  if (!appFromDb || !appMeta || isAppDisabled) return { notFound: true };
+  if (!appFromDb || !appMeta || isAppDisabled) return { notFound: true } as const;
 
   const isTemplate = appMeta.isTemplate;
   const appDirname = path.join(isTemplate ? "templates" : "", appFromDb.dirName);

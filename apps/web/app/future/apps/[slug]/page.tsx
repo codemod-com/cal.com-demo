@@ -3,6 +3,7 @@ import { Prisma } from "@prisma/client";
 import { withAppDirSsg } from "app/WithAppDirSsg";
 import { _generateMetadata } from "app/_utils";
 import { WithLayout } from "app/layoutHOC";
+import type { InferGetStaticPropsType } from "next";
 import { cookies, headers } from "next/headers";
 
 import { APP_NAME } from "@calcom/lib/constants";
@@ -11,15 +12,16 @@ import prisma from "@calcom/prisma";
 import { getStaticProps } from "@lib/apps/[slug]/getStaticProps";
 import { buildLegacyCtx } from "@lib/buildLegacyCtx";
 
-const getData = withAppDirSsg(getStaticProps);
+type Y = InferGetStaticPropsType<typeof getStaticProps>;
+const getData = withAppDirSsg<Y>(getStaticProps);
 
 export const generateMetadata = async ({ params }: { params: Record<string, string | string[]> }) => {
   const legacyContext = buildLegacyCtx(headers(), cookies(), params);
-  const { data } = await getData(legacyContext);
+  const res = await getData(legacyContext);
 
   return await _generateMetadata(
-    () => `${data.name} | ${APP_NAME}`,
-    () => data.description
+    () => `${res?.data.name} | ${APP_NAME}`,
+    () => res?.data.description ?? ""
   );
 };
 
@@ -38,6 +40,6 @@ export const generateStaticParams = async () => {
   return [];
 };
 
-export default WithLayout({ getLayout: null, Page, getData: withAppDirSsg(getStaticProps) });
+export default WithLayout({ getLayout: null, Page, getData });
 
 export const dynamic = "force-static";

@@ -22,4 +22,6 @@ export const generateMetadata = async ({ params }: PageProps) => {
   );
 };
 
-export default WithLayout({ getData: withAppDirSsr(getServerSideProps), Page, getLayout: null })<"P">;
+const getData = withAppDirSsr(getServerSideProps);
+
+export default WithLayout({ getData, Page, getLayout: null })<"P">;

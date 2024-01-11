@@ -12,12 +12,14 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   });
 
   if (!booking) {
-    return {
+    const redirect = {
       redirect: {
         destination: "/video/no-meeting-found",
         permanent: false,
       },
-    };
+    } as const;
+
+    return redirect;
   }
 
   const bookingObj = Object.assign({}, booking, {

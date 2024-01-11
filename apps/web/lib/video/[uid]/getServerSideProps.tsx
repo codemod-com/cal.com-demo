@@ -50,12 +50,14 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   });
 
   if (!booking || booking.references.length === 0 || !booking.references[0].meetingUrl) {
-    return {
+    const redirect = {
       redirect: {
         destination: "/video/no-meeting-found",
         permanent: false,
       },
-    };
+    } as const;
+
+    return redirect;
   }
 
   //daily.co calls have a 60 minute exit buffer when a user enters a call when it's not available it will trigger the modals
@@ -65,12 +67,14 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   //find out if the meeting is in the past
   const isPast = booking?.endTime <= exitDate;
   if (isPast) {
-    return {
+    const redirect = {
       redirect: {
         destination: `/video/meeting-ended/${booking?.uid}`,
         permanent: false,
       },
-    };
+    } as const;
+
+    return redirect;
   }
 
   const bookingObj = Object.assign({}, booking, {

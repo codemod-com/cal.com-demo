@@ -12,14 +12,14 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const { req, res } = ctx;
   const session = await getServerSession({ req, res });
 
-  if (!session?.user?.id) {
-    return res.writeHead(401).end();
-  }
+  // if (!session?.user?.id) {
+  //   return res.writeHead(401).end();
+  // }
 
   const credentials = await prisma.credential.findFirst({
     where: {
       type: "alby_payment",
-      userId: session.user.id,
+      userId: session?.user.id,
     },
   });
 
