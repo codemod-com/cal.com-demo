@@ -1,28 +1,17 @@
 import OldPage from "@pages/video/[uid]";
-<<<<<<< HEAD
 import { _generateMetadata } from "app/_utils";
 import { WithLayout } from "app/layoutHOC";
 import MarkdownIt from "markdown-it";
-=======
-import { ssrInit } from "app/_trpc/ssrInit";
-import { _generateMetadata } from "app/_utils";
-import { WithLayout } from "app/layoutHOC";
-import MarkdownIt from "markdown-it";
-import { type GetServerSidePropsContext } from "next";
->>>>>>> 51848fd7e (make no-meeting-found page use ssr)
 import { redirect } from "next/navigation";
 
 import { getServerSession } from "@calcom/features/auth/lib/getServerSession";
 import { APP_NAME } from "@calcom/lib/constants";
 import prisma, { bookingMinimalSelect } from "@calcom/prisma";
 
-<<<<<<< HEAD
 import type { buildLegacyCtx } from "@lib/buildLegacyCtx";
 
 import { ssrInit } from "@server/lib/ssr";
 
-=======
->>>>>>> 51848fd7e (make no-meeting-found page use ssr)
 export const generateMetadata = async () =>
   await _generateMetadata(
     () => `${APP_NAME} Video`,
@@ -113,8 +102,4 @@ async function getData(context: ReturnType<typeof buildLegacyCtx>) {
   };
 }
 
-<<<<<<< HEAD
-=======
-// @ts-expect-error getData arg
->>>>>>> 51848fd7e (make no-meeting-found page use ssr)
 export default WithLayout({ getData, Page: OldPage, getLayout: null })<"P">;
