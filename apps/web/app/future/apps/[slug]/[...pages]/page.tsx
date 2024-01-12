@@ -1,5 +1,4 @@
 import LegacyPage from "@pages/apps/[slug]/[...pages]";
-import { ssrInit } from "app/_trpc/ssrInit";
 import { _generateMetadata } from "app/_utils";
 import type { GetServerSidePropsContext } from "next";
 import { cookies, headers } from "next/headers";
@@ -18,6 +17,8 @@ import type { AppGetServerSideProps } from "@calcom/types/AppGetServerSideProps"
 
 import type { AppProps } from "@lib/app-providers";
 import { getQuery } from "@lib/getQuery";
+
+import { ssrInit } from "@server/lib/ssr";
 
 type AppPageType = {
   getServerSideProps: AppGetServerSideProps;
@@ -117,6 +118,7 @@ const getPageProps = async ({ params }: { params: Record<string, string | string
 
     const ctx = { req, params, query };
 
+    // @ts-expect-error req
     const session = await getServerSession({ req });
     const user = session?.user;
     const app = await getAppWithMetadata({ slug: appName });
