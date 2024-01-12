@@ -1,20 +1,22 @@
-"use client";
-
 import type { GetServerSidePropsContext } from "next";
 
 import { getAppWithMetadata } from "@calcom/app-store/_appRegistry";
-import RoutingFormsRoutingConfig from "@calcom/app-store/routing-forms/pages/app-routing.config";
+import RoutingFormsRoutingConfig, {
+  serverSidePropsConfig,
+} from "@calcom/app-store/routing-forms/pages/app-routing.config";
 import TypeformRoutingConfig from "@calcom/app-store/typeform/pages/app-routing.config";
 import { getServerSession } from "@calcom/features/auth/lib/getServerSession";
-import { useParamsWithFallback } from "@calcom/lib/hooks/useParamsWithFallback";
 import prisma from "@calcom/prisma";
 import type { AppGetServerSideProps } from "@calcom/types/AppGetServerSideProps";
 
 import type { AppProps } from "@lib/app-providers";
 
-import PageWrapper from "@components/PageWrapper";
-
 import { ssrInit } from "@server/lib/ssr";
+
+const AppsRouting = {
+  "routing-forms": RoutingFormsRoutingConfig,
+  typeform: TypeformRoutingConfig,
+};
 
 type AppPageType = {
   getServerSideProps: AppGetServerSideProps;
@@ -34,12 +36,6 @@ type NotFound = {
   notFound: true;
 };
 
-// TODO: It is a candidate for apps.*.generated.*
-const AppsRouting = {
-  "routing-forms": RoutingFormsRoutingConfig,
-  typeform: TypeformRoutingConfig,
-};
-
 function getRoute(appName: string, pages: string[]) {
   const routingConfig = AppsRouting[appName as keyof typeof AppsRouting] as Record<string, AppPageType>;
 
@@ -51,59 +47,20 @@ function getRoute(appName: string, pages: string[]) {
   const mainPage = pages[0];
   const appPage = routingConfig.layoutHandler || (routingConfig[mainPage] as AppPageType);
 
+  const getServerSidePropsHandler = serverSidePropsConfig[mainPage];
+
   if (!appPage) {
     return {
       notFound: true,
     } as NotFound;
   }
-  return { notFound: false, Component: appPage.default, ...appPage } as Found;
+  return {
+    notFound: false,
+    Component: appPage.default,
+    ...appPage,
+    getServerSideProps: getServerSidePropsHandler,
+  } as Found;
 }
-
-const AppPage: AppPageType["default"] = function AppPage(props) {
-  const appName = props.appName;
-  const params = useParamsWithFallback();
-  const pages = (params.pages || []) as string[];
-  const route = getRoute(appName, pages);
-
-  const componentProps = {
-    ...props,
-    pages: pages.slice(1),
-  };
-
-  if (!route || route.notFound) {
-    throw new Error("Route can't be undefined");
-  }
-  return <route.Component {...componentProps} />;
-};
-
-AppPage.isBookingPage = ({ router }) => {
-  const route = getRoute(router.query.slug as string, router.query.pages as string[]);
-  if (route.notFound) {
-    return false;
-  }
-  const isBookingPage = route.Component.isBookingPage;
-  if (typeof isBookingPage === "function") {
-    return isBookingPage({ router });
-  }
-
-  return !!isBookingPage;
-};
-
-export const getLayout: NonNullable<(typeof AppPage)["getLayout"]> = (page, router) => {
-  const route = getRoute(router.query.slug as string, router.query.pages as string[]);
-  if (route.notFound) {
-    return null;
-  }
-  if (!route.Component.getLayout) {
-    return page;
-  }
-  return route.Component.getLayout(page, router);
-};
-
-AppPage.getLayout = getLayout;
-AppPage.PageWrapper = PageWrapper;
-
-export default AppPage;
 
 export async function getServerSideProps(
   context: GetServerSidePropsContext<{
@@ -113,11 +70,15 @@ export async function getServerSideProps(
   }>
 ) {
   const { params, req, res } = context;
+
+  const notFound = {
+    notFound: true,
+  } as const;
+
   if (!params) {
-    return {
-      notFound: true,
-    };
+    return notFound;
   }
+
   const appName = params.slug;
   const pages = params.pages;
   const route = getRoute(appName, pages);
@@ -133,9 +94,7 @@ export async function getServerSideProps(
     const user = session?.user;
     const app = await getAppWithMetadata({ slug: appName });
     if (!app) {
-      return {
-        notFound: true,
-      };
+      return notFound;
     }
 
     const result = await route.getServerSideProps(
@@ -151,14 +110,14 @@ export async function getServerSideProps(
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     //@ts-ignore
     if (result.notFound) {
-      return {
-        notFound: true,
-      };
+      return notFound;
     }
     if (result.redirect) {
-      return {
+      const redirect = {
         redirect: result.redirect,
-      };
+      } as const;
+
+      return redirect;
     }
     return {
       props: {
