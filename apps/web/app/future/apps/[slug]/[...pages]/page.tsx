@@ -1,4 +1,4 @@
-import Page, { getLayout } from "@pages/apps/[slug]/[...pages]";
+import Page from "@pages/apps/[slug]/[...pages]";
 import type { Params, SearchParams } from "app/_types";
 import { _generateMetadata } from "app/_utils";
 import { WithLayout } from "app/layoutHOC";
@@ -53,4 +53,4 @@ export const generateMetadata = async ({
 const getData = withAppDirSsr(getServerSideProps);
 
 // @ts-expect-error  getLayout
-export default WithLayout({ getData, Page, getLayout });
+export default WithLayout({ getData, Page, getLayout: null });

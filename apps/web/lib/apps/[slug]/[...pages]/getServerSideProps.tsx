@@ -36,7 +36,7 @@ type NotFound = {
   notFound: true;
 };
 
-function getRoute(appName: string, pages: string[]) {
+export function getRoute(appName: string, pages: string[]) {
   const routingConfig = AppsRouting[appName as keyof typeof AppsRouting] as Record<string, AppPageType>;
 
   if (!routingConfig) {
