@@ -1,3 +1,5 @@
+"use client";
+
 import type { GetServerSidePropsContext } from "next";
 
 import { getAppWithMetadata } from "@calcom/app-store/_appRegistry";
