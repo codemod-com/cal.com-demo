@@ -1,3 +1,5 @@
+"use client";
+
 import type { GetServerSidePropsContext } from "next";
 import { getProviders, signIn, getCsrfToken } from "next-auth/react";
 
