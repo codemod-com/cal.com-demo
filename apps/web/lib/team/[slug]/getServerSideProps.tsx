@@ -13,10 +13,12 @@ import { RedirectType } from "@calcom/prisma/client";
 import { teamMetadataSchema } from "@calcom/prisma/zod-utils";
 
 import { getTemporaryOrgRedirect } from "@lib/getTemporaryOrgRedirect";
+import { type inferSSRProps } from "@lib/types/inferSSRProps";
 
 import { ssrInit } from "@server/lib/ssr";
 
 const log = logger.getSubLogger({ prefix: ["team/[slug]"] });
+export type PageProps = inferSSRProps<typeof getServerSideProps>;
 
 const getTheLastArrayElement = (value: ReadonlyArray<string> | string | undefined): string | undefined => {
   if (value === undefined || typeof value === "string") {
