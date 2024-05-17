@@ -176,7 +176,7 @@ export default function MemberInvitationModal(props: MemberInvitationModalProps)
   const importRef = useRef<HTMLInputElement | null>(null);
 
   return (
-    <Dialog
+    (<Dialog
       name="inviteModal"
       open={props.isOpen}
       onOpenChange={() => {
@@ -437,6 +437,6 @@ export default function MemberInvitationModal(props: MemberInvitationModalProps)
           </DialogFooter>
         </Form>
       </DialogContent>
-    </Dialog>
+    </Dialog>)
   );
 }

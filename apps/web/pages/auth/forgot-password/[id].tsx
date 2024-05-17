@@ -77,7 +77,7 @@ export default function Page({ requestId, isRequestExpired, csrfToken }: Props) 
   };
 
   return (
-    <AuthContainer
+    (<AuthContainer
       showLogo
       title={t("reset_password")}
       description={t("change_your_password")}
@@ -137,7 +137,7 @@ export default function Page({ requestId, isRequestExpired, csrfToken }: Props) 
           <Success />
         </>
       )}
-    </AuthContainer>
+    </AuthContainer>)
   );
 }
 
