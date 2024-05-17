@@ -90,66 +90,76 @@ type DialogContentProps = React.ComponentProps<(typeof DialogPrimitive)["Content
 };
 
 // enableOverflow:- use this prop whenever content inside DialogContent could overflow and require scrollbar
-export const DialogContent = React.forwardRef<HTMLDivElement, DialogContentProps>(
-  ({ children, title, Icon: icon, enableOverflow, type = "creation", ...props }, forwardedRef) => {
-    const isPlatform = useIsPlatform();
-    const [Portal, Overlay, Content] = useMemo(
-      () =>
-        isPlatform
-          ? [
-              ({ children }: { children: ReactElement | ReactElement[] }) => <>{children}</>,
-              PlatformDialogPrimitives.DialogOverlay,
-              PlatformDialogPrimitives.DialogContent,
-            ]
-          : [DialogPrimitive.Portal, DialogPrimitive.Overlay, DialogPrimitive.Content],
-      [isPlatform]
-    );
-    return (
-      <Portal>
-        <Overlay className="fadeIn fixed inset-0 z-50 bg-neutral-800 bg-opacity-70 transition-opacity dark:bg-opacity-70 " />
-        <Content
-          {...props}
-          className={classNames(
-            "fadeIn bg-default scroll-bar fixed left-1/2 top-1/2 z-50 w-full max-w-[22rem] -translate-x-1/2 -translate-y-1/2 rounded-md text-left shadow-xl focus-visible:outline-none sm:align-middle",
-            props.size == "xl"
-              ? "px-8 pt-8 sm:max-w-[90rem]"
-              : props.size == "lg"
-              ? "px-8 pt-8 sm:max-w-[70rem]"
-              : props.size == "md"
-              ? "px-8 pt-8 sm:max-w-[48rem]"
-              : "px-8 pt-8 sm:max-w-[35rem]",
-            "max-h-[95vh]",
-            enableOverflow ? "overflow-auto" : "overflow-visible",
-            `${props.className || ""}`
-          )}
-          ref={forwardedRef}>
-          {type === "creation" && (
-            <div>
-              <DialogHeader title={title} subtitle={props.description} />
-              <div data-testid="dialog-creation" className="flex flex-col">
-                {children}
-              </div>
-            </div>
-          )}
-          {type === "confirmation" && (
-            <div className="flex">
-              {icon && (
-                <div className="bg-emphasis mr-4 inline-flex h-10 w-10 items-center justify-center rounded-full">
-                  <Icon name={icon} className="text-emphasis h-4 w-4" />
-                </div>
-              )}
-              <div className="w-full">
-                <DialogHeader title={title} subtitle={props.description} />
-                <div data-testid="dialog-confirmation">{children}</div>
-              </div>
-            </div>
-          )}
-          {!type && children}
-        </Content>
-      </Portal>
-    );
+export const DialogContent = (
+  {
+    ref: forwardedRef,
+    children,
+    title,
+    Icon: icon,
+    enableOverflow,
+    type = "creation",
+    ...props
+  }: DialogContentProps & {
+    ref: React.RefObject<HTMLDivElement>;
   }
-);
+) => {
+  const isPlatform = useIsPlatform();
+  const [Portal, Overlay, Content] = useMemo(
+    () =>
+      isPlatform
+        ? [
+            ({ children }: { children: ReactElement | ReactElement[] }) => <>{children}</>,
+            PlatformDialogPrimitives.DialogOverlay,
+            PlatformDialogPrimitives.DialogContent,
+          ]
+        : [DialogPrimitive.Portal, DialogPrimitive.Overlay, DialogPrimitive.Content],
+    [isPlatform]
+  );
+  return (
+    <Portal>
+      <Overlay className="fadeIn fixed inset-0 z-50 bg-neutral-800 bg-opacity-70 transition-opacity dark:bg-opacity-70 " />
+      <Content
+        {...props}
+        className={classNames(
+          "fadeIn bg-default scroll-bar fixed left-1/2 top-1/2 z-50 w-full max-w-[22rem] -translate-x-1/2 -translate-y-1/2 rounded-md text-left shadow-xl focus-visible:outline-none sm:align-middle",
+          props.size == "xl"
+            ? "px-8 pt-8 sm:max-w-[90rem]"
+            : props.size == "lg"
+            ? "px-8 pt-8 sm:max-w-[70rem]"
+            : props.size == "md"
+            ? "px-8 pt-8 sm:max-w-[48rem]"
+            : "px-8 pt-8 sm:max-w-[35rem]",
+          "max-h-[95vh]",
+          enableOverflow ? "overflow-auto" : "overflow-visible",
+          `${props.className || ""}`
+        )}
+        ref={forwardedRef}>
+        {type === "creation" && (
+          <div>
+            <DialogHeader title={title} subtitle={props.description} />
+            <div data-testid="dialog-creation" className="flex flex-col">
+              {children}
+            </div>
+          </div>
+        )}
+        {type === "confirmation" && (
+          <div className="flex">
+            {icon && (
+              <div className="bg-emphasis mr-4 inline-flex h-10 w-10 items-center justify-center rounded-full">
+                <Icon name={icon} className="text-emphasis h-4 w-4" />
+              </div>
+            )}
+            <div className="w-full">
+              <DialogHeader title={title} subtitle={props.description} />
+              <div data-testid="dialog-confirmation">{children}</div>
+            </div>
+          </div>
+        )}
+        {!type && children}
+      </Content>
+    </Portal>
+  );
+};
 
 type DialogHeaderProps = {
   title: React.ReactNode;
@@ -179,10 +189,10 @@ type DialogFooterProps = {
 
 export function DialogFooter(props: DialogFooterProps) {
   return (
-    <div className={classNames("bg-default sticky bottom-0", props.className)}>
+    (<div className={classNames("bg-default sticky bottom-0", props.className)}>
       {props.showDivider && (
         // TODO: the -mx-8 is causing overflow in the dialog buttons
-        <hr data-testid="divider" className="border-subtle -mx-8" />
+        (<hr data-testid="divider" className="border-subtle -mx-8" />)
       )}
       <div
         className={classNames(
@@ -191,7 +201,7 @@ export function DialogFooter(props: DialogFooterProps) {
         )}>
         {props.children}
       </div>
-    </div>
+    </div>)
   );
 }
 
@@ -199,14 +209,19 @@ DialogContent.displayName = "DialogContent";
 
 export const DialogTrigger: ForwardRefExoticComponent<
   DialogPrimitive.DialogTriggerProps & React.RefAttributes<HTMLButtonElement>
-> = React.forwardRef((props, ref) => {
+> = (
+  {
+    ref,
+    ...props
+  }
+) => {
   const isPlatform = useIsPlatform();
   return !isPlatform ? (
     <DialogPrimitive.Trigger {...props} ref={ref} />
   ) : (
     <PlatformDialogPrimitives.DialogTrigger {...props} ref={ref} />
   );
-});
+};
 
 DialogTrigger.displayName = "DialogTrigger";
 

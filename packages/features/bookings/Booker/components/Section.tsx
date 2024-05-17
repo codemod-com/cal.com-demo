@@ -1,6 +1,5 @@
 import type { MotionProps } from "framer-motion";
 import { m } from "framer-motion";
-import { forwardRef } from "react";
 
 import { classNames } from "@calcom/lib";
 
@@ -40,9 +39,17 @@ const gridAreaClassNameMap: { [key in BookerAreas]: string } = {
 /**
  * Small helper compnent that renders a booker section in a specific grid area.
  */
-export const BookerSection = forwardRef<HTMLDivElement, BookerSectionProps>(function BookerSection(
-  { children, area, visible, className, ...props },
-  ref
+export const BookerSection = function BookerSection(
+  {
+    ref,
+    children,
+    area,
+    visible,
+    className,
+    ...props
+  }: BookerSectionProps & {
+    ref: React.RefObject<HTMLDivElement>;
+  }
 ) {
   const layout = useBookerStore((state) => state.layout);
   let gridClassName: string;
@@ -60,4 +67,4 @@ export const BookerSection = forwardRef<HTMLDivElement, BookerSectionProps>(func
       {children}
     </m.div>
   );
-});
+};

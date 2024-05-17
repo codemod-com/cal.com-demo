@@ -1,4 +1,4 @@
-import React, { forwardRef, useId, useState } from "react";
+import React, { useId, useState } from "react";
 
 import classNames from "@calcom/lib/classNames";
 import { useLocale } from "@calcom/lib/hooks/useLocale";
@@ -8,9 +8,14 @@ import { HintsOrErrors } from "./HintOrErrors";
 import { Label } from "./Label";
 import type { InputFieldProps, InputProps } from "./types";
 
-export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
-  { isFullWidth = true, ...props },
-  ref
+export const Input = function Input(
+  {
+    ref,
+    isFullWidth = true,
+    ...props
+  }: InputProps & {
+    ref: React.RefObject<HTMLInputElement>;
+  }
 ) {
   return (
     <input
@@ -23,7 +28,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
       )}
     />
   );
-});
+};
 
 type AddonProps = {
   children: React.ReactNode;
@@ -61,7 +66,14 @@ const Addon = ({ isFilled, children, className, error, onClickAddon }: AddonProp
   </div>
 );
 
-export const InputField = forwardRef<HTMLInputElement, InputFieldProps>(function InputField(props, ref) {
+export const InputField = function InputField(
+  {
+    ref,
+    ...props
+  }: InputFieldProps & {
+    ref: React.RefObject<HTMLInputElement>;
+  }
+) {
   const id = useId();
   const { t: _t, isLocaleReady, i18n } = useLocale();
   const t = props.t || _t;
@@ -186,8 +198,15 @@ export const InputField = forwardRef<HTMLInputElement, InputFieldProps>(function
       {hint && <div className="text-default mt-2 flex items-center text-sm">{hint}</div>}
     </div>
   );
-});
+};
 
-export const TextField = forwardRef<HTMLInputElement, InputFieldProps>(function TextField(props, ref) {
+export const TextField = function TextField(
+  {
+    ref,
+    ...props
+  }: InputFieldProps & {
+    ref: React.RefObject<HTMLInputElement>;
+  }
+) {
   return <InputField ref={ref} {...props} />;
-});
+};

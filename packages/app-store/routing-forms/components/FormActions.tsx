@@ -1,6 +1,6 @@
 import type { App_RoutingForms_Form } from "@prisma/client";
 import { usePathname, useRouter } from "next/navigation";
-import { createContext, forwardRef, useContext, useState } from "react";
+import { createContext, useContext, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
@@ -386,9 +386,13 @@ type FormActionProps<T> = {
   extraClassNames?: string;
 } & ButtonProps;
 
-export const FormAction = forwardRef(function FormAction<T extends typeof Button>(
-  props: FormActionProps<T>,
-  forwardedRef: React.ForwardedRef<HTMLAnchorElement | HTMLButtonElement>
+export const FormAction = function FormAction<T extends typeof Button>(
+  {
+    ref: forwardedRef,
+    ...props
+  }: FormActionProps<T> & {
+    ref: React.RefObject<unknown>;
+  }
 ) {
   const {
     action: actionName,
@@ -517,4 +521,4 @@ export const FormAction = forwardRef(function FormAction<T extends typeof Button
       </Component>
     </DropdownMenuItem>
   );
-});
+};

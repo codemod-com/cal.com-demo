@@ -1,6 +1,5 @@
 import classNames from "classnames";
 import type { ReactNode } from "react";
-import { forwardRef } from "react";
 
 import { Icon, type IconName } from "../..";
 
@@ -17,7 +16,14 @@ export interface AlertProps {
   CustomIcon?: IconName;
   customIconColor?: string;
 }
-export const Alert = forwardRef<HTMLDivElement, AlertProps>((props, ref) => {
+export const Alert = (
+  {
+    ref,
+    ...props
+  }: AlertProps & {
+    ref: React.RefObject<HTMLDivElement>;
+  }
+) => {
   const { severity, iconClassName, CustomIcon, customIconColor } = props;
 
   return (
@@ -98,6 +104,6 @@ export const Alert = forwardRef<HTMLDivElement, AlertProps>((props, ref) => {
       </div>
     </div>
   );
-});
+};
 
 Alert.displayName = "Alert";
