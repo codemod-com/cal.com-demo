@@ -1,7 +1,6 @@
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
 import Link from "next/link";
 import type { ComponentProps } from "react";
-import { forwardRef } from "react";
 
 import { classNames } from "@calcom/lib";
 import { Icon, type IconName } from "@calcom/ui";
@@ -11,18 +10,22 @@ import type { ButtonColor } from "../../button/Button";
 export const Dropdown = DropdownMenuPrimitive.Root;
 
 type DropdownMenuTriggerProps = ComponentProps<(typeof DropdownMenuPrimitive)["Trigger"]>;
-export const DropdownMenuTrigger = forwardRef<HTMLButtonElement, DropdownMenuTriggerProps>(
-  ({ className = "", ...props }, forwardedRef) => (
-    <DropdownMenuPrimitive.Trigger
-      {...props}
-      className={classNames(
-        !props.asChild &&
-          `focus:bg-subtle hover:bg-muted text-default group-hover:text-emphasis inline-flex items-center rounded-md bg-transparent px-3 py-2 text-sm font-medium ring-0 ${className}`
-      )}
-      ref={forwardedRef}
-    />
-  )
-);
+export const DropdownMenuTrigger = (
+  {
+    ref: forwardedRef,
+    className = "",
+    ...props
+  }: DropdownMenuTriggerProps & {
+    ref: React.RefObject<HTMLButtonElement>;
+  }
+) => (<DropdownMenuPrimitive.Trigger
+  {...props}
+  className={classNames(
+    !props.asChild &&
+      `focus:bg-subtle hover:bg-muted text-default group-hover:text-emphasis inline-flex items-center rounded-md bg-transparent px-3 py-2 text-sm font-medium ring-0 ${className}`
+  )}
+  ref={forwardedRef}
+/>);
 DropdownMenuTrigger.displayName = "DropdownMenuTrigger";
 
 export const DropdownMenuTriggerItem = DropdownMenuPrimitive.Trigger;
@@ -30,24 +33,32 @@ export const DropdownMenuTriggerItem = DropdownMenuPrimitive.Trigger;
 export const DropdownMenuPortal = DropdownMenuPrimitive.Portal;
 
 type DropdownMenuContentProps = ComponentProps<(typeof DropdownMenuPrimitive)["Content"]>;
-export const DropdownMenuContent = forwardRef<HTMLDivElement, DropdownMenuContentProps>(
-  ({ children, sideOffset = 2, align = "end", ...props }, forwardedRef) => {
-    return (
-      <DropdownMenuPrimitive.Content
-        align={align}
-        {...props}
-        sideOffset={sideOffset}
-        className={classNames(
-          "shadow-dropdown w-50 bg-default border-subtle relative z-10 ml-1.5 origin-top-right rounded-md border text-sm",
-          "[&>*:first-child]:mt-1 [&>*:last-child]:mb-1",
-          props.className
-        )}
-        ref={forwardedRef}>
-        {children}
-      </DropdownMenuPrimitive.Content>
-    );
+export const DropdownMenuContent = (
+  {
+    ref: forwardedRef,
+    children,
+    sideOffset = 2,
+    align = "end",
+    ...props
+  }: DropdownMenuContentProps & {
+    ref: React.RefObject<HTMLDivElement>;
   }
-);
+) => {
+  return (
+    <DropdownMenuPrimitive.Content
+      align={align}
+      {...props}
+      sideOffset={sideOffset}
+      className={classNames(
+        "shadow-dropdown w-50 bg-default border-subtle relative z-10 ml-1.5 origin-top-right rounded-md border text-sm",
+        "[&>*:first-child]:mt-1 [&>*:last-child]:mb-1",
+        props.className
+      )}
+      ref={forwardedRef}>
+      {children}
+    </DropdownMenuPrimitive.Content>
+  );
+};
 DropdownMenuContent.displayName = "DropdownMenuContent";
 
 type DropdownMenuLabelProps = ComponentProps<(typeof DropdownMenuPrimitive)["Label"]>;
@@ -56,49 +67,65 @@ export const DropdownMenuLabel = (props: DropdownMenuLabelProps) => (
 );
 
 type DropdownMenuItemProps = ComponentProps<(typeof DropdownMenuPrimitive)["CheckboxItem"]>;
-export const DropdownMenuItem = forwardRef<HTMLDivElement, DropdownMenuItemProps>(
-  ({ className = "", ...props }, forwardedRef) => (
-    <DropdownMenuPrimitive.Item
-      className={`focus:ring-brand-800 hover:bg-subtle hover:text-emphasis text-default text-sm ring-inset first-of-type:rounded-t-[inherit] last-of-type:rounded-b-[inherit] focus:outline-none focus:ring-1 ${className}`}
-      {...props}
-      ref={forwardedRef}
-    />
-  )
-);
+export const DropdownMenuItem = (
+  {
+    ref: forwardedRef,
+    className = "",
+    ...props
+  }: DropdownMenuItemProps & {
+    ref: React.RefObject<HTMLDivElement>;
+  }
+) => (<DropdownMenuPrimitive.Item
+  className={`focus:ring-brand-800 hover:bg-subtle hover:text-emphasis text-default text-sm ring-inset first-of-type:rounded-t-[inherit] last-of-type:rounded-b-[inherit] focus:outline-none focus:ring-1 ${className}`}
+  {...props}
+  ref={forwardedRef}
+/>);
 DropdownMenuItem.displayName = "DropdownMenuItem";
 
 export const DropdownMenuGroup = DropdownMenuPrimitive.Group;
 
 type DropdownMenuCheckboxItemProps = ComponentProps<(typeof DropdownMenuPrimitive)["CheckboxItem"]>;
-export const DropdownMenuCheckboxItem = forwardRef<HTMLDivElement, DropdownMenuCheckboxItemProps>(
-  ({ children, ...props }, forwardedRef) => {
-    return (
-      <DropdownMenuPrimitive.CheckboxItem {...props} ref={forwardedRef} className="">
-        {children}
-        <DropdownMenuPrimitive.ItemIndicator>
-          <Icon name="circle-check" />
-        </DropdownMenuPrimitive.ItemIndicator>
-      </DropdownMenuPrimitive.CheckboxItem>
-    );
+export const DropdownMenuCheckboxItem = (
+  {
+    ref: forwardedRef,
+    children,
+    ...props
+  }: DropdownMenuCheckboxItemProps & {
+    ref: React.RefObject<HTMLDivElement>;
   }
-);
+) => {
+  return (
+    <DropdownMenuPrimitive.CheckboxItem {...props} ref={forwardedRef} className="">
+      {children}
+      <DropdownMenuPrimitive.ItemIndicator>
+        <Icon name="circle-check" />
+      </DropdownMenuPrimitive.ItemIndicator>
+    </DropdownMenuPrimitive.CheckboxItem>
+  );
+};
 DropdownMenuCheckboxItem.displayName = "DropdownMenuCheckboxItem";
 
 export const DropdownMenuRadioGroup = DropdownMenuPrimitive.RadioGroup;
 
 type DropdownMenuRadioItemProps = ComponentProps<(typeof DropdownMenuPrimitive)["RadioItem"]>;
-export const DropdownMenuRadioItem = forwardRef<HTMLDivElement, DropdownMenuRadioItemProps>(
-  ({ children, ...props }, forwardedRef) => {
-    return (
-      <DropdownMenuPrimitive.RadioItem {...props} ref={forwardedRef}>
-        {children}
-        <DropdownMenuPrimitive.ItemIndicator>
-          <Icon name="circle-check" />
-        </DropdownMenuPrimitive.ItemIndicator>
-      </DropdownMenuPrimitive.RadioItem>
-    );
+export const DropdownMenuRadioItem = (
+  {
+    ref: forwardedRef,
+    children,
+    ...props
+  }: DropdownMenuRadioItemProps & {
+    ref: React.RefObject<HTMLDivElement>;
   }
-);
+) => {
+  return (
+    <DropdownMenuPrimitive.RadioItem {...props} ref={forwardedRef}>
+      {children}
+      <DropdownMenuPrimitive.ItemIndicator>
+        <Icon name="circle-check" />
+      </DropdownMenuPrimitive.ItemIndicator>
+    </DropdownMenuPrimitive.RadioItem>
+  );
+};
 DropdownMenuRadioItem.displayName = "DropdownMenuRadioItem";
 
 type DropdownItemProps = {
@@ -153,17 +180,23 @@ export const DropdownItem = (props: DropdownItemProps) => {
 };
 
 type DropdownMenuSeparatorProps = ComponentProps<(typeof DropdownMenuPrimitive)["Separator"]>;
-export const DropdownMenuSeparator = forwardRef<HTMLDivElement, DropdownMenuSeparatorProps>(
-  ({ className = "", ...props }, forwardedRef) => {
-    return (
-      <DropdownMenuPrimitive.Separator
-        className={classNames("bg-emphasis my-1 h-px", className)}
-        {...props}
-        ref={forwardedRef}
-      />
-    );
+export const DropdownMenuSeparator = (
+  {
+    ref: forwardedRef,
+    className = "",
+    ...props
+  }: DropdownMenuSeparatorProps & {
+    ref: React.RefObject<HTMLDivElement>;
   }
-);
+) => {
+  return (
+    <DropdownMenuPrimitive.Separator
+      className={classNames("bg-emphasis my-1 h-px", className)}
+      {...props}
+      ref={forwardedRef}
+    />
+  );
+};
 DropdownMenuSeparator.displayName = "DropdownMenuSeparator";
 
 export default Dropdown;
