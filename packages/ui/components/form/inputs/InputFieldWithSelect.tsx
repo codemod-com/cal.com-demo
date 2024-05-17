@@ -1,12 +1,14 @@
-import React, { forwardRef } from "react";
+import React from "react";
 
 import { InputField, UnstyledSelect } from "../../..";
 import type { InputFieldProps } from "./types";
 
-export const InputFieldWithSelect = forwardRef<
-  HTMLInputElement,
-  InputFieldProps & { selectProps: typeof UnstyledSelect }
->(function EmailField(props, ref) {
+export const InputFieldWithSelect = function EmailField(
+  {
+    ref,
+    ...props
+  }
+) {
   return (
     <InputField
       ref={ref}
@@ -16,4 +18,4 @@ export const InputFieldWithSelect = forwardRef<
       addOnSuffix={<UnstyledSelect {...props.selectProps} />}
     />
   );
-});
+};

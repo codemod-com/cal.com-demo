@@ -1,5 +1,4 @@
 import type { MutableRefObject } from "react";
-import { forwardRef } from "react";
 
 import type { BookerLayout } from "@calcom/features/bookings/Booker/types";
 import { APP_NAME } from "@calcom/lib/constants";
@@ -20,10 +19,15 @@ export const tabs = [
     href: "embedTabName=embed-code",
     icon: "code" as const,
     type: "code",
-    Component: forwardRef<
-      HTMLTextAreaElement | HTMLIFrameElement | null,
-      { embedType: EmbedType; calLink: string; previewState: PreviewState; namespace: string }
-    >(function EmbedHtml({ embedType, calLink, previewState, namespace }, ref) {
+    Component: function EmbedHtml(
+      {
+        ref,
+        embedType,
+        calLink,
+        previewState,
+        namespace
+      }
+    ) {
       const { t } = useLocale();
       const embedSnippetString = useGetEmbedSnippetString(namespace);
       const embedCalOrigin = useEmbedCalOrigin();
@@ -69,17 +73,22 @@ export const tabs = [
           <p className="text-subtle hidden text-sm">{t("need_help_embedding")}</p>
         </>
       );
-    }),
+    },
   },
   {
     name: "React",
     href: "embedTabName=embed-react",
     icon: "code" as const,
     type: "code",
-    Component: forwardRef<
-      HTMLTextAreaElement | HTMLIFrameElement | null,
-      { embedType: EmbedType; calLink: string; previewState: PreviewState; namespace: string }
-    >(function EmbedReact({ embedType, calLink, previewState, namespace }, ref) {
+    Component: function EmbedReact(
+      {
+        ref,
+        embedType,
+        calLink,
+        previewState,
+        namespace
+      }
+    ) {
       const { t } = useLocale();
       const embedCalOrigin = useEmbedCalOrigin();
 
@@ -118,17 +127,20 @@ export const tabs = [
           />
         </>
       );
-    }),
+    },
   },
   {
     name: "Preview",
     href: "embedTabName=embed-preview",
     icon: "trello" as const,
     type: "iframe",
-    Component: forwardRef<
-      HTMLIFrameElement | HTMLTextAreaElement | null,
-      { calLink: string; embedType: EmbedType; previewState: PreviewState; namespace: string }
-    >(function Preview({ calLink, embedType }, ref) {
+    Component: function Preview(
+      {
+        ref,
+        calLink,
+        embedType
+      }
+    ) {
       const bookerUrl = useBookerUrl();
       const iframeSrc = `${EMBED_PREVIEW_HTML_URL}?embedType=${embedType}&calLink=${calLink}&embedLibUrl=${embedLibUrl}&bookerUrl=${bookerUrl}`;
       if (ref instanceof Function || !ref) {
@@ -148,7 +160,7 @@ export const tabs = [
           key={iframeSrc}
         />
       );
-    }),
+    },
   },
 ];
 

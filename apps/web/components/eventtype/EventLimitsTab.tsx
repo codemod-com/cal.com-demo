@@ -19,10 +19,14 @@ import type { PeriodType } from "@calcom/prisma/enums";
 import type { IntervalLimit } from "@calcom/types/Calendar";
 import { Button, DateRangePicker, InputField, Label, Select, SettingsToggle, TextField } from "@calcom/ui";
 
-const MinimumBookingNoticeInput = React.forwardRef<
-  HTMLInputElement,
-  Omit<UseFormRegisterReturn<"minimumBookingNotice">, "ref">
->(function MinimumBookingNoticeInput({ ...passThroughProps }, ref) {
+const MinimumBookingNoticeInput = function MinimumBookingNoticeInput(
+  {
+    ref,
+    ...passThroughProps
+  }: Omit<UseFormRegisterReturn<"minimumBookingNotice">, "ref"> & {
+    ref: React.RefObject<HTMLInputElement>;
+  }
+) {
   const { t } = useLocale();
   const { setValue, getValues } = useFormContext<FormValues>();
   const durationTypeOptions: {
@@ -107,7 +111,7 @@ const MinimumBookingNoticeInput = React.forwardRef<
       />
     </div>
   );
-});
+};
 
 export const EventLimitsTab = ({ eventType }: Pick<EventTypeSetupProps, "eventType">) => {
   const { t, i18n } = useLocale();

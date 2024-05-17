@@ -1,6 +1,5 @@
 import { useSession } from "next-auth/react";
 import type { InputHTMLAttributes, ReactNode } from "react";
-import { forwardRef } from "react";
 
 import { classNames } from "@calcom/lib";
 import { getPlaceholderAvatar } from "@calcom/lib/defaultAvatarImage";
@@ -147,7 +146,16 @@ type Props = InputHTMLAttributes<HTMLInputElement> & {
   icon?: ReactNode;
 };
 
-export const FilterCheckboxField = forwardRef<HTMLInputElement, Props>(({ label, icon, ...rest }, ref) => {
+export const FilterCheckboxField = (
+  {
+    ref,
+    label,
+    icon,
+    ...rest
+  }: Props & {
+    ref: React.RefObject<HTMLInputElement>;
+  }
+) => {
   return (
     <div className="hover:bg-muted flex items-center py-2 pl-3 pr-2.5 hover:cursor-pointer">
       <label className="flex w-full max-w-full items-center justify-between hover:cursor-pointer">
@@ -176,6 +184,6 @@ export const FilterCheckboxField = forwardRef<HTMLInputElement, Props>(({ label,
       </label>
     </div>
   );
-});
+};
 
 FilterCheckboxField.displayName = "FilterCheckboxField";
