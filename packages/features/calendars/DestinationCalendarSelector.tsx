@@ -125,7 +125,7 @@ const DestinationCalendarSelector = ({
   const queryDestinationCalendar = query.data.destinationCalendar;
 
   return (
-    <div
+    (<div
       className="relative table w-full table-fixed"
       title={`${t("create_events_on")}: ${selectedOption?.label || ""}`}>
       <Select
@@ -181,7 +181,7 @@ const DestinationCalendarSelector = ({
       {hideAdvancedText ? null : (
         <p className="text-sm leading-tight">{t("you_can_override_calendar_in_advanced_tab")}</p>
       )}
-    </div>
+    </div>)
   );
 };
 
