@@ -78,7 +78,7 @@ const DestinationCalendarSelector = ({
       })`
     : "";
   return (
-    <div
+    (<div
       className="relative flex items-center"
       title={`${t("select_destination_calendar")}: ${selectedOption?.label || ""}`}>
       <Select
@@ -142,7 +142,7 @@ const DestinationCalendarSelector = ({
           IndicatorSeparator: () => null,
         }}
       />
-    </div>
+    </div>)
   );
 };
 
