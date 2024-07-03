@@ -62,7 +62,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     : await getInitialProps(fullUrl);
 
   return (
-    <html
+    (<html
       lang={locale}
       dir={direction}
       style={embedColorScheme ? { colorScheme: embedColorScheme as string } : undefined}
@@ -109,6 +109,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         )}
         {children}
       </body>
-    </html>
+    </html>)
   );
 }
