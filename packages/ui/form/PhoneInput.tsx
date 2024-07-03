@@ -21,7 +21,7 @@ function BasePhoneInput({ name, className = "", onChange, value, ...rest }: Phon
   const defaultCountry = useDefaultCountry();
 
   return (
-    <PhoneInput
+    (<PhoneInput
       {...rest}
       value={value ? value.trim().replace(/^\+?/, "+") : undefined}
       country={value ? undefined : defaultCountry}
@@ -55,7 +55,7 @@ function BasePhoneInput({ name, className = "", onChange, value, ...rest }: Phon
         marginLeft: "-4px",
       }}
       dropdownStyle={{ width: "max-content" }}
-    />
+    />)
   );
 }
 

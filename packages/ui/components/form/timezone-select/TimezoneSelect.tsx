@@ -49,7 +49,7 @@ export function TimezoneSelectComponent({
   }, [components]);
 
   return (
-    <BaseSelect
+    (<BaseSelect
       value={value}
       className={className}
       isLoading={isPending}
@@ -128,7 +128,7 @@ export function TimezoneSelectComponent({
         multiValueRemove: () => "text-default py-auto ml-2",
         noOptionsMessage: () => "h-12 py-2 flex items-center justify-center",
       }}
-    />
+    />)
   );
 }
 
