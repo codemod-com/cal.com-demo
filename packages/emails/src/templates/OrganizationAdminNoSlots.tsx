@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import type { TFunction } from "next-i18next";
 import { Trans } from "next-i18next";
 
@@ -19,6 +20,8 @@ export type OrganizationAdminNoSlotsEmailInput = {
 export const OrganizationAdminNoSlotsEmail = (
   props: OrganizationAdminNoSlotsEmailInput & Partial<React.ComponentProps<typeof BaseEmailHtml>>
 ) => {
+const { t } = useTranslation();
+
   return (
     <BaseEmailHtml subject={`No availability found for ${props.user}`}>
       <p
@@ -30,23 +33,14 @@ export const OrganizationAdminNoSlotsEmail = (
         <>{props.language("org_admin_no_slots|heading", { name: props.user })}</>
       </p>
       <p style={{ fontWeight: 400, fontSize: "16px", lineHeight: "24px" }}>
-        <Trans i18nKey="org_admin_no_slots|content" values={{ username: props.user, slug: props.slug }}>
-          Hello Organization Admins,
+        <Trans i18nKey="org_admin_no_slots|content" values={{ username: props.user, slug: props.slug }}>{t('hello-organization-admins')}<br />
+          <br />{t('please-note-it-has-been-brought-to-our-attention-that')}{props.user}{t('has-not-had-any-availability-when-a-user-has-visited')}{props.teamSlug}{t('slash')}{props.slug}{t('period')}<br />{t('start-time')}{props.startTime}
+          <br />{t('end-time')}{props.endTime}
           <br />
-          <br />
-          Please note: It has been brought to our attention that {props.user} has not had any availability
-          when a user has visited {props.teamSlug}/{props.slug}.
-          <br />
-          Start time: {props.startTime}
-          <br />
-          End time: {props.endTime}
-          <br />
-          <br />
-          There’s a few reasons why this could be happening:
-          <br />
+          <br />{t('theres-a-few-reasons-why-this-could-be-happening')}<br />
           <ul>
-            <li>The user does not have any calendars connected</li>
-            <li>Their schedules attached to this event are not enabled</li>
+            <li>{t('the-user-does-not-have-any-calendars-connected')}</li>
+            <li>{t('their-schedules-attached-to-this-event-are-not-enabled')}</li>
           </ul>
         </Trans>
       </p>

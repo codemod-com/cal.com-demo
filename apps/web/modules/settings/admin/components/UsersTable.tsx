@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { getPlaceholderAvatar } from "@calcom/lib/defaultAvatarImage";
 import { getUserAvatarUrl } from "@calcom/lib/getAvatarUrl";
 import { SMSLockState } from "@calcom/prisma/client";
@@ -50,6 +51,8 @@ const LockStatusTable = ({
   teams?: Team[];
   setSMSLockState: (param: { userId?: number; teamId?: number; lock: boolean }) => void;
 }) => {
+const { t } = useTranslation();
+
   function getActions({ user, team }: { user?: User; team?: Team }) {
     const smsLockState = user?.smsLockState ?? team?.smsLockState;
     if (!smsLockState) return [];
@@ -88,10 +91,10 @@ const LockStatusTable = ({
     <>
       <Table>
         <Header>
-          <ColumnTitle widthClassNames="w-auto">User/Team</ColumnTitle>
-          <ColumnTitle>Status</ColumnTitle>
+          <ColumnTitle widthClassNames="w-auto">{t('user-team')}</ColumnTitle>
+          <ColumnTitle>{t('status')}</ColumnTitle>
           <ColumnTitle widthClassNames="w-auto">
-            <span className="sr-only">Edit</span>
+            <span className="sr-only">{t('edit')}</span>
           </ColumnTitle>
         </Header>
 
@@ -121,7 +124,10 @@ const LockStatusTable = ({
               </Cell>
             </Row>
           ))}
-          {teams.map((team) => (
+          {teams.map((team) =>  {
+const { t } = useTranslation();
+
+return (
             <Row key={`team-${team.id}`}>
               <Cell widthClassNames="w-auto">
                 <div className="min-h-10 flex items-center">
@@ -132,7 +138,7 @@ const LockStatusTable = ({
                   />
                   <div className="text-subtle ml-4 font-medium">
                     <span className="text-default">{team.name}</span>
-                    <span className="ml-3 break-all">/team/{team.slug}</span>
+                    <span className="ml-3 break-all">{t('team-path')}{team.slug}</span>
                   </div>
                 </div>
               </Cell>
@@ -141,7 +147,8 @@ const LockStatusTable = ({
                 <DropdownActions actions={getActions({ team })} />
               </Cell>
             </Row>
-          ))}
+          )
+})}
         </tbody>
       </Table>
     </>

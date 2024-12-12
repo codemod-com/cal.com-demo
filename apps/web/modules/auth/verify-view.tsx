@@ -1,4 +1,6 @@
 "use client";
+import { useTranslation, Trans } from "react-i18next";
+
 
 import { motion } from "framer-motion";
 import { signIn } from "next-auth/react";
@@ -118,6 +120,8 @@ const MailOpenIcon = () => (
 );
 
 export default function Verify(props: PageProps) {
+const { t } = useTranslation();
+
   const searchParams = useCompatSearchParams();
   const pathname = usePathname();
   const router = useRouter();
@@ -171,7 +175,7 @@ export default function Verify(props: PageProps) {
   }
 
   if (!stripeCustomerId && !sessionId) {
-    return <div>Invalid Link</div>;
+    return <div>{t('invalid-link')}</div>;
   }
 
   return (
@@ -198,10 +202,12 @@ export default function Verify(props: PageProps) {
               : "Check your Inbox"}
           </h3>
           {hasPaymentFailed && (
-            <p className="my-6">Your account has been created, but your premium has not been reserved.</p>
+            <p className="my-6">{t('account-created-premium-not-reserved')}</p>
           )}
-          <p className="text-muted dark:text-subtle text-base font-normal">
-            We have sent an email to <b>{customer?.email} </b>with a link to activate your account.{" "}
+          <p className="text-muted dark:text-subtle text-base font-normal"><Trans
+i18nKey="email-sent-activate-account"
+components={{"0": <b />}}
+/>
             {hasPaymentFailed &&
               "Once you activate your account you will be able to try purchase your premium username again or select a different one."}
           </p>
@@ -214,13 +220,11 @@ export default function Verify(props: PageProps) {
                   : "https://mail.google.com/mail/u/0/"
               }
               target="_blank"
-              EndIcon="external-link">
-              Open in Gmail
-            </Button>
+              EndIcon="external-link">{t('open-in-gmail')}</Button>
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <p className="text-subtle text-base font-normal ">Don’t seen an email?</p>
+          <p className="text-subtle text-base font-normal ">{t('did-not-receive-email')}</p>
           <button
             className={classNames(
               "font-light",

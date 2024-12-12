@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
 import LexicalErrorBoundary from "@lexical/react/LexicalErrorBoundary";
@@ -40,17 +41,21 @@ const initialConfig = {
   onError: (error: Error) => console.error(error),
 };
 
-const TestWrapper = ({ children }: { children: string | JSX.Element }) => (
+const TestWrapper = ({ children }: { children: string | JSX.Element }) =>  {
+const { t } = useTranslation();
+
+return (
   <LexicalComposer initialConfig={initialConfig}>
     <RichTextPlugin
       contentEditable={<ContentEditable />}
-      placeholder={<div>Enter some text...</div>}
+      placeholder={<div>{t('enter-some-text')}</div>}
       ErrorBoundary={LexicalErrorBoundary}
     />
     <HistoryPlugin />
     {children}
   </LexicalComposer>
-);
+)
+};
 
 describe("ToolbarPlugin", () => {
   const defaultProps = {

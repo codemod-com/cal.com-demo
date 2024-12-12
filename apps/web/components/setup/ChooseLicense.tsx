@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import * as RadioGroup from "@radix-ui/react-radio-group";
 import classNames from "classnames";
 import Link from "next/link";
@@ -12,6 +13,8 @@ const ChooseLicense = (
     onSubmit: (value: string) => void;
   } & Omit<JSX.IntrinsicElements["form"], "onSubmit" | "onChange">
 ) => {
+const { t } = useTranslation();
+
   const { value: initialValue = "FREE", onChange, onSubmit, ...rest } = props;
   const [value, setValue] = useState(initialValue);
   const { t } = useLocale();
@@ -54,7 +57,7 @@ const ChooseLicense = (
             <div className={classNames("bg-default h-full cursor-pointer space-y-2 rounded-md border p-4")}>
               <h2 className="font-cal text-emphasis text-xl">{t("custom_plan")}</h2>
               <p className="font-medium text-green-800">{t("contact_sales")}</p>
-              <p className="text-subtle">Build on top of Cal.com</p>
+              <p className="text-subtle">{t('build-on-top-of-cal-com')}</p>
               <ul className="text-subtle ml-4 list-disc text-left text-xs">
                 <li>{t("no_need_to_keep_your_code_open_source")}</li>
                 <li>{t("repackage_rebrand_resell")}</li>

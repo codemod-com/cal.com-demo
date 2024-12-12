@@ -1,4 +1,6 @@
 "use client";
+import { useTranslation, Trans } from "react-i18next";
+
 
 import type { TFunction } from "next-i18next";
 import { Trans } from "next-i18next";
@@ -15,6 +17,8 @@ export const SlugReplacementEmail = (
     t: TFunction;
   } & Partial<React.ComponentProps<typeof BaseEmailHtml>>
 ) => {
+const { t } = useTranslation();
+
   const { slug, name, teamName, t } = props;
 
   return (
@@ -24,20 +28,19 @@ export const SlugReplacementEmail = (
       title={t("event_replaced_notice")}>
       <>
         <Trans i18nKey="hi_user_name" name={name}>
-          <p style={{ fontWeight: 400, lineHeight: "24px", display: "inline-block" }}>Hi {name}</p>
+          <p style={{ fontWeight: 400, lineHeight: "24px", display: "inline-block" }}>{t('hi-{name}', { name })}</p>
           <p style={{ display: "inline" }}>,</p>
         </Trans>
         <Trans i18nKey="email_body_slug_replacement_notice" slug={slug}>
-          <p style={{ fontWeight: 400, lineHeight: "24px" }}>
-            An administrator on the <strong>{teamName}</strong> team has replaced your event type{" "}
-            <strong>/{slug}</strong> with a managed event type that they control.
-          </p>
+          <p style={{ fontWeight: 400, lineHeight: "24px" }}><Trans
+i18nKey="administrator-on-the-{team-name}-team-replaced-your-event-type-{slug}"
+values={{ _teamName_: <>{teamName}</>, slug }}
+components={{"0": <strong />, "1": 
+            <strong />}}
+/></p>
         </Trans>
         <Trans i18nKey="email_body_slug_replacement_info">
-          <p style={{ fontWeight: 400, lineHeight: "24px" }}>
-            Your link will continue to work but some settings for it may have changed. You can review it in
-            event types.
-          </p>
+          <p style={{ fontWeight: 400, lineHeight: "24px" }}>{t('link-will-continue-to-work-settings-may-have-changed-review-it-in-event-types')}</p>
         </Trans>
         <table
           role="presentation"
@@ -65,13 +68,8 @@ export const SlugReplacementEmail = (
           }}
         />
         <Trans i18nKey="email_body_slug_replacement_suggestion">
-          <p style={{ fontWeight: 400, lineHeight: "24px" }}>
-            If you have any questions about the event type, please reach out to your administrator.
-            <br />
-            <br />
-            Happy scheduling, <br />
-            The Cal.com team
-          </p>
+          <p style={{ fontWeight: 400, lineHeight: "24px" }}>{t('questions-about-the-event-type-reach-out-to-your-administrator')}<br />
+            <br />{t('happy-scheduling')}<br />{t('the-cal-com-team')}</p>
         </Trans>
         {/*<p style={{ fontWeight: 400, lineHeight: "24px" }}>
           <>{t("email_body_slug_replacement_suggestion")}</>
