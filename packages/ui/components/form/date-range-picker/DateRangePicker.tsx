@@ -1,4 +1,6 @@
 "use client";
+import { useTranslation } from "react-i18next";
+
 
 import * as Popover from "@radix-ui/react-popover";
 import { format } from "date-fns";
@@ -25,6 +27,8 @@ export function DatePickerWithRange({
   onDatesChange,
   disabled,
 }: React.HTMLAttributes<HTMLDivElement> & DatePickerWithRangeProps) {
+const { t } = useTranslation();
+
   function handleDayClick(date: Date) {
     if (dates?.endDate) {
       onDatesChange({ startDate: date, endDate: undefined });
@@ -51,10 +55,10 @@ export function DatePickerWithRange({
                   {format(dates.startDate, "LLL dd, y")} - {format(dates.endDate, "LLL dd, y")}
                 </>
               ) : (
-                <>{format(dates.startDate, "LLL dd, y")} - End</>
+                <>{format(dates.startDate, "LLL dd, y")}{t('end-fragment')}</>
               )
             ) : (
-              <span>Pick a date</span>
+              <span>{t('pick-a-date')}</span>
             )}
           </Button>
         </Popover.Trigger>

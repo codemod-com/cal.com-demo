@@ -1,4 +1,6 @@
 "use client";
+import { useTranslation } from "react-i18next";
+
 
 import dayjs from "@calcom/dayjs";
 import { useLocale } from "@calcom/lib/hooks/useLocale";
@@ -10,6 +12,8 @@ import type { getServerSideProps } from "@lib/video/meeting-ended/[uid]/getServe
 
 export type PageProps = inferSSRProps<typeof getServerSideProps>;
 export default function MeetingUnavailable(props: PageProps) {
+const { t } = useTranslation();
+
   const { t } = useLocale();
 
   return (
@@ -32,9 +36,7 @@ export default function MeetingUnavailable(props: PageProps) {
                     <Icon name="x" className="h-6 w-6 text-red-600" />
                   </div>
                   <div className="mt-3 text-center sm:mt-5">
-                    <h3 className="text-emphasis text-lg font-medium leading-6" id="modal-headline">
-                      This meeting is in the past.
-                    </h3>
+                    <h3 className="text-emphasis text-lg font-medium leading-6" id="modal-headline">{t('this-meeting-is-in-the-past')}</h3>
                   </div>
                   <div className="mt-4 border-b border-t py-4">
                     <h2 className="font-cal text-default mb-2 text-center text-lg font-medium">

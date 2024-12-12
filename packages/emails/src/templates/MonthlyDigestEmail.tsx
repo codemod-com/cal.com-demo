@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import type { TFunction } from "next-i18next";
 
 import { APP_NAME, SENDER_NAME, SUPPORT_MAIL_ADDRESS } from "@calcom/lib/constants";
@@ -33,6 +34,8 @@ export type MonthlyDigestEmailData = {
 export const MonthlyDigestEmail = (
   props: MonthlyDigestEmailData & Partial<React.ComponentProps<typeof BaseEmailHtml>>
 ) => {
+const { t } = useTranslation();
+
   const EventsDetails = () => {
     return (
       <div
@@ -179,7 +182,7 @@ export const MonthlyDigestEmail = (
         </div>
         <div style={{ marginTop: "30px", marginBottom: "30px" }}>
           <CallToAction
-            label="View all stats"
+            label={t('view-all-stats')}
             href={`${process.env.NEXT_PUBLIC_WEBSITE_URL}/insights?teamId=${props.team.id}`}
             endIconName="white-arrow-right"
           />

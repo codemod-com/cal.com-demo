@@ -1,0 +1,12 @@
+{
+  "read": "Read",
+  "write": "Write",
+  "client-name": "\"Client name\"",
+  "redirect-uris": "Redirect uris",
+  "empty-string": "\"\"",
+  "booking-redirect-uri": "\"Booking redirect uri\"",
+  "booking-cancel-redirect-uri": "\"Booking cancel redirect uri\"",
+  "booking-reschedule-redirect-uri": "\"Booking reschedule redirect uri\"",
+  "enable-emails": "Enable emails",
+  "permissions": "Permissions"
+}

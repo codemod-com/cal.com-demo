@@ -1,4 +1,6 @@
 "use client";
+import { useTranslation } from "react-i18next";
+
 
 import { Analytics as DubAnalytics } from "@dub/analytics/react";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -179,6 +181,8 @@ export default function Signup({
   redirectUrl,
   emailVerificationEnabled,
 }: SignupProps) {
+const { t } = useTranslation();
+
   const isOrgInviteByLink = orgSlug && !prepopulateFormValues?.username;
   const [isSamlSignup, setIsSamlSignup] = useState(false);
   const [premiumUsername, setPremiumUsername] = useState(false);
@@ -523,7 +527,7 @@ export default function Signup({
                         <img
                           className={classNames("text-subtle  mr-2 h-4 w-4", premiumUsername && "opacity-50")}
                           src="/google-icon-colored.svg"
-                          alt="Continue with Google Icon"
+                          alt={t('continue-with-google-icon')}
                         />
                       }
                       className={classNames("w-full justify-center rounded-md text-center")}
@@ -612,16 +616,12 @@ export default function Signup({
                         className="text-emphasis hover:underline"
                         key="terms"
                         href={`${WEBSITE_TERMS_URL}`}
-                        target="_blank">
-                        Terms
-                      </Link>,
+                        target="_blank">{t('terms')}</Link>,
                       <Link
                         className="text-emphasis hover:underline"
                         key="privacy"
                         href={`${WEBSITE_PRIVACY_POLICY_URL}`}
-                        target="_blank">
-                        Privacy Policy.
-                      </Link>,
+                        target="_blank">{t('privacy-policy')}</Link>,
                     ]}
                   />
                 </div>
@@ -636,21 +636,21 @@ export default function Signup({
                     <img
                       src="/product-cards/product-of-the-day.svg"
                       className="h-[34px] w-full dark:invert"
-                      alt="Cal.com was Product of the Day at ProductHunt"
+                      alt={t('cal-com-product-of-the-day-at-producthunt')}
                     />
                   </div>
                   <div>
                     <img
                       src="/product-cards/product-of-the-week.svg"
                       className="h-[34px] w-full dark:invert"
-                      alt="Cal.com was Product of the Week at ProductHunt"
+                      alt={t('cal-com-product-of-the-week-at-producthunt')}
                     />
                   </div>
                   <div>
                     <img
                       src="/product-cards/product-of-the-month.svg"
                       className="h-[34px] w-full dark:invert"
-                      alt="Cal.com was Product of the Month at ProductHunt"
+                      alt={t('cal-com-product-of-the-month-at-producthunt')}
                     />
                   </div>
                 </div>
@@ -659,32 +659,32 @@ export default function Signup({
                     <img
                       src="/product-cards/producthunt.svg"
                       className="h-[54px] w-full"
-                      alt="ProductHunt Rating of 5 Stars"
+                      alt={t('producthunt-rating-of-5-stars')}
                     />
                   </div>
                   <div>
                     <img
                       src="/product-cards/google-reviews.svg"
                       className="h-[54px] w-full"
-                      alt="Google Reviews Rating of 4.7 Stars"
+                      alt={t('google-reviews-rating-of-4-7-stars')}
                     />
                   </div>
                   <div>
                     <img
                       src="/product-cards/g2.svg"
                       className="h-[54px] w-full"
-                      alt="G2 Rating of 4.7 Stars"
+                      alt={t('g2-rating-of-4-7-stars')}
                     />
                   </div>
                 </div>
               </>
             )}
             <div className="border-default hidden rounded-bl-2xl rounded-br-none rounded-tl-2xl border border-r-0 border-dashed bg-black/[3%] dark:bg-white/5 lg:block lg:py-[6px] lg:pl-[6px]">
-              <img className="block dark:hidden" src="/mock-event-type-list.svg" alt="Cal.com Booking Page" />
+              <img className="block dark:hidden" src="/mock-event-type-list.svg" alt={t('cal-com-booking-page-1')} />
               <img
                 className="hidden dark:block"
                 src="/mock-event-type-list-dark.svg"
-                alt="Cal.com Booking Page"
+                alt={t('cal-com-booking-page-2')}
               />
             </div>
             <div className="mr-12 mt-8 hidden h-full w-full grid-cols-3 gap-4 overflow-hidden lg:grid">

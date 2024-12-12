@@ -1,4 +1,6 @@
 "use client";
+import { useTranslation } from "react-i18next";
+
 
 import { useRouter } from "next/navigation";
 
@@ -17,6 +19,8 @@ import type { FormValues } from "@components/settings/platform/oauth-clients/oau
 import { OAuthClientForm } from "@components/settings/platform/oauth-clients/oauth-client-form";
 
 export default function CreateOAuthClient() {
+const { t } = useTranslation();
+
   const searchParams = useCompatSearchParams();
   const router = useRouter();
   const { t } = useLocale();
@@ -59,7 +63,7 @@ export default function CreateOAuthClient() {
     });
   };
 
-  if (isUserLoading) return <div className="m-5">Loading...</div>;
+  if (isUserLoading) return <div className="m-5">{t('loading')}</div>;
 
   if (isPlatformUser && isPaidUser) {
     return (

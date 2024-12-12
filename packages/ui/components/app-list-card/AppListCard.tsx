@@ -1,4 +1,6 @@
 "use client";
+import { useTranslation } from "react-i18next";
+
 
 import type { AppListCardProps } from "@calcom/features/apps/components/AppListCard";
 import classNames from "@calcom/lib/classNames";
@@ -7,6 +9,8 @@ import { useLocale } from "@calcom/lib/hooks/useLocale";
 import { Avatar, Badge, Icon, ListItemText } from "@calcom/ui";
 
 export const AppListCard = (props: AppListCardProps & { highlight?: boolean }) => {
+const { t } = useTranslation();
+
   const { t } = useLocale();
   const {
     logo,
@@ -37,7 +41,7 @@ export const AppListCard = (props: AppListCardProps & { highlight?: boolean }) =
             <h3 className="text-emphasis truncate text-sm font-semibold">{title}</h3>
             <div className="flex items-center gap-x-2">
               {isDefault && <Badge variant="green">{t("default")}</Badge>}
-              {isTemplate && <Badge variant="red">Template</Badge>}
+              {isTemplate && <Badge variant="red">{t('template')}</Badge>}
             </div>
           </div>
           <ListItemText component="p">{description}</ListItemText>

@@ -1,4 +1,6 @@
 "use client";
+import { useTranslation, Trans } from "react-i18next";
+
 
 import { useRouter } from "next/navigation";
 
@@ -11,6 +13,8 @@ import { Avatar, Button, Icon } from "@calcom/ui";
 import { hasPermission } from "../../../../../packages/platform/utils/permissions";
 
 export default function Authorize() {
+const { t } = useTranslation();
+
   const { t } = useLocale();
   const router = useRouter();
 
@@ -47,9 +51,12 @@ export default function Authorize() {
 
     return (
       !!permissionsMessage && (
-        <li key={value.read} className="relative pl-5 text-sm">
-          <span className="absolute left-0">&#10003;</span>
-          {permissionsMessage} your {`${value.label}s`.toLocaleLowerCase()}
+        <li key={value.read} className="relative pl-5 text-sm"><Trans
+i18nKey="permissions-message-your"
+values={{ permissionsMessage }}
+components={{"0": 
+          <span className="absolute left-0" />}}
+/>{`${value.label}s`.toLocaleLowerCase()}
         </li>
       )
     );
@@ -66,7 +73,7 @@ export default function Authorize() {
            */}
           {client.logo ? (
             <Avatar
-              alt=""
+              alt={t('empty-string-1')}
               fallback={<Icon name="plus" className="text-subtle h-6 w-6" />}
               className="items-center"
               imageSrc={client.logo}
@@ -74,7 +81,7 @@ export default function Authorize() {
             />
           ) : (
             <Avatar
-              alt=""
+              alt={t('empty-string-2')}
               fallback={<Icon name="plus" className="text-subtle h-6 w-6" />}
               className="items-center"
               imageSrc="/cal-com-icon.svg"
@@ -84,7 +91,7 @@ export default function Authorize() {
           <div className="relative -ml-6 h-24 w-24">
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="flex h-[70px] w-[70px] items-center justify-center  rounded-full bg-white">
-                <img src="/cal-com-icon.svg" alt="Logo" className="h-16 w-16 rounded-full" />
+                <img src="/cal-com-icon.svg" alt={t('logo')} className="h-16 w-16 rounded-full" />
               </div>
             </div>
           </div>

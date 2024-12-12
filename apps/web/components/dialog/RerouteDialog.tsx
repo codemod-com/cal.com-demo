@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { useMutation } from "@tanstack/react-query";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -274,6 +275,8 @@ const NewRoutingManager = ({
   };
   reroutingState: ReturnType<typeof useReroutingState>;
 }) => {
+const { t } = useTranslation();
+
   const { t } = useLocale();
   const router = useRouter();
   const bookerUrl = useBookerUrl();
@@ -645,13 +648,11 @@ const NewRoutingManager = ({
     return (
       <div>
         <span className="text-attention">
-          <span>Continue with rerouting in the new</span>{" "}
+          <span>{t('continue-with-rerouting-in-the-new')}</span>{" "}
           <a
             href="javascript:void(0)"
             className="text-attention underline"
-            onClick={() => reroutingState.value?.reschedulerWindow?.focus()}>
-            tab
-          </a>
+            onClick={() => reroutingState.value?.reschedulerWindow?.focus()}>{t('tab')}</a>
         </span>
       </div>
     );

@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { render, screen } from "@testing-library/react";
 import { useEffect } from "react";
 
@@ -18,11 +19,13 @@ describe("ErrorBoundary", () => {
 
   test("should render error message and error details when an error occurs", () => {
     const ErrorThrowingComponent = () => {
+const { t } = useTranslation();
+
       useEffect(() => {
         throw new Error("Test Error");
       }, []);
 
-      return <div>Error Throwing Component</div>;
+      return <div>{t('error-throwing-component')}</div>;
     };
 
     render(
