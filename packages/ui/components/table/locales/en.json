@@ -1,0 +1,17 @@
+{
+  "header-column-1": "Header Column 1",
+  "header-column-2": "Header Column 2",
+  "row-1-cell-1": "Row 1, Cell 1",
+  "row-1-cell-2": "Row 1, Cell 2",
+  "row-2-cell-1": "Row 2, Cell 1",
+  "row-2-cell-2": "Row 2, Cell 2",
+  "row-3-footer-cell-1": "Row 3(footer), Cell 1",
+  "row-3-footer-cell-2": "Row 3(footer), Cell 2",
+  "table-caption": "Table Caption",
+  "title-column-1": "Title Column 1",
+  "title-column-2": "Title Column 2",
+  "row-1-cell-1-duplicate": "Row 1, Cell 1",
+  "row-1-cell-2-duplicate": "Row 1, Cell 2",
+  "row-2-cell-1-duplicate": "Row 2, Cell 1",
+  "row-2-cell-2-duplicate": "Row 2, Cell 2"
+}

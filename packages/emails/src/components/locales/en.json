@@ -1,0 +1,6 @@
+{
+  "empty-string": "\"\"",
+  "empty-string-fragment": "\"\"",
+  "reason-for-rejection-optional": "Reason for rejection <0>(Optional)</0>",
+  "why-are-you-rejecting": "\"Why are you rejecting?\""
+}

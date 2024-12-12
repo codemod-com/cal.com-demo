@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import type { IframeHTMLAttributes } from "react";
@@ -74,6 +75,8 @@ export const AppPage = ({
   concurrentMeetings,
   paid,
 }: AppPageProps) => {
+const { t } = useTranslation();
+
   const { t, i18n } = useLocale();
   const router = useRouter();
   const searchParams = useCompatSearchParams();
@@ -234,9 +237,7 @@ export const AppPage = ({
               </a>
             </h2>
             {isTemplate && (
-              <Badge variant="red" className="mt-4">
-                Template - Available in Dev Environment only for testing
-              </Badge>
+              <Badge variant="red" className="mt-4">{t('template-available-in-dev-environment-only-for-testing')}</Badge>
             )}
           </header>
         </div>

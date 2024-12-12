@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { useId } from "@radix-ui/react-id";
 import type { ReactElement, ReactNode, Ref } from "react";
 import React, { forwardRef } from "react";
@@ -106,8 +107,10 @@ export const PasswordField = forwardRef<HTMLInputElement, InputFieldProps>(funct
   props,
   ref
 ) {
+const { t } = useTranslation();
+
   return (
-    <InputField data-testid="password" type="password" placeholder="•••••••••••••" ref={ref} {...props} />
+    <InputField data-testid="password" type="password" placeholder={t('unique-key-0')} ref={ref} {...props} />
   );
 });
 

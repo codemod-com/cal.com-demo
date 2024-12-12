@@ -1,4 +1,6 @@
 "use client";
+import { useTranslation } from "react-i18next";
+
 
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -27,6 +29,8 @@ interface AppCardProps {
 }
 
 export function AppCard({ app, credentials, searchText, userAdminTeams }: AppCardProps) {
+const { t } = useTranslation();
+
   const { t } = useLocale();
   const router = useRouter();
   const allowedMultipleInstalls = app.categories && app.categories.indexOf("calendar") > -1;
@@ -178,7 +182,7 @@ export function AppCard({ app, credentials, searchText, userAdminTeams }: AppCar
       <div className="max-w-44 absolute right-0 mr-4 flex flex-wrap justify-end gap-1">
         {appAdded > 0 ? <Badge variant="green">{t("installed", { count: appAdded })}</Badge> : null}
         {app.isTemplate && (
-          <span className="bg-error rounded-md px-2 py-1 text-sm font-normal text-red-800">Template</span>
+          <span className="bg-error rounded-md px-2 py-1 text-sm font-normal text-red-800">{t('template')}</span>
         )}
         {(app.isDefault || (!app.isDefault && app.isGlobal)) && (
           <span className="bg-subtle text-emphasis flex items-center rounded-md px-2 py-1 text-sm font-normal">

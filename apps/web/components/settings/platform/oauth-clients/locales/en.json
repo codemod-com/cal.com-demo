@@ -1,0 +1,16 @@
+{
+  "client-name-fragment": "Client name:<0>{{_name_}}</0>",
+  "client-id-label": "Client Id:",
+  "client-secret-label": "Client Secret:",
+  "organization-id-label": "Organization Id:",
+  "permissions-label": "Permissions:",
+  "disabled-label": " Disabled",
+  "redirect-uris-label": "Redirect uris:",
+  "booking-redirect-uri-label": "Booking redirect uri:",
+  "booking-reschedule-uri-label": "Booking reschedule uri:",
+  "booking-cancel-uri-label": "Booking cancel uri:",
+  "emails-enabled-label": "Emails enabled:",
+  "webhooks-section": "Webhooks",
+  "edit-button": "Edit",
+  "delete-button": "Delete"
+}

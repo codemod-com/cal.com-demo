@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import fs from "fs";
 import { Box, Newline, Text, useApp } from "ink";
 import SelectInput from "ink-select-input";
@@ -21,6 +22,8 @@ export const AppForm = ({
   slug?: string;
   action: "create" | "edit" | "create-template" | "edit-template";
 }) => {
+const { t } = useTranslation();
+
   cliTemplate = Templates.find((t) => t.value === cliTemplate)?.value || "";
   const { exit } = useApp();
   const isTemplate = action === "create-template" || action === "edit-template";
@@ -162,7 +165,7 @@ export const AppForm = ({
 
   if (action === "edit" || action === "edit-template") {
     if (!slug) {
-      return <Text>--slug is required</Text>;
+      return <Text>{t('slug-is-required')}</Text>;
     }
     if (!app) {
       return (
@@ -202,58 +205,48 @@ export const AppForm = ({
         )}
         {status === "done" && (
           <Box flexDirection="column" paddingTop={2} paddingBottom={2}>
-            <Text bold>
-              Just wait for a few seconds for process to exit and then you are good to go. Your{" "}
-              {isTemplate ? "Template" : "App"} code exists at {getAppDirPath(slug, isTemplate)}
+            <Text bold>{t('just-wait-for-a-few-seconds-for-process-to-exit-and-then-you-are-good-to-go-your')}
+              {isTemplate ? "Template" : "App"}{t('code-exists-at')}{getAppDirPath(slug, isTemplate)}
             </Text>
-            <Text>
-              Tip : Go and change the logo of your {isTemplate ? "template" : "app"} by replacing{" "}
+            <Text>{t('tip-go-and-change-the-logo-of-your')}{isTemplate ? "template" : "app"}{t('by-replacing')}
               {`${getAppDirPath(slug, isTemplate)}/static/icon.svg`}
             </Text>
             <Newline />
-            <Text bold underline color="blue">
-              App Summary:
-            </Text>
+            <Text bold underline color="blue">{t('app-summary')}</Text>
             <Box flexDirection="column">
               <Box flexDirection="row">
-                <Text color="green">Slug: </Text>
+                <Text color="green">{t('slug')}</Text>
                 <Text>{slug}</Text>
               </Box>
               <Box flexDirection="row">
-                <Text color="green">{isTemplate ? "Template" : "App"} URL: </Text>
+                <Text color="green">{isTemplate ? "Template" : "App"}{t('url')}</Text>
                 <Text>{`http://localhost:3000/apps/${slug}`}</Text>
               </Box>
               <Box flexDirection="row">
-                <Text color="green">Name: </Text>
+                <Text color="green">{t('name')}</Text>
                 <Text>{name}</Text>
               </Box>
               <Box flexDirection="row">
-                <Text color="green">Description: </Text>
+                <Text color="green">{t('description')}</Text>
                 <Text>{description}</Text>
               </Box>
               <Box flexDirection="row">
-                <Text color="green">Category: </Text>
+                <Text color="green">{t('category')}</Text>
                 <Text>{category}</Text>
               </Box>
               <Box flexDirection="row">
-                <Text color="green">Publisher Name: </Text>
+                <Text color="green">{t('publisher-name')}</Text>
                 <Text>{publisher}</Text>
               </Box>
               <Box flexDirection="row">
-                <Text color="green">Publisher Email: </Text>
+                <Text color="green">{t('publisher-email')}</Text>
                 <Text>{email}</Text>
               </Box>
-              <Text bold>
-                Next Step: Enable the app from http://localhost:3000/settings/admin/apps as admin user (Email:
-                admin@example.com, Pass: ADMINadmin2022!)
-              </Text>
+              <Text bold>{t('next-step-enable-the-app-from-http-localhost-3000-settings-admin-apps-as-admin-user-email-admin-example-com-pass-adminadmin2022')}</Text>
             </Box>
           </Box>
         )}
-        <Text italic color="gray">
-          Note: You should not rename app directory manually. Use cli only to do that as it needs to be
-          updated in DB as well
-        </Text>
+        <Text italic color="gray">{t('note-you-should-not-rename-app-directory-manually-use-cli-only-to-do-that-as-it-needs-to-be-updated-in-db-as-well')}</Text>
       </Box>
     );
   }

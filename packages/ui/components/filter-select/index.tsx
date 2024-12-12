@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { classNames } from "@calcom/lib";
 import {
   Button,
@@ -42,6 +43,8 @@ export function FilterSelect({
   emptyText = "No results",
   testId,
 }: FilterSelectProps) {
+const { t } = useTranslation();
+
   const selectedOption = options.find((option) => option.value === selectedValue);
 
   return (
@@ -91,9 +94,7 @@ export function FilterSelect({
               <>
                 <CommandSeparator />
                 <CommandGroup>
-                  <CommandItem onSelect={() => onChange(null)} className="justify-center text-center">
-                    Clear filter
-                  </CommandItem>
+                  <CommandItem onSelect={() => onChange(null)} className="justify-center text-center">{t('clear-filter')}</CommandItem>
                 </CommandGroup>
               </>
             )}

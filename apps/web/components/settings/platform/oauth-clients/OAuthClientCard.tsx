@@ -1,3 +1,4 @@
+import { useTranslation, Trans } from "react-i18next";
 import { useRouter } from "next/navigation";
 import React from "react";
 
@@ -41,6 +42,8 @@ export const OAuthClientCard = ({
   areEmailsEnabled,
   organizationId,
 }: OAuthClientCardProps) => {
+const { t } = useTranslation();
+
   const router = useRouter();
 
   const clientPermissions = Object.values(PERMISSIONS_GROUPED_MAP).map((value, index) => {
@@ -74,8 +77,11 @@ export const OAuthClientCard = ({
       )}>
       <div className="flex flex-col gap-2">
         <div className="flex gap-1">
-          <p className="font-semibold">
-            Client name: <span className="font-normal">{name}</span>
+          <p className="font-semibold"><Trans
+i18nKey="client-name-fragment"
+values={{ _name_: <>{name}</> }}
+components={{"0": <span className="font-normal" />}}
+/>
           </p>
         </div>
         {!!logo && (
@@ -85,7 +91,7 @@ export const OAuthClientCard = ({
         )}
         <div className="flex flex-col gap-2">
           <div className="flex flex-row items-center gap-2">
-            <div className="font-semibold">Client Id:</div>
+            <div className="font-semibold">{t('client-id-label')}</div>
             <div>{id}</div>
             <Icon
               name="clipboard"
@@ -99,7 +105,7 @@ export const OAuthClientCard = ({
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <div className="font-semibold">Client Secret:</div>
+          <div className="font-semibold">{t('client-secret-label')}</div>
           <div className="flex items-center justify-center rounded-md">
             {[...new Array(20)].map((_, index) => (
               <Icon name="asterisk" key={`${index}asterisk`} className="h-2 w-2" />
@@ -117,7 +123,7 @@ export const OAuthClientCard = ({
         </div>
         <div className="flex flex-col gap-2">
           <div className="flex flex-row items-center gap-2">
-            <div className="font-semibold">Organization Id:</div>
+            <div className="font-semibold">{t('organization-id-label')}</div>
             <div>{organizationId}</div>
             <Icon
               name="clipboard"
@@ -131,30 +137,30 @@ export const OAuthClientCard = ({
           </div>
         </div>
         <div className="border-subtle flex text-sm">
-          <span className="font-semibold">Permissions: </span>
-          {permissions ? <div className="flex">{clientPermissions}</div> : <>&nbsp;Disabled</>}
+          <span className="font-semibold">{t('permissions-label')}</span>
+          {permissions ? <div className="flex">{clientPermissions}</div> : <>{t('disabled-label')}</>}
         </div>
         <div className="flex gap-1 text-sm">
-          <span className="font-semibold">Redirect uris: </span>
+          <span className="font-semibold">{t('redirect-uris-label')}</span>
           {redirectUris.map((item, index) => (redirectUris.length === index + 1 ? `${item}` : `${item}, `))}
         </div>
         {bookingRedirectUri && (
           <div className="flex gap-1 text-sm">
-            <span className="font-semibold">Booking redirect uri: </span> {bookingRedirectUri}
+            <span className="font-semibold">{t('booking-redirect-uri-label')}</span> {bookingRedirectUri}
           </div>
         )}
         {bookingRescheduleRedirectUri && (
           <div className="flex gap-1 text-sm">
-            <span className="font-semibold">Booking reschedule uri: </span> {bookingRescheduleRedirectUri}
+            <span className="font-semibold">{t('booking-reschedule-uri-label')}</span> {bookingRescheduleRedirectUri}
           </div>
         )}
         {bookingCancelRedirectUri && (
           <div className="flex gap-1 text-sm">
-            <span className="font-semibold">Booking cancel uri: </span> {bookingCancelRedirectUri}
+            <span className="font-semibold">{t('booking-cancel-uri-label')}</span> {bookingCancelRedirectUri}
           </div>
         )}
         <div className="flex gap-1 text-sm">
-          <span className="text-sm font-semibold">Emails enabled:</span> {areEmailsEnabled ? "Yes" : "No"}
+          <span className="text-sm font-semibold">{t('emails-enabled-label')}</span> {areEmailsEnabled ? "Yes" : "No"}
         </div>
       </div>
       <div className="flex items-start gap-4">
@@ -162,19 +168,13 @@ export const OAuthClientCard = ({
           color="primary"
           loading={isLoading}
           disabled={isLoading}
-          onClick={() => router.push(`/settings/platform/oauth-clients/${id}/edit/webhooks`)}>
-          Webhooks
-        </Button>
+          onClick={() => router.push(`/settings/platform/oauth-clients/${id}/edit/webhooks`)}>{t('webhooks-section')}</Button>
         <Button
           color="secondary"
           loading={isLoading}
           disabled={isLoading}
-          onClick={() => router.push(`/settings/platform/oauth-clients/${id}/edit`)}>
-          Edit
-        </Button>
-        <Button color="destructive" loading={isLoading} disabled={isLoading} onClick={() => onDelete(id)}>
-          Delete
-        </Button>
+          onClick={() => router.push(`/settings/platform/oauth-clients/${id}/edit`)}>{t('edit-button')}</Button>
+        <Button color="destructive" loading={isLoading} disabled={isLoading} onClick={() => onDelete(id)}>{t('delete-button')}</Button>
       </div>
     </div>
   );

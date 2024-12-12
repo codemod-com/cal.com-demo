@@ -1,0 +1,7 @@
+{
+  "duration-m": "{{duration}}m",
+  "empty-string": "\"\"",
+  "team-has-no-events": "Team has no Events",
+  "save": "Save",
+  "save-duplicate": "Save"
+}

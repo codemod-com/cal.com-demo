@@ -1,4 +1,6 @@
 "use client";
+import { useTranslation } from "react-i18next";
+
 
 import * as Popover from "@radix-ui/react-popover";
 import { useState } from "react";
@@ -18,6 +20,8 @@ export type ColorPickerProps = {
 };
 
 const ColorPicker = (props: ColorPickerProps) => {
+const { t } = useTranslation();
+
   const init = !isValidHexCode(props.defaultValue)
     ? fallBackHex(props.defaultValue, false)
     : props.defaultValue;
@@ -35,7 +39,7 @@ const ColorPicker = (props: ColorPickerProps) => {
           <Popover.Trigger asChild>
             <button
               className="h-5 w-5 rounded-sm"
-              aria-label="pick colors"
+              aria-label={t('pick-colors')}
               style={{ backgroundColor: color }}
             />
           </Popover.Trigger>
