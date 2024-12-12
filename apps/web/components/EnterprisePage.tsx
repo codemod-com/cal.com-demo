@@ -1,4 +1,6 @@
 "use client";
+import { useTranslation } from "react-i18next";
+
 
 import { ShellMain } from "@calcom/features/shell/Shell";
 import { UpgradeTip } from "@calcom/features/tips";
@@ -6,6 +8,8 @@ import { useLocale } from "@calcom/lib/hooks/useLocale";
 import { Button, ButtonGroup, Icon } from "@calcom/ui";
 
 export default function EnterprisePage() {
+const { t } = useTranslation();
+
   const { t } = useLocale();
 
   const features = [
@@ -61,7 +65,7 @@ export default function EnterprisePage() {
               </ButtonGroup>
             </div>
           }>
-          <>Create Org</>
+          <>{t('create-org')}</>
         </UpgradeTip>
       </ShellMain>
     </div>

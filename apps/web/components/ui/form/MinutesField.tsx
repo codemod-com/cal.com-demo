@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import classNames from "classnames";
 import type { InputHTMLAttributes, ReactNode } from "react";
 import React, { forwardRef } from "react";
@@ -7,6 +8,8 @@ type Props = InputHTMLAttributes<HTMLInputElement> & {
 };
 
 const MinutesField = forwardRef<HTMLInputElement, Props>(({ label, ...rest }, ref) => {
+const { t } = useTranslation();
+
   return (
     <div className="block sm:flex">
       {!!label && (
@@ -28,9 +31,7 @@ const MinutesField = forwardRef<HTMLInputElement, Props>(({ label, ...rest }, re
             )}
           />
           <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-            <span className="text-subtle text-sm" id="duration">
-              mins
-            </span>
+            <span className="text-subtle text-sm" id="duration">{t('mins')}</span>
           </div>
         </div>
       </div>

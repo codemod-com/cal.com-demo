@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { EmptyScreen } from "@calcom/ui";
 
 import type { ManagedUser } from "@lib/hooks/settings/platform/oauth-clients/useOAuthClients";
@@ -13,6 +14,8 @@ export const ManagedUserTable = ({
   isManagedUserLoading,
   initialClientId,
 }: ManagedUserTableProps) => {
+const { t } = useTranslation();
+
   const showUsers = !isManagedUserLoading && managedUsers?.length;
 
   return (
@@ -22,9 +25,9 @@ export const ManagedUserTable = ({
           <table className="w-[100%] rounded-lg">
             <colgroup className="border-subtle overflow-hidden rounded-b-lg border border-b-0" span={3} />
             <tr>
-              <td className="border-subtle border px-4 py-3 md:text-center">Id</td>
-              <td className="border-subtle border px-4 py-3 md:text-center">Username</td>
-              <td className="border-subtle border px-4 py-3 md:text-center">Email</td>
+              <td className="border-subtle border px-4 py-3 md:text-center">{t('id')}</td>
+              <td className="border-subtle border px-4 py-3 md:text-center">{t('username')}</td>
+              <td className="border-subtle border px-4 py-3 md:text-center">{t('email')}</td>
             </tr>
             {managedUsers.map((user) => {
               return (

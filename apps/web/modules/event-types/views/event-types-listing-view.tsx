@@ -1,4 +1,6 @@
 "use client";
+import { useTranslation } from "react-i18next";
+
 
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { Trans } from "next-i18next";
@@ -254,6 +256,8 @@ export const InfiniteEventTypeList = ({
   isPending,
   debouncedSearchTerm,
 }: InfiniteEventTypeListProps): JSX.Element => {
+const { t } = useTranslation();
+
   const { t } = useLocale();
   const router = useRouter();
   const pathname = usePathname();
@@ -810,10 +814,8 @@ export const InfiniteEventTypeList = ({
               i18nKey={`delete${isManagedEventPrefix()}_event_type_description`}
               components={{ li: <li />, ul: <ul className="ml-4 list-disc" /> }}>
               <ul>
-                <li>Members assigned to this event type will also have their event types deleted.</li>
-                <li>
-                  Anyone who they&apos;ve shared their link with will no longer be able to book using it.
-                </li>
+                <li>{t('members-assigned-to-this-event-type-will-also-have-their-event-types-deleted')}</li>
+                <li>{t('anyone-who-theyve-shared-their-link-with-will-no-longer-be-able-to-book-using-it')}</li>
               </ul>
             </Trans>
           </p>
@@ -898,12 +900,14 @@ const InfiniteScrollMain = ({
   eventTypeGroups: GetUserEventGroupsResponse["eventTypeGroups"] | undefined;
   profiles: GetUserEventGroupsResponse["profiles"] | undefined;
 }) => {
+const { t } = useTranslation();
+
   const searchParams = useCompatSearchParams();
   const { data } = useTypedQuery(querySchema);
   const orgBranding = useOrgBranding();
 
   if (status === "error") {
-    return <Alert severity="error" title="Something went wrong" message={errorMessage} />;
+    return <Alert severity="error" title={t('something-went-wrong')} message={errorMessage} />;
   }
 
   if (!eventTypeGroups || !profiles || status === "pending") {
@@ -950,6 +954,8 @@ const EventTypesPage: React.FC & {
   PageWrapper?: AppProps["Component"]["PageWrapper"];
   getLayout?: AppProps["Component"]["getLayout"];
 } = () => {
+const { t } = useTranslation();
+
   const { t } = useLocale();
   const searchParams = useCompatSearchParams();
   const { open } = useIntercom();
@@ -1017,8 +1023,8 @@ const EventTypesPage: React.FC & {
       subtitle={t("event_types_page_subtitle")}
       CTA={<CTA profileOptions={profileOptions} isOrganization={!!user?.organizationId} />}>
       <HeadSeo
-        title="Event Types"
-        description="Create events to share for people to book on your calendar."
+        title={t('event-types')}
+        description={t('create-events-to-share-for-people-to-book-on-your-calendar')}
       />
 
       <InfiniteScrollMain

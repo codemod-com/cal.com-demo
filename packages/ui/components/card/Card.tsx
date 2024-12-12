@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 // @TODO: turn this into a more generic component that has the same Props API as MUI https://mui.com/material-ui/react-card/
 import type { VariantProps } from "class-variance-authority";
 import { cva } from "class-variance-authority";
@@ -131,6 +132,8 @@ export function Card({
   thumbnailUrl,
   learnMore,
 }: BaseCardProps) {
+const { t } = useTranslation();
+
   const LinkComponent = learnMore && learnMore.href.startsWith("https") ? "a" : Link;
   return (
     <div
@@ -198,7 +201,7 @@ export function Card({
               strokeLinejoin="round"
             />
           </svg>
-          <img alt="play feature video" src={thumbnailUrl} />
+          <img alt={t('play-feature-video')} src={thumbnailUrl} />
         </a>
       )}
 

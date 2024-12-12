@@ -1,3 +1,4 @@
+import { useTranslation, Trans } from "react-i18next";
 import { Button } from "@calcom/ui";
 
 type PlatformBillingCardProps = {
@@ -19,6 +20,8 @@ export const PlatformBillingCard = ({
   handleSubscribe,
   currentPlan,
 }: PlatformBillingCardProps) => {
+const { t } = useTranslation();
+
   return (
     <div className="border-subtle max-w-[450px] rounded-2xl border p-5 md:mx-4">
       <div className="pb-5">
@@ -38,8 +41,11 @@ export const PlatformBillingCard = ({
         <p className="pb-5 pt-3 text-base">{description}</p>
         <h1 className="text-3xl font-semibold">
           {pricing !== undefined && (
-            <>
-              US${pricing} <span className="text-sm">per month</span>
+            <><Trans
+i18nKey="us-pricing-per-month"
+values={{ pricing }}
+components={{"0": <span className="text-sm" />}}
+/>
             </>
           )}
         </h1>
@@ -55,7 +61,7 @@ export const PlatformBillingCard = ({
         </div>
       )}
       <div className="mt-5">
-        <p>This includes:</p>
+        <p>{t('this-includes')}</p>
         {includes.map((feature) => {
           return (
             <div key={feature} className="my-2 flex">

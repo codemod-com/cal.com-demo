@@ -1,4 +1,6 @@
 "use client";
+import { useTranslation } from "react-i18next";
+
 
 import { usePathname } from "next/navigation";
 
@@ -15,6 +17,8 @@ import { useGetUserAttributes } from "@components/settings/platform/hooks/useGet
 import { CtaRow } from "~/settings/billing/billing-view";
 
 export default function PlatformBillingUpgrade() {
+const { t } = useTranslation();
+
   const pathname = usePathname();
   const { t } = useLocale();
   const { open } = useIntercom();
@@ -28,7 +32,7 @@ export default function PlatformBillingUpgrade() {
     useGetUserAttributes();
 
   if (isUserLoading || (isUserBillingDataLoading && !userBillingData)) {
-    return <div className="m-5">Loading...</div>;
+    return <div className="m-5">{t('loading')}</div>;
   }
 
   if (isPlatformUser && !isPaidUser)
@@ -37,7 +41,7 @@ export default function PlatformBillingUpgrade() {
         teamId={userOrgId}
         heading={
           <div className="mb-5 text-center text-2xl font-semibold">
-            <h1>Subscribe to Platform</h1>
+            <h1>{t('subscribe-to-platform')}</h1>
           </div>
         }
       />
@@ -76,9 +80,7 @@ export default function PlatformBillingUpgrade() {
             <CtaRow
               title="Change plan"
               description={t("Want to change your existing plan or check out other plans?")}>
-              <Button href="/settings/platform/plans" color="secondary">
-                Plans
-              </Button>
+              <Button href="/settings/platform/plans" color="secondary">{t('plans')}</Button>
             </CtaRow>
 
             <hr className="border-subtle" />

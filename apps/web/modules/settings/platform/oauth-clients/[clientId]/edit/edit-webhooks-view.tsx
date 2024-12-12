@@ -1,4 +1,6 @@
 "use client";
+import { useTranslation } from "react-i18next";
+
 
 import { useParams } from "next/navigation";
 import { useRouter } from "next/navigation";
@@ -19,6 +21,8 @@ import NoPlatformPlan from "@components/settings/platform/dashboard/NoPlatformPl
 import { useGetUserAttributes } from "@components/settings/platform/hooks/useGetUserAttributes";
 
 export default function EditOAuthClientWebhooks() {
+const { t } = useTranslation();
+
   const { t } = useLocale();
   const router = useRouter();
   const params = useParams<{ clientId: string }>();
@@ -37,7 +41,7 @@ export default function EditOAuthClientWebhooks() {
   const { mutateAsync: createWebhook } = useCreateOAuthClientWebhook(clientId);
   const { mutateAsync: updateWebhook } = useUpdateOAuthClientWebhook(clientId);
 
-  if (isUserLoading) return <div className="m-5">Loading...</div>;
+  if (isUserLoading) return <div className="m-5">{t('loading')}</div>;
 
   if (isPlatformUser && isPaidUser) {
     return (
@@ -55,7 +59,7 @@ export default function EditOAuthClientWebhooks() {
               </div>
             </div>
 
-            {webhooksStatus !== "success" && <p>Error while trying to access webhooks.</p>}
+            {webhooksStatus !== "success" && <p>{t('error-while-trying-to-access-webhooks')}</p>}
 
             {isWebhooksFetched && webhooksStatus === "success" && (
               <WebhookForm

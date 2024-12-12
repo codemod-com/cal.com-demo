@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import React from "react";
 import { useFormContext } from "react-hook-form";
 
@@ -5,6 +6,8 @@ import { useLocale } from "@calcom/lib/hooks/useLocale";
 import { Label, TextField } from "@calcom/ui";
 
 export default function TwoFactor({ center = true }) {
+const { t } = useTranslation();
+
   const { t } = useLocale();
   const methods = useFormContext();
 
@@ -16,9 +19,9 @@ export default function TwoFactor({ center = true }) {
 
       <TextField
         id="backup-code"
-        label=""
+        label={t('empty-string-key')}
         defaultValue=""
-        placeholder="XXXXX-XXXXX"
+        placeholder={t('xxxxx-xxxxx-key')}
         minLength={10} // without dash
         maxLength={11} // with dash
         required
