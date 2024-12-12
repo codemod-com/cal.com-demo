@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import type { CSSProperties } from "react";
 
 import { BASE_URL, IS_PRODUCTION } from "@calcom/lib/constants";
@@ -29,6 +30,8 @@ export const getHeadImage = (headerType: BodyHeadType): string => {
 };
 
 const EmailSchedulingBodyHeader = (props: { headerType: BodyHeadType; headStyles?: CSSProperties }) => {
+const { t } = useTranslation();
+
   const image = getHeadImage(props.headerType);
 
   return (
@@ -57,7 +60,7 @@ const EmailSchedulingBodyHeader = (props: { headerType: BodyHeadType; headStyles
                   fontSize: "13px",
                 }}
                 width="64"
-                alt=""
+                alt={t('empty-string')}
               />
             </td>
           </Row>

@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import classNames from "classnames";
 // eslint-disable-next-line no-restricted-imports
 import { noop } from "lodash";
@@ -48,6 +49,8 @@ const obtainNewUsernameChangeCondition = ({
 };
 
 const PremiumTextfield = (props: ICustomUsernameProps) => {
+const { t } = useTranslation();
+
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
@@ -176,16 +179,13 @@ const PremiumTextfield = (props: ICustomUsernameProps) => {
   };
 
   let paymentMsg = !currentUsername ? (
-    <span className="text-xs text-orange-400">
-      You need to reserve your premium username for {getPremiumPlanPriceValue()}
+    <span className="text-xs text-orange-400">{t('you-need-to-reserve-your-premium-username-for')}{getPremiumPlanPriceValue()}
     </span>
   ) : null;
 
   if (recentAttemptPaymentStatus && recentAttemptPaymentStatus !== "paid") {
     paymentMsg = (
-      <span className="text-sm text-red-500">
-        Your payment could not be completed. Your username is still not reserved
-      </span>
+      <span className="text-sm text-red-500">{t('your-payment-could-not-be-completed-your-username-is-still-not-reserved')}</span>
     );
   }
 

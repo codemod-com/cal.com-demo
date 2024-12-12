@@ -1,0 +1,7 @@
+{
+  "loading": "Loading...",
+  "error-while-trying-to-access-webhooks": "Error while trying to access webhooks.",
+  "oauth-client-not-found": "OAuth Client not found.",
+  "loading-duplicate": "Loading...",
+  "something-went-wrong": "Something went wrong."
+}

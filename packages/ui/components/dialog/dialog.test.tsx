@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { render, screen } from "@testing-library/react";
 import { vi } from "vitest";
 
@@ -36,15 +37,17 @@ const DialogComponent = (props: {
   showDivider?: boolean;
   color?: "primary" | "secondary" | "minimal" | "destructive";
 }) => {
+const { t } = useTranslation();
+
   return (
     <Dialog open={props.open}>
       <DialogContent type={props.type}>
         <div className="flex flex-row justify-center align-middle ">
           <DialogHeader title={props.title} subtitle={props.subtitle} />
-          <p>Dialog Content</p>
+          <p>{t('dialog-content')}</p>
           <DialogFooter showDivider={props.showDivider}>
             <DialogClose color={props.color} />
-            <p>Dialog Footer</p>
+            <p>{t('dialog-footer')}</p>
           </DialogFooter>
         </div>
       </DialogContent>

@@ -1,4 +1,6 @@
 "use client";
+import { useTranslation } from "react-i18next";
+
 
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
@@ -23,6 +25,8 @@ import { PlatformPricing } from "@components/settings/platform/pricing/platform-
 const queryClient = new QueryClient();
 
 export default function Platform() {
+const { t } = useTranslation();
+
   const { t } = useLocale();
   const [initialClientId, setInitialClientId] = useState("");
   const [initialClientName, setInitialClientName] = useState("");
@@ -54,10 +58,10 @@ export default function Platform() {
     setInitialClientName(data[0]?.name);
   }, [data]);
 
-  if (isUserLoading || isOAuthClientLoading) return <div className="m-5">Loading...</div>;
+  if (isUserLoading || isOAuthClientLoading) return <div className="m-5">{t('loading-0')}</div>;
 
   if (isUserBillingDataLoading && !userBillingData) {
-    return <div className="m-5">Loading...</div>;
+    return <div className="m-5">{t('loading-1')}</div>;
   }
 
   if (isPlatformUser && !isPaidUser)
@@ -66,7 +70,7 @@ export default function Platform() {
         teamId={userOrgId}
         heading={
           <div className="mb-5 text-center text-2xl font-semibold">
-            <h1>Subscribe to Platform</h1>
+            <h1>{t('subscribe-to-platform')}</h1>
           </div>
         }
       />

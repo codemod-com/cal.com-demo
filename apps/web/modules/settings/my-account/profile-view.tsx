@@ -1,4 +1,6 @@
 "use client";
+import { useTranslation } from "react-i18next";
+
 
 import { zodResolver } from "@hookform/resolvers/zod";
 // eslint-disable-next-line no-restricted-imports
@@ -90,6 +92,8 @@ export type FormValues = {
 };
 
 const ProfileView = () => {
+const { t } = useTranslation();
+
   const { t } = useLocale();
   const utils = trpc.useUtils();
   const { update } = useSession();
@@ -344,7 +348,7 @@ const ProfileView = () => {
                   id="password"
                   autoComplete="current-password"
                   required
-                  label="Password"
+                  label={t('password')}
                   ref={passwordRef}
                 />
               )}
@@ -398,7 +402,7 @@ const ProfileView = () => {
               id="password"
               autoComplete="current-password"
               required
-              label="Password"
+              label={t('password-duplicate')}
               ref={passwordRef}
             />
 
@@ -512,6 +516,8 @@ const ProfileForm = ({
   userOrganization: RouterOutputs["viewer"]["me"]["organization"];
   isCALIdentityProvider: boolean;
 }) => {
+const { t } = useTranslation();
+
   const { t } = useLocale();
   const [firstRender, setFirstRender] = useState(true);
 
@@ -728,7 +734,7 @@ const ProfileForm = ({
         so essentially there is no point in allowing them to disconnect, since when they log in they will get logged into the same account */}
         {!isCALIdentityProvider && user.email !== user.identityProviderEmail && (
           <div className="mt-6">
-            <Label>Connected accounts</Label>
+            <Label>{t('connected-accounts')}</Label>
             <div className="flex items-center">
               <span className="text-default text-sm capitalize">{user.identityProvider.toLowerCase()}</span>
               {user.identityProviderEmail && (
