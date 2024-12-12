@@ -1,6 +1,9 @@
+import { useTranslation } from "react-i18next";
 import React, { forwardRef } from "react";
 
 export const SatSymbol = forwardRef<SVGSVGElement, React.SVGProps<SVGSVGElement>>(function SatSymbol(props) {
+const { t } = useTranslation();
+
   return (
     <svg
       className={props.className}
@@ -8,7 +11,7 @@ export const SatSymbol = forwardRef<SVGSVGElement, React.SVGProps<SVGSVGElement>
       data-name="Layer 1"
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 360 360">
-      <title>Satoshis</title>
+      <title>{t('satoshis')}</title>
 
       <rect
         fill="currentColor"

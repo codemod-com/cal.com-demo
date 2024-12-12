@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Navbar } from "@/components/Navbar";
 import { Inter } from "next/font/google";
 // eslint-disable-next-line @calcom/eslint/deprecated-imports-next-router
@@ -9,6 +10,8 @@ import { Booker, useEventTypes, useTeamEventTypes, useTeams } from "@calcom/atom
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Bookings(props: { calUsername: string; calEmail: string }) {
+const { t } = useTranslation();
+
   const [bookingTitle, setBookingTitle] = useState<string | null>(null);
   const [eventTypeSlug, setEventTypeSlug] = useState<string | null>(null);
   const [eventTypeDuration, setEventTypeDuration] = useState<number | null>(null);
@@ -25,13 +28,13 @@ export default function Bookings(props: { calUsername: string; calEmail: string 
       className={`flex min-h-screen flex-col ${inter.className} main text-default flex min-h-full w-full flex-col items-center overflow-visible`}>
       <Navbar username={props.calUsername} />
       <div>
-        <h1 className="mx-10 my-4 text-2xl font-semibold">{props.calUsername} Public Booking Page</h1>
+        <h1 className="mx-10 my-4 text-2xl font-semibold">{props.calUsername}{t('public-booking-page')}</h1>
 
-        {isLoadingEvents && !eventTypeSlug && <p>Loading...</p>}
+        {isLoadingEvents && !eventTypeSlug && <p>{t('loading')}</p>}
 
         {!isLoadingEvents && !eventTypeSlug && Boolean(eventTypes?.length) && !rescheduleUid && (
           <div className="flex flex-col gap-4">
-            <h1>User event types</h1>
+            <h1>{t('user-event-types')}</h1>
             {eventTypes?.map(
               (event: { id: number; slug: string; title: string; lengthInMinutes: number }) => {
                 const formatEventSlug = event.slug
@@ -60,7 +63,7 @@ export default function Bookings(props: { calUsername: string; calEmail: string 
 
         {!isLoadingTeamEvents && !eventTypeSlug && Boolean(teamEventTypes?.length) && !rescheduleUid && (
           <div className="flex flex-col gap-4">
-            <h1>Team event types</h1>
+            <h1>{t('team-event-types')}</h1>
             {teamEventTypes?.map(
               (event: { id: number; slug: string; title: string; lengthInMinutes: number }) => {
                 const formatEventSlug = event.slug
@@ -132,7 +135,7 @@ export default function Bookings(props: { calUsername: string; calEmail: string 
             duration={eventTypeDuration}
           />
         )}
-        {bookingTitle && <p>Booking created: {bookingTitle}</p>}
+        {bookingTitle && <p>{t('booking-created-{booking-title}', { bookingTitle })}</p>}
       </div>
     </main>
   );

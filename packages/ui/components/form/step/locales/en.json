@@ -1,0 +1,3 @@
+{
+  "step-{current-step}-of-{steps}": "Step{{currentStep}}of{{steps}}"
+}

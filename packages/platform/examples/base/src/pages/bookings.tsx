@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Navbar } from "@/components/Navbar";
 import { Inter } from "next/font/google";
 // eslint-disable-next-line @calcom/eslint/deprecated-imports-next-router
@@ -9,6 +10,8 @@ import dayjs from "@calcom/dayjs";
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Bookings(props: { calUsername: string; calEmail: string }) {
+const { t } = useTranslation();
+
   const { isLoading: isLoadingUpcomingBookings, data: upcomingBookings } = useBookings({
     take: 50,
     skip: 0,
@@ -27,8 +30,8 @@ export default function Bookings(props: { calUsername: string; calEmail: string 
     <main
       className={`flex min-h-screen flex-col ${inter.className} main text-default flex min-h-full w-full flex-col items-center overflow-visible`}>
       <Navbar username={props.calUsername} />
-      <h1 className="my-4 text-2xl font-semibold">{props.calUsername} Bookings</h1>
-      {isLoading && <p>Loading...</p>}
+      <h1 className="my-4 text-2xl font-semibold">{props.calUsername}{t('bookings')}</h1>
+      {isLoading && <p>{t('loading')}</p>}
       {!isLoading &&
         pastBookings &&
         upcomingBookings &&
@@ -64,7 +67,7 @@ export default function Bookings(props: { calUsername: string; calEmail: string 
                 </div>
                 <div className="px-6">
                   <p>
-                    {booking?.hosts?.[0]?.name} and {booking.attendees[0].name}
+                    {booking?.hosts?.[0]?.name}{t('and')}{booking.attendees[0].name}
                   </p>{" "}
                   <p />
                 </div>

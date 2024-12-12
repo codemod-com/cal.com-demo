@@ -1,4 +1,6 @@
 "use client";
+import { useTranslation } from "react-i18next";
+
 
 import { useParams } from "next/navigation";
 import { useRouter } from "next/navigation";
@@ -31,6 +33,8 @@ import {
 } from "../../../../../../../../packages/platform/utils/permissions";
 
 export default function EditOAuthClient() {
+const { t } = useTranslation();
+
   const { t } = useLocale();
   const router = useRouter();
   const params = useParams<{ clientId: string }>();
@@ -75,7 +79,7 @@ export default function EditOAuthClient() {
     });
   };
 
-  if (isUserLoading) return <div className="m-5">Loading...</div>;
+  if (isUserLoading) return <div className="m-5">{t('loading')}</div>;
 
   if (isPlatformUser && isPaidUser) {
     return (
@@ -92,7 +96,7 @@ export default function EditOAuthClient() {
                 </p>
               </div>
             </div>
-            {(!Boolean(clientId) || (isFetched && !data)) && <p>OAuth Client not found.</p>}
+            {(!Boolean(clientId) || (isFetched && !data)) && <p>{t('oauth-client-not-found')}</p>}
             {isFetched && !!data && (
               <EditOAuthClientForm
                 defaultValues={{
@@ -117,8 +121,8 @@ export default function EditOAuthClient() {
                 isPending={isUpdating}
               />
             )}
-            {isFetching && <p>Loading...</p>}
-            {isError && <p>Something went wrong.</p>}
+            {isFetching && <p>{t('loading-duplicate')}</p>}
+            {isError && <p>{t('something-went-wrong')}</p>}
           </div>
         </Shell>
       </div>

@@ -1,0 +1,8 @@
+{
+  "duration-m": "{{duration}}m",
+  "empty-string": "\"\"",
+  "team-has-no-events": "Team has no Events",
+  "save-fragment-1": "Save",
+  "empty-fragment": "\"\"",
+  "save-fragment-2": "Save"
+}

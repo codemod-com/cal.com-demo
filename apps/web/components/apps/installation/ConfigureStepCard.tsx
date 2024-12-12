@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { Dispatch, SetStateAction } from "react";
 import type { FC } from "react";
@@ -60,6 +61,8 @@ type TUpdatedEventTypesStatus = { id: number; updated: boolean }[][];
 
 const EventTypeAppSettingsForm = forwardRef<HTMLButtonElement, EventTypeAppSettingsFormProps>(
   function EventTypeAppSettingsForm(props, ref) {
+const { t } = useTranslation();
+
     const { handleDelete, onSubmit, eventType, loading, isConferencing } = props;
     const { t } = useLocale();
 
@@ -107,9 +110,7 @@ const EventTypeAppSettingsForm = forwardRef<HTMLButtonElement, EventTypeAppSetti
               className="absolute right-4 top-4 h-4 w-4 cursor-pointer"
               onClick={() => !loading && handleDelete()}
             />
-            <button type="submit" className="hidden" form={`eventtype-${eventType.id}`} ref={ref}>
-              Save
-            </button>
+            <button type="submit" className="hidden" form={`eventtype-${eventType.id}`} ref={ref}>{t('save-fragment-1')}</button>
           </div>
         </div>
       </Form>
@@ -186,6 +187,8 @@ const EventTypeGroup = ({
 };
 
 export const ConfigureStepCard: FC<ConfigureStepCardProps> = (props) => {
+const { t } = useTranslation();
+
   const { loading, formPortalRef, handleSetUpLater } = props;
   const { t } = useLocale();
   const { control, watch } = useFormContext<TEventTypesForm>();
@@ -222,12 +225,15 @@ export const ConfigureStepCard: FC<ConfigureStepCardProps> = (props) => {
     formPortalRef?.current &&
     createPortal(
       <div className="mt-8">
-        {fields.map((group, groupIndex) => (
+        {fields.map((group, groupIndex) =>  {
+const { t } = useTranslation();
+
+return (
           <div key={group.fieldId}>
             {eventTypeGroups[groupIndex].eventTypes.some((eventType) => eventType.selected === true) && (
               <div className="mb-2 mt-4 flex items-center">
                 <Avatar
-                  alt=""
+                  alt={t('empty-fragment')}
                   imageSrc={group.image} // if no image, use default avatar
                   size="md"
                   className="inline-flex justify-center"
@@ -242,10 +248,9 @@ export const ConfigureStepCard: FC<ConfigureStepCardProps> = (props) => {
               {...props}
             />
           </div>
-        ))}
-        <button form="outer-event-type-form" type="submit" className="hidden" ref={mainForSubmitRef}>
-          Save
-        </button>
+        )
+})}
+        <button form="outer-event-type-form" type="submit" className="hidden" ref={mainForSubmitRef}>{t('save-fragment-2')}</button>
         <Button
           className="text-md mt-6 w-full justify-center"
           type="button"

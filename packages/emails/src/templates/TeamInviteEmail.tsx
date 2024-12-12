@@ -1,3 +1,4 @@
+import { useTranslation, Trans } from "react-i18next";
 import type { TFunction } from "next-i18next";
 import { Trans } from "next-i18next";
 
@@ -24,6 +25,8 @@ type TeamInvite = {
 export const TeamInviteEmail = (
   props: TeamInvite & Partial<React.ComponentProps<typeof V2BaseEmailHtml>>
 ) => {
+const { t } = useTranslation();
+
   const typeOfInvite = getTypeOfInvite(props);
 
   const heading = getHeading();
@@ -46,7 +49,7 @@ export const TeamInviteEmail = (
             ? `${WEBAPP_URL}/emails/calendar-email-hero.png`
             : "http://localhost:3000/emails/calendar-email-hero.png"
         }
-        alt=""
+        alt={t('empty-string')}
       />
       <p
         style={{
@@ -157,49 +160,52 @@ export const TeamInviteEmail = (
           <>
             {autoJoinType == "added" ? (
               <>
-                <Trans i18nKey="email_team_invite|content|added_to_org">
-                  {invitedBy} has added you to the <strong>{teamName}</strong> organization.
-                </Trans>{" "}
+                <Trans i18nKey="email_team_invite|content|added_to_org"><Trans
+i18nKey="invited-by-added-to-team-organization"
+values={{ invitedBy, _teamName_: <>{teamName}</> }}
+components={{"0": <strong />}}
+/></Trans>{" "}
                 <Trans
                   i18nKey="email_team_invite|content_addition|existing_user_added"
-                  values={{ prevLink: props.prevLink, newLink: props.newLink, teamName: props.teamName }}>
-                  Your link has been changed from <a href={prevLink ?? ""}>{prevLinkWithoutProtocol}</a> to{" "}
-                  <a href={newLink ?? ""}>{newLinkWithoutProtocol}</a> but don&apos;t worry, all previous
-                  links still work and redirect appropriately.
-                  <br />
-                  <br />
-                  Please note: All of your personal event types have been moved into the{" "}
-                  <strong>{teamName}</strong> organisation, which may also include potential personal link.
-                  <br />
-                  <br />
-                  Please log in and make sure you have no private events on your new organisational account.
-                  <br />
-                  <br />
-                  For personal events we recommend creating a new account with a personal email address.
-                  <br />
-                  <br />
-                  Enjoy your new clean link:{" "}
-                  <a href={`${newLink}?orgRedirection=true`}>{newLinkWithoutProtocol}</a>
+                  values={{ prevLink: props.prevLink, newLink: props.newLink, teamName: props.teamName }}><Trans
+i18nKey="link-changed-from-to"
+values={{ _prevLinkWithoutProtocol_: <>{prevLinkWithoutProtocol}</>, _newLinkWithoutProtocol_: <>{newLinkWithoutProtocol}</> }}
+components={{"0": <a href={prevLink ?? ""} />, "1": 
+                  <a href={newLink ?? ""} />}}
+/><br />
+                  <br /><Trans
+i18nKey="personal-event-types-moved-to-organization"
+values={{ _teamName_: <>{teamName}</> }}
+components={{"0": 
+                  <strong />}}
+/><br />
+                  <br />{t('log-in-check-private-events')}<br />
+                  <br />{t('recommend-creating-new-account')}<br />
+                  <br /><Trans
+i18nKey="enjoy-new-clean-link"
+values={{ _newLinkWithoutProtocol_: <>{newLinkWithoutProtocol}</> }}
+components={{"0": 
+                  <a href={`${newLink}?orgRedirection=true`} />}}
+/>
                 </Trans>
               </>
             ) : (
               <>
-                <Trans i18nKey="email_team_invite|content|invited_to_org">
-                  {invitedBy} has invited you to join the <strong>{teamName}</strong> organization.
-                </Trans>{" "}
+                <Trans i18nKey="email_team_invite|content|invited_to_org"><Trans
+i18nKey="invited-by-invited-to-join-organization"
+values={{ invitedBy, _teamName_: <>{teamName}</> }}
+components={{"0": <strong />}}
+/></Trans>{" "}
                 <Trans
                   i18nKey="existing_user_added_link_will_change"
-                  values={{ prevLink: props.prevLink, newLink: props.newLink, teamName: props.teamName }}>
-                  On accepting the invite, your link will change to your organization domain but don&apos;t
-                  worry, all previous links will still work and redirect appropriately.
-                  <br />
-                  <br />
-                  Please note: All of your personal event types will be moved into the{" "}
-                  <strong>{teamName}</strong> organisation, which may also include potential personal link.
-                  <br />
-                  <br />
-                  For personal events we recommend creating a new account with a personal email address.
-                </Trans>
+                  values={{ prevLink: props.prevLink, newLink: props.newLink, teamName: props.teamName }}>{t('accepting-invite-link-change')}<br />
+                  <br /><Trans
+i18nKey="personal-event-types-will-be-moved"
+values={{ _teamName_: <>{teamName}</> }}
+components={{"0": 
+                  <strong />}}
+/><br />
+                  <br />{t('recommend-creating-new-account-again')}</Trans>
               </>
             )}
           </>
@@ -208,18 +214,19 @@ export const TeamInviteEmail = (
       return (
         <>
           {autoJoinType === "added" ? (
-            <Trans i18nKey="email_team_invite|content|added_to_org">
-              {invitedBy} has added you to the <strong>{teamName}</strong> organization.
-            </Trans>
+            <Trans i18nKey="email_team_invite|content|added_to_org"><Trans
+i18nKey="invited-by-added-to-team-organization-again"
+values={{ invitedBy, _teamName_: <>{teamName}</> }}
+components={{"0": <strong />}}
+/></Trans>
           ) : (
-            <Trans i18nKey="email_team_invite|content|invited_to_org">
-              {invitedBy} has invited you to join the <strong>{teamName}</strong> organization.
-            </Trans>
+            <Trans i18nKey="email_team_invite|content|invited_to_org"><Trans
+i18nKey="invited-by-invited-to-team-organization"
+values={{ invitedBy, _teamName_: <>{teamName}</> }}
+components={{"0": <strong />}}
+/></Trans>
           )}{" "}
-          <Trans>
-            {appName} is the event-juggling scheduler that enables you and your team to schedule meetings
-            without the email tennis.
-          </Trans>
+          <Trans>{t('app-name-event-juggling-scheduler', { appName })}</Trans>
         </>
       );
     }
@@ -228,20 +235,21 @@ export const TeamInviteEmail = (
       return (
         <>
           {autoJoinType === "added" ? (
-            <Trans i18nKey="email_team_invite|content|added_to_subteam">
-              {invitedBy} has added you to the team <strong>{teamName}</strong> in their organization{" "}
-              <strong>{parentTeamName}</strong>.
-            </Trans>
+            <Trans i18nKey="email_team_invite|content|added_to_subteam"><Trans
+i18nKey="invited-by-added-to-team-in-parent-organization"
+values={{ invitedBy, _teamName_: <>{teamName}</>, _parentTeamName_: <>{parentTeamName}</> }}
+components={{"0": <strong />, "1": 
+              <strong />}}
+/></Trans>
           ) : (
-            <Trans i18nKey="email_team_invite|content|invited_to_subteam">
-              {invitedBy} has invited you to the team <strong>{teamName}</strong> in their organization{" "}
-              <strong>{parentTeamName}</strong>.
-            </Trans>
+            <Trans i18nKey="email_team_invite|content|invited_to_subteam"><Trans
+i18nKey="invited-by-invited-to-team-in-parent-organization"
+values={{ invitedBy, _teamName_: <>{teamName}</>, _parentTeamName_: <>{parentTeamName}</> }}
+components={{"0": <strong />, "1": 
+              <strong />}}
+/></Trans>
           )}{" "}
-          <Trans>
-            {appName} is the event-juggling scheduler that enables you and your team to schedule meetings
-            without the email tennis.
-          </Trans>
+          <Trans>{t('app-name-event-juggling-scheduler-again', { appName })}</Trans>
         </>
       );
     }

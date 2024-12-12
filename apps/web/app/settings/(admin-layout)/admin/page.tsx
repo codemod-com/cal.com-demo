@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { _generateMetadata } from "app/_utils";
 
 export const generateMetadata = async () =>
@@ -6,5 +7,9 @@ export const generateMetadata = async () =>
     () => ""
   );
 
-const Page = () => <h1>Admin index</h1>;
+const Page = () =>  {
+const { t } = useTranslation();
+
+return <h1>{t('admin-index')}</h1>
+};
 export default Page;
