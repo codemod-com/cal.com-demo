@@ -1,4 +1,8 @@
 "use client";
+import { I18nextProvider } from "react-i18next";
+
+import { i18n } from "./i18n";
+
 
 // eslint-disable-next-line no-restricted-imports
 import { noop } from "lodash";
@@ -31,7 +35,8 @@ export function WizardLayout({
   }, [pathname]);
 
   return (
-    <div
+    <I18nextProvider i18n={i18n}>
+<div
       className="dark:bg-brand dark:text-brand-contrast text-emphasis min-h-screen"
       data-testid="onboarding">
       <div>
@@ -70,6 +75,7 @@ export function WizardLayout({
         )}
       </div>
     </div>
+</I18nextProvider>
   );
 }
 
