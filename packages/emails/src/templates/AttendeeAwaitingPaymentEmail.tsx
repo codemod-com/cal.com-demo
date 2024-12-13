@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { CallToAction, CallToActionTable } from "../components";
 import { AttendeeScheduledEmail } from "./AttendeeScheduledEmail";
 
@@ -14,9 +15,11 @@ function ManageLink(props: React.ComponentProps<typeof AttendeeScheduledEmail>) 
 }
 
 export const AttendeeAwaitingPaymentEmail = (props: React.ComponentProps<typeof AttendeeScheduledEmail>) => {
+const { t } = useTranslation("../../../../tmp/i6o6wu/packages/emails/src/templates");
+
   return props.calEvent.paymentInfo?.paymentOption === "HOLD" ? (
     <AttendeeScheduledEmail
-      title="meeting_awaiting_payment_method"
+      title={t('meeting-awaiting-payment-method')}
       headerType="calendarCircle"
       subject="awaiting_payment_subject"
       callToAction={<ManageLink {...props} />}
@@ -24,7 +27,7 @@ export const AttendeeAwaitingPaymentEmail = (props: React.ComponentProps<typeof 
     />
   ) : (
     <AttendeeScheduledEmail
-      title="meeting_awaiting_payment"
+      title={t('meeting-awaiting-payment')}
       headerType="calendarCircle"
       subject="awaiting_payment_subject"
       callToAction={<ManageLink {...props} />}

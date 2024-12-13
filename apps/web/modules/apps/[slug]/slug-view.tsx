@@ -1,4 +1,6 @@
 "use client";
+import { useTranslation, Trans } from "react-i18next";
+
 
 import MarkdownIt from "markdown-it";
 import type { InferGetStaticPropsType } from "next";
@@ -19,6 +21,8 @@ const md = new MarkdownIt("default", { html: true, breaks: true });
 export type PageProps = InferGetStaticPropsType<typeof getStaticProps>;
 
 function SingleAppPage(props: PageProps) {
+const { t } = useTranslation("../../../tmp/i6o6wu/apps/web/modules/apps/[slug]");
+
   const { error, setQuery: setError } = useRouterQuery("error");
   const { t } = useLocale();
   if (error === "account_already_linked") {
@@ -30,11 +34,11 @@ function SingleAppPage(props: PageProps) {
     if (!IS_PRODUCTION) {
       // TODO: Improve disabled App UI. This is just a placeholder.
       return (
-        <div className="p-2">
-          This App seems to be disabled. If you are an admin, you can enable this app from{" "}
-          <Link href="/settings/admin/apps" className="cursor-pointer text-blue-500 underline">
-            here
-          </Link>
+        <div className="p-2"><Trans
+i18nKey="this-app-seems-to-be-disabled-if-you-are-an-admin-you-can-enable-this-app-from-here"
+components={{"0": 
+          <Link href="/settings/admin/apps" className="cursor-pointer text-blue-500 underline" />}}
+/>
         </div>
       );
     }

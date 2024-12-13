@@ -1,9 +1,12 @@
+import { useTranslation, Trans } from "react-i18next";
 import { I18nextProvider } from "react-i18next";
 import { i18n } from "./i18n";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function Index() {
+const { t } = useTranslation("../../../tmp/i6o6wu/example-apps/credential-sync/pages");
+
   const [data, setData] = useState("");
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -47,13 +50,16 @@ export default function Index() {
   return (
     <I18nextProvider i18n={i18n}>
 <div>
-      <h1>Welcome to Credential Sync Playground</h1>
-      <p>
-        You are managing credentials for cal.com <strong>userId={userId}</strong> for{" "}
-        <strong>appSlug={appSlug}</strong>. Update query params to manage a different user or app{" "}
+      <h1>{t('welcome-to-credential-sync-playground')}</h1>
+      <p><Trans
+i18nKey="managing-credentials-for-cal-com-user-id-app-slug"
+values={{ userId, appSlug }}
+components={{"0": <strong />, "1": 
+        <strong />}}
+/>
       </p>
-      <button onClick={() => updateToken({ invalid: true })}>Give an invalid token to Cal.com</button>
-      <button onClick={() => updateToken()}>Give a valid token to Cal.com</button>
+      <button onClick={() => updateToken({ invalid: true })}>{t('give-an-invalid-token-to-cal-com')}</button>
+      <button onClick={() => updateToken()}>{t('give-a-valid-token-to-cal-com')}</button>
       <div>{data}</div>
     </div>
 </I18nextProvider>

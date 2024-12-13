@@ -1,0 +1,6 @@
+{
+  "welcome-to-credential-sync-playground": "Welcome to Credential Sync Playground",
+  "managing-credentials-for-cal-com-user-id-app-slug": "You are managing credentials for cal.com<0>userId={{userId}}</0>for <1>appSlug={{appSlug}}</1>. Update query params to manage a different user or app",
+  "give-an-invalid-token-to-cal-com": "Give an invalid token to Cal.com",
+  "give-a-valid-token-to-cal-com": "Give a valid token to Cal.com"
+}

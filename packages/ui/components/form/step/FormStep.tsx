@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import React from "react";
 
 import classNames from "@calcom/lib/classNames";
@@ -9,10 +10,11 @@ type Props = {
 
 // It might be worth passing this label string from outside the component so we can translate it?
 function FormStep({ currentStep, steps }: Props) {
+const { t } = useTranslation("../../../tmp/i6o6wu/packages/ui/components/form/step");
+
   return (
     <div className="w-full">
-      <p className="text-muted text-xs font-medium">
-        Step {currentStep} of {steps}
+      <p className="text-muted text-xs font-medium">{t('step-{current-step}-of-{steps}', { currentStep, steps })}
       </p>
       <div className="flex flex-nowrap space-x-1">
         {[...Array(steps)].map((_, j) => {

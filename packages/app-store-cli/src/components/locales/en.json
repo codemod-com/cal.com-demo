@@ -1,0 +1,20 @@
+{
+  "type-below-the-slug-of-the": "Type below the slug of the",
+  "that-you-want-to-delete": "that you want to delete.",
+  "it-would-cleanup-the-app-directory-and-app-table-and-credential-table": "It would cleanup the app directory and App table and Credential table.",
+  "slug-is-required": "--slug is required",
+  "just-wait-for-a-few-seconds-for-process-to-exit-and-then-you-are-good-to-go-your": "Just wait for a few seconds for process to exit and then you are good to go. Your",
+  "code-exists-at": "code exists at",
+  "tip-go-and-change-the-logo-of-your": "Tip : Go and change the logo of your",
+  "by-replacing": "by replacing",
+  "app-summary": "App Summary:",
+  "slug": "Slug:",
+  "url": "URL:",
+  "name": "Name:",
+  "description": "Description:",
+  "category": "Category:",
+  "publisher-name": "Publisher Name:",
+  "publisher-email": "Publisher Email:",
+  "next-step-enable-the-app-from-http-localhost-3000-settings-admin-apps-as-admin-user": "Next Step: Enable the app from http://localhost:3000/settings/admin/apps as admin user (Email: admin@example.com, Pass: ADMINadmin2022!)",
+  "note-you-should-not-rename-app-directory-manually-use-cli-only-to-do-that-as-it-needs-to-be-updated-in-db-as-well": "Note: You should not rename app directory manually. Use cli only to do that as it needs to be updated in DB as well"
+}

@@ -1,4 +1,6 @@
 "use client";
+import { useTranslation } from "react-i18next";
+
 
 import type { GetStaticPropsContext } from "next";
 import Link from "next/link";
@@ -26,6 +28,8 @@ enum pageType {
 }
 
 export default function Custom404() {
+const { t } = useTranslation("../../../tmp/i6o6wu/apps/web/pages");
+
   const pathname = usePathname();
   const { t } = useLocale();
   const [username, setUsername] = useState<string>("");
@@ -96,7 +100,7 @@ export default function Custom404() {
     return (
       <>
         <HeadSeo
-          title="Feature is currently disabled"
+          title={t('feature-is-currently-disabled')}
           description={t("404_page_not_found")}
           nextSeoProps={{
             nofollow: true,
@@ -107,9 +111,7 @@ export default function Custom404() {
           <main className="mx-auto max-w-xl pb-6 pt-16 sm:pt-24">
             <div className="text-center">
               <p className="text-sm font-semibold uppercase tracking-wide text-black">{t("error_404")}</p>
-              <h1 className="font-cal mt-2 text-4xl font-extrabold text-gray-900 sm:text-5xl">
-                Feature is currently disabled
-              </h1>
+              <h1 className="font-cal mt-2 text-4xl font-extrabold text-gray-900 sm:text-5xl">{t('feature-is-currently-disabled-2')}</h1>
             </div>
             <div className="mt-12">
               <div className="mt-8">

@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import type { AssignmentReason } from "@prisma/client";
 import Link from "next/link";
 import { useState } from "react";
@@ -104,6 +105,8 @@ const isBookingReroutable = (booking: ParsedBooking): booking is ReroutableBooki
 };
 
 function BookingListItem(booking: BookingItemProps) {
+const { t } = useTranslation("../../../tmp/i6o6wu/apps/web/components/booking");
+
   const parsedBooking = buildParsedBooking(booking);
 
   const { userTimeZone, userTimeFormat, userEmail } = booking.loggedInUser;
@@ -490,7 +493,7 @@ function BookingListItem(booking: BookingItemProps) {
               label={
                 <>
                   {t("rejection_reason")}
-                  <span className="text-subtle font-normal"> (Optional)</span>
+                  <span className="text-subtle font-normal">{t('optional')}</span>
                 </>
               }
               value={rejectionReason}
