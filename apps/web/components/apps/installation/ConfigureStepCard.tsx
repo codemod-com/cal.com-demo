@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { Dispatch, SetStateAction } from "react";
 import type { FC } from "react";
@@ -186,6 +187,8 @@ const EventTypeGroup = ({
 };
 
 export const ConfigureStepCard: FC<ConfigureStepCardProps> = (props) => {
+const { t } = useTranslation("../../../tmp/i6o6wu/apps/web/components/apps/installation");
+
   const { loading, formPortalRef, handleSetUpLater } = props;
   const { t } = useLocale();
   const { control, watch } = useFormContext<TEventTypesForm>();
@@ -222,12 +225,15 @@ export const ConfigureStepCard: FC<ConfigureStepCardProps> = (props) => {
     formPortalRef?.current &&
     createPortal(
       <div className="mt-8">
-        {fields.map((group, groupIndex) => (
+        {fields.map((group, groupIndex) =>  {
+const { t } = useTranslation("../../../tmp/i6o6wu/apps/web/components/apps/installation");
+
+return (
           <div key={group.fieldId}>
             {eventTypeGroups[groupIndex].eventTypes.some((eventType) => eventType.selected === true) && (
               <div className="mb-2 mt-4 flex items-center">
                 <Avatar
-                  alt=""
+                  alt={t('empty-string-fragment')}
                   imageSrc={group.image} // if no image, use default avatar
                   size="md"
                   className="inline-flex justify-center"
@@ -242,10 +248,9 @@ export const ConfigureStepCard: FC<ConfigureStepCardProps> = (props) => {
               {...props}
             />
           </div>
-        ))}
-        <button form="outer-event-type-form" type="submit" className="hidden" ref={mainForSubmitRef}>
-          Save
-        </button>
+        )
+})}
+        <button form="outer-event-type-form" type="submit" className="hidden" ref={mainForSubmitRef}>{t('save-button-text')}</button>
         <Button
           className="text-md mt-6 w-full justify-center"
           type="button"

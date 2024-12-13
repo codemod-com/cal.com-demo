@@ -1,4 +1,6 @@
 "use client";
+import { useTranslation } from "react-i18next";
+
 
 import { useMemo, useState } from "react";
 import type { ITimezoneOption, ITimezone, Props as SelectProps } from "react-timezone-select";
@@ -72,6 +74,8 @@ export function TimezoneSelectComponent({
   value,
   ...props
 }: TimezoneSelectComponentProps) {
+const { t } = useTranslation("../../../tmp/i6o6wu/packages/ui/components/form/timezone-select");
+
   const data = [...(props.data || []), ...SELECT_SEARCH_DATA];
   /*
    * we support multiple timezones for the different labels
@@ -95,7 +99,7 @@ export function TimezoneSelectComponent({
     <BaseSelect
       value={value}
       className={`${className} ${timezoneSelectCustomClassname}`}
-      aria-label="Timezone Select"
+      aria-label={t('timezone-select')}
       isLoading={isPending}
       isDisabled={isPending}
       {...reactSelectProps}

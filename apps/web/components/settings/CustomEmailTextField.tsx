@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import type { UseFormReturn } from "react-hook-form";
 
@@ -39,6 +40,8 @@ const CustomEmailTextField = ({
   handleVerifyEmail,
   handleItemDelete,
 }: CustomEmailTextFieldProps) => {
+const { t } = useTranslation("../../../tmp/i6o6wu/apps/web/components/settings");
+
   const { t } = useLocale();
   const [inputFocus, setInputFocus] = useState(false);
 
@@ -50,7 +53,7 @@ const CustomEmailTextField = ({
         }`}>
         <TextField
           {...formMethods.register(formMethodFieldName)}
-          label=""
+          label={t('empty-string')}
           containerClassName="flex flex-1 items-center"
           className="mb-0 border-none outline-none focus:ring-0"
           data-testid={dataTestId}
