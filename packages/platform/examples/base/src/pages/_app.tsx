@@ -1,3 +1,5 @@
+import { I18nextProvider } from "react-i18next";
+import { i18n } from "./i18n";
 import type { Data } from "@/pages/api/get-managed-users";
 import "@/styles/globals.css";
 import type { AppProps } from "next/app";
@@ -75,7 +77,8 @@ export default function App({ Component, pageProps }: AppProps) {
   }, [selectedUser]);
 
   return (
-    <div className={`${poppins.className} text-black`}>
+    <I18nextProvider i18n={i18n}>
+<div className={`${poppins.className} text-black`}>
       {options.length > 0 && (
         <Select defaultValue={selectedUser} onChange={setSelectedUser} options={options} />
       )}
@@ -122,5 +125,6 @@ export default function App({ Component, pageProps }: AppProps) {
         </div>
       )}
     </div>
+</I18nextProvider>
   );
 }

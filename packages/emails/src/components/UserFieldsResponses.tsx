@@ -1,3 +1,5 @@
+import { I18nextProvider } from "react-i18next";
+import { i18n } from "./i18n";
 import type { TFunction } from "next-i18next";
 
 import getLabelValueMapFromResponses from "@calcom/lib/getLabelValueMapFromResponses";
@@ -11,7 +13,8 @@ export function UserFieldsResponses(props: { calEvent: CalendarEvent; t: TFuncti
 
   if (!labelValueMap) return null;
   return (
-    <>
+    <I18nextProvider i18n={i18n}>
+<>
       {Object.keys(labelValueMap).map((key) =>
         labelValueMap[key] !== "" ? (
           <Info
@@ -30,5 +33,6 @@ export function UserFieldsResponses(props: { calEvent: CalendarEvent; t: TFuncti
         ) : null
       )}
     </>
+</I18nextProvider>
   );
 }
