@@ -1,0 +1,13 @@
+{
+  "username": "\"username\"",
+  "lock-user": "Lock User",
+  "team-slug": "\"team slug\"",
+  "lock-team": "Lock Team",
+  "client-name": "\"Client name\"",
+  "empty-string": "\"\"",
+  "redirect-uri": "\"Redirect URI\"",
+  "empty-string-2": "\"\"",
+  "empty-string-3": "\"\"",
+  "client-id": "Client Id",
+  "client-secret": "Client Secret"
+}

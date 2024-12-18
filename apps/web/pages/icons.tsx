@@ -1,4 +1,6 @@
 "use client";
+import { useTranslation } from "react-i18next";
+
 
 import type { InferGetStaticPropsType } from "next";
 import { Inter } from "next/font/google";
@@ -50,10 +52,12 @@ const IconGrid = (props: {
 );
 
 export default function IconsPage(props: InferGetStaticPropsType<typeof getStaticProps>) {
+const { t } = useTranslation("");
+
   return (
     <div className="bg-subtle flex h-screen">
       <Head>
-        <title>Icon showcase | {APP_NAME}</title>
+        <title>{t('icon-showcase-app-name', { APP_NAME })}</title>
       </Head>
       <style jsx global>{`
         :root {
@@ -63,10 +67,10 @@ export default function IconsPage(props: InferGetStaticPropsType<typeof getStati
       `}</style>
       <IconSprites />
       <div className="bg-default m-auto min-w-full rounded-md p-10 text-right ltr:text-left">
-        <h1 className="text-emphasis font-cal text-2xl font-medium">Icons showcase</h1>
-        <IconGrid title="Regular Icons" icons={props.icons} />
+        <h1 className="text-emphasis font-cal text-2xl font-medium">{t('icons-showcase')}</h1>
+        <IconGrid title={t('regular-icons')} icons={props.icons} />
         <IconGrid
-          title="Filled Icons"
+          title={t('filled-icons')}
           icons={props.icons}
           rootClassName="bg-darkgray-100 text-gray-50"
           iconClassName="fill-blue-500"

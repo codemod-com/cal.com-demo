@@ -1,4 +1,6 @@
 "use client";
+import { useTranslation } from "react-i18next";
+
 
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useSession } from "next-auth/react";
@@ -12,6 +14,8 @@ import { trpc } from "@calcom/trpc/react";
 import { Avatar, Button, Icon, Select } from "@calcom/ui";
 
 export default function Authorize() {
+const { t } = useTranslation("../modules/auth/oauth2");
+
   const { t } = useLocale();
   const { status } = useSession();
 
@@ -83,7 +87,7 @@ export default function Authorize() {
       <div className="bg-default border-subtle mt-2 max-w-xl rounded-md border px-9 pb-3 pt-2">
         <div className="flex items-center justify-center">
           <Avatar
-            alt=""
+            alt={t('empty-string')}
             fallback={<Icon name="plus" className="text-subtle h-6 w-6" />}
             className="items-center"
             imageSrc={client.logo}
@@ -92,7 +96,7 @@ export default function Authorize() {
           <div className="relative -ml-6 h-24 w-24">
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="bg-default flex h-[70px] w-[70px] items-center  justify-center rounded-full">
-                <img src="/cal-com-icon.svg" alt="Logo" className="h-16 w-16 rounded-full" />
+                <img src="/cal-com-icon.svg" alt={t('logo')} className="h-16 w-16 rounded-full" />
               </div>
             </div>
           </div>

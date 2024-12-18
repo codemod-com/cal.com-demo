@@ -1,3 +1,4 @@
+import { useTranslation, Trans } from "react-i18next";
 import type { TFunction } from "next-i18next";
 import { Trans } from "next-i18next";
 
@@ -16,6 +17,8 @@ interface DailyVideoDownloadRecordingEmailProps {
 export const DailyVideoDownloadRecordingEmail = (
   props: DailyVideoDownloadRecordingEmailProps & Partial<React.ComponentProps<typeof V2BaseEmailHtml>>
 ) => {
+const { t } = useTranslation("../templates");
+
   const image = `${WEBAPP_URL}/emails/logo.png`;
   return (
     <V2BaseEmailHtml
@@ -38,7 +41,7 @@ export const DailyVideoDownloadRecordingEmail = (
               fontSize: "13px",
             }}
             width="89"
-            alt=""
+            alt={t('empty-string')}
           />
         </a>
       </div>
@@ -89,10 +92,10 @@ export const DailyVideoDownloadRecordingEmail = (
       </div>
 
       <p style={{ fontWeight: 500, lineHeight: "20px", marginTop: "8px" }}>
-        <Trans i18nKey="link_valid_for_12_hrs">
-          Note: The download link is valid only for 12 hours. You can generate new download link by following
-          instructions
-          <a href="https://cal.com/docs/enterprise-features/teams/cal-video-recordings"> here</a>
+        <Trans i18nKey="link_valid_for_12_hrs"><Trans
+i18nKey="note-download-link-valid-12-hours"
+components={{"0": <a href="https://cal.com/docs/enterprise-features/teams/cal-video-recordings" />}}
+/>
         </Trans>
       </p>
 

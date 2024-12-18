@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Navbar } from "@/components/Navbar";
 import { Inter, Poppins } from "next/font/google";
 
@@ -7,18 +8,16 @@ const inter = Inter({ subsets: ["latin"] });
 const poppins = Poppins({ subsets: ["latin"], weight: ["400", "800"] });
 
 export default function Home(props: { calUsername: string; calEmail: string }) {
+const { t } = useTranslation("");
+
   return (
     <main className={`flex min-h-screen flex-col ${inter.className} items-center justify-center`}>
       <Navbar username={props.calUsername} />
       <div
         className={` h-[100vh] w-full items-center justify-center gap-y-3  font-mono lg:flex ${inter.className} gap-16 `}>
         <div className="ml-32">
-          <h1 className={`${poppins.className} w-[100%] pb-3 text-7xl font-bold`}>
-            The all in one Scheduling marketplace
-          </h1>
-          <p className={`w-[70%] font-normal ${inter.className} pb-3 text-2xl`}>
-            To get started, connect your google calendar.
-          </p>
+          <h1 className={`${poppins.className} w-[100%] pb-3 text-7xl font-bold`}>{t('the-all-in-one-scheduling-marketplace')}</h1>
+          <p className={`w-[70%] font-normal ${inter.className} pb-3 text-2xl`}>{t('to-get-started-connect-your-google-calendar')}</p>
           <div className="flex flex-row gap-4">
             <Connect.GoogleCalendar
               redir="http://localhost:4321/calendars"
@@ -47,7 +46,7 @@ export default function Home(props: { calUsername: string; calEmail: string }) {
             width="76%"
             height="76%"
             className="rounded-lg shadow-2xl"
-            alt="cover image"
+            alt={t('cover-image')}
             src="https://images.unsplash.com/photo-1506784365847-bbad939e9335?q=80&w=2668&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
           />
         </div>

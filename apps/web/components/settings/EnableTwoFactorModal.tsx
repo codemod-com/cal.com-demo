@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import type { BaseSyntheticEvent } from "react";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -50,6 +51,8 @@ interface EnableTwoFactorValues {
 }
 
 const EnableTwoFactorModal = ({ onEnable, onCancel, open, onOpenChange }: EnableTwoFactorModalProps) => {
+const { t } = useTranslation("../components/settings");
+
   const { t } = useLocale();
   const form = useForm<EnableTwoFactorValues>();
 
@@ -188,7 +191,7 @@ const EnableTwoFactorModal = ({ onEnable, onCancel, open, onOpenChange }: Enable
             <div className="-mt-3 flex justify-center">
               {
                 // eslint-disable-next-line @next/next/no-img-element
-                <img src={dataUri} alt="" />
+                <img src={dataUri} alt={t('empty-string')} />
               }
             </div>
             <p data-testid="two-factor-secret" className="mb-4 text-center font-mono text-xs">

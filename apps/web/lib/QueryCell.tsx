@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import type {
   QueryObserverPendingResult,
   QueryObserverRefetchErrorResult,
@@ -48,6 +49,8 @@ export function QueryCell<TData, TError extends ErrorLike>(
 export function QueryCell<TData, TError extends ErrorLike>(
   opts: QueryCellOptionsNoEmpty<TData, TError> | QueryCellOptionsWithEmpty<TData, TError>
 ) {
+const { t } = useTranslation("../lib");
+
   const { query } = opts;
   const { isLocaleReady } = useLocale();
   const StatusLoader = opts.customLoader || <Loader />; // Fixes edge case where this can return null form query cell
@@ -70,7 +73,7 @@ export function QueryCell<TData, TError extends ErrorLike>(
   if (query.status === "error") {
     return (
       opts.error?.(query) ?? (
-        <Alert severity="error" title="Something went wrong" message={query.error.message} />
+        <Alert severity="error" title={t('something-went-wrong')} message={query.error.message} />
       )
     );
   }

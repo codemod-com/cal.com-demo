@@ -1,4 +1,6 @@
 "use client";
+import { useTranslation } from "react-i18next";
+
 
 import type { DailyCall } from "@daily-co/daily-js";
 import DailyIframe from "@daily-co/daily-js";
@@ -22,6 +24,8 @@ import { CalAiTranscribe } from "~/videos/ai/ai-transcribe";
 export type PageProps = inferSSRProps<typeof getServerSideProps>;
 
 export default function JoinCall(props: PageProps) {
+const { t } = useTranslation("../modules/videos/views");
+
   const { meetingUrl, meetingPassword, booking, hasTeamPlan, calVideoLogo } = props;
   const [daily, setDaily] = useState<DailyCall | null>(null);
 
@@ -94,7 +98,7 @@ export default function JoinCall(props: PageProps) {
           <img
             className="min-w-16 min-h-16 fixed z-10 hidden aspect-square h-16 w-16 rounded-full sm:inline-block"
             src={calVideoLogo}
-            alt="My Org Logo"
+            alt={t('my-org-logo')}
             style={{
               top: 32,
               left: 32,
@@ -104,7 +108,7 @@ export default function JoinCall(props: PageProps) {
           <img
             className="fixed z-10 hidden h-5 sm:inline-block"
             src={`${WEBSITE_URL}/cal-logo-word-dark.svg`}
-            alt="Logo"
+            alt={t('logo')}
             style={{
               top: 47,
               left: 20,

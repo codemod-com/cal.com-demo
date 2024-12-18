@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import Link from "next/link";
 
 import classNames from "@calcom/lib/classNames";
@@ -31,6 +32,8 @@ const HorizontalTabItem = function ({
   avatar,
   ...props
 }: HorizontalTabItemProps) {
+const { t } = useTranslation("../components/navigation/tabs");
+
   const { t, isLocaleReady } = useLocale();
 
   const isCurrent = useUrlMatchesCurrentUrl(href) || props?.isActive;
@@ -68,7 +71,7 @@ const HorizontalTabItem = function ({
       )}
       {isLocaleReady ? (
         <div className="flex items-center gap-x-2">
-          {avatar && <Avatar size="sm" imageSrc={avatar} alt="avatar" />} {t(name)}
+          {avatar && <Avatar size="sm" imageSrc={avatar} alt={t('avatar')} />} {t(name)}
         </div>
       ) : (
         <SkeletonText className="h-4 w-24" />

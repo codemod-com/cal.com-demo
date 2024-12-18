@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { zodResolver } from "@hookform/resolvers/zod";
 // eslint-disable-next-line no-restricted-imports
 import { noop } from "lodash";
@@ -55,6 +56,8 @@ const EnterpriseLicense = (
     ) => void;
   } & Omit<JSX.IntrinsicElements["form"], "onSubmit">
 ) => {
+const { t } = useTranslation("../components/setup");
+
   const { onSubmit, onSuccess = noop, onSuccessValidate = noop, ...rest } = props;
   const { t } = useLocale();
   const [checkLicenseLoading, setCheckLicenseLoading] = useState(false);
@@ -99,20 +102,23 @@ const EnterpriseLicense = (
           </Button>
           <div className="relative flex justify-center">
             <hr className="border-subtle my-8 w-full border-[1.5px]" />
-            <span className="bg-default absolute mt-[22px] px-3.5 text-sm">OR</span>
+            <span className="bg-default absolute mt-[22px] px-3.5 text-sm">{t('or')}</span>
           </div>
           {t("already_have_key")}
           <Controller
             name="licenseKey"
             control={formMethods.control}
-            render={({ field: { onBlur, onChange, value } }) => (
+            render={({ field: { onBlur, onChange, value } }) =>  {
+const { t } = useTranslation("../components/setup");
+
+return (
               <TextField
                 {...formMethods.register("licenseKey")}
                 className={classNames(
                   "group-hover:border-emphasis mb-0",
                   (checkLicenseLoading || (errors.licenseKey === undefined && isDirty)) && "border-r-0"
                 )}
-                placeholder="xxxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxxx"
+                placeholder={t('xxxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxxx')}
                 labelSrOnly={true}
                 value={value}
                 addOnFilled={false}
@@ -135,7 +141,8 @@ const EnterpriseLicense = (
                   await formMethods.trigger("licenseKey");
                 }}
               />
-            )}
+            )
+}}
           />
         </div>
       </form>
