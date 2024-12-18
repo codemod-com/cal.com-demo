@@ -1,4 +1,6 @@
 "use client";
+import { useTranslation } from "react-i18next";
+
 
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -12,6 +14,8 @@ import { HeadSeo } from "@calcom/ui";
 export type PageProps = inferSSRProps<typeof getServerSideProps>;
 
 export default function SetupInformation(props: PageProps) {
+const { t } = useTranslation("../modules/apps/[slug]/setup");
+
   const searchParams = useCompatSearchParams();
   const router = useRouter();
   const slug = searchParams?.get("slug") as string;
@@ -31,7 +35,7 @@ export default function SetupInformation(props: PageProps) {
   return (
     <>
       {/* So that the set up page does not get indexed by search engines */}
-      <HeadSeo nextSeoProps={{ noindex: true, nofollow: true }} title={`${slug} | Cal.com`} description="" />
+      <HeadSeo nextSeoProps={{ noindex: true, nofollow: true }} title={`${slug} | Cal.com`} description={t('empty-string')} />
       <AppSetupPage slug={slug} {...props} />
     </>
   );

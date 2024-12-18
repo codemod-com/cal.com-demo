@@ -1,4 +1,6 @@
 "use client";
+import { useTranslation } from "react-i18next";
+
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import classNames from "classnames";
@@ -39,9 +41,13 @@ interface LoginValues {
   csrfToken: string;
 }
 
-const GoogleIcon = () => (
-  <img className="text-subtle mr-2 h-4 w-4" src="/google-icon-colored.svg" alt="Continue with Google Icon" />
-);
+const GoogleIcon = () =>  {
+const { t } = useTranslation("../modules/auth");
+
+return (
+  <img className="text-subtle mr-2 h-4 w-4" src="/google-icon-colored.svg" alt={t('continue-with-google-icon')} />
+)
+};
 export type PageProps = inferSSRProps<typeof getServerSideProps>;
 export default function Login({
   csrfToken,
@@ -52,6 +58,8 @@ export default function Login({
   totpEmail,
 }: // eslint-disable-next-line @typescript-eslint/ban-types
 PageProps & WithNonceProps<{}>) {
+const { t } = useTranslation("../modules/auth");
+
   const searchParams = useCompatSearchParams();
   const { t } = useLocale();
   const router = useRouter();
@@ -250,7 +258,7 @@ PageProps & WithNonceProps<{}>) {
                   id="email"
                   label={t("email_address")}
                   defaultValue={totpEmail || (searchParams?.get("email") as string)}
-                  placeholder="john.doe@example.com"
+                  placeholder={t('john-doe-at-example-dot-com')}
                   required
                   {...register("email")}
                 />

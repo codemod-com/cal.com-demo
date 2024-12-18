@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import type { TFunction } from "next-i18next";
 
 import { APP_NAME, WEBAPP_URL, IS_PRODUCTION } from "@calcom/lib/constants";
@@ -15,6 +16,8 @@ type TeamInvite = {
 export const OrgAutoInviteEmail = (
   props: TeamInvite & Partial<React.ComponentProps<typeof V2BaseEmailHtml>>
 ) => {
+const { t } = useTranslation("../templates");
+
   return (
     <V2BaseEmailHtml
       subject={props.language("user_invited_you", {
@@ -43,7 +46,7 @@ export const OrgAutoInviteEmail = (
             ? `${WEBAPP_URL}/emails/calendar-email-hero.png`
             : "http://localhost:3000/emails/calendar-email-hero.png"
         }
-        alt=""
+        alt={t('empty-string')}
       />
       <p
         style={{

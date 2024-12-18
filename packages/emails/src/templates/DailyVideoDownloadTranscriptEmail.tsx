@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import type { TFunction } from "next-i18next";
 
 import { WEBAPP_URL, APP_NAME, COMPANY_NAME } from "@calcom/lib/constants";
@@ -15,6 +16,8 @@ interface DailyVideoDownloadTranscriptEmailProps {
 export const DailyVideoDownloadTranscriptEmail = (
   props: DailyVideoDownloadTranscriptEmailProps & Partial<React.ComponentProps<typeof V2BaseEmailHtml>>
 ) => {
+const { t } = useTranslation("../templates");
+
   const image = `${WEBAPP_URL}/emails/logo.png`;
   return (
     <V2BaseEmailHtml
@@ -37,7 +40,7 @@ export const DailyVideoDownloadTranscriptEmail = (
               fontSize: "13px",
             }}
             width="89"
-            alt=""
+            alt={t('empty-string')}
           />
         </a>
       </div>
@@ -59,6 +62,8 @@ export const DailyVideoDownloadTranscriptEmail = (
       </p>
 
       {props.transcriptDownloadLinks.map((downloadLink, index) => {
+const { t } = useTranslation("../templates");
+
         return (
           <div
             key={downloadLink}
@@ -85,7 +90,7 @@ export const DailyVideoDownloadTranscriptEmail = (
                 marginTop: "0px",
                 color: "black",
               }}>
-              {props.date} Transcript {index + 1}
+              {props.date}{t('transcript')}{index + 1}
             </p>
             <CallToAction label={props.language("download_transcript")} href={downloadLink} />
           </div>

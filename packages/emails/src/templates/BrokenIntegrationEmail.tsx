@@ -1,4 +1,6 @@
 "use client";
+import { useTranslation, Trans } from "react-i18next";
+
 
 import type { TFunction } from "next-i18next";
 import { Trans } from "react-i18next";
@@ -16,18 +18,19 @@ export function getEnumKeyByEnumValue(myEnum: any, enumValue: number | string): 
 }
 
 const BrokenVideoIntegration = (props: { location: string; eventTypeId?: number | null; t: TFunction }) => {
+const { t } = useTranslation("../templates");
+
   return (
-    <Trans i18nKey="broken_video_action" t={props.t}>
-      We could not add the <span>{props.location}</span> meeting link to your scheduled event. Contact your
-      invitees or update your calendar event to add the details. You can either&nbsp;
+    <Trans i18nKey="broken_video_action" t={props.t}><Trans
+i18nKey="could-not-add-meeting-link"
+values={{ _props_location_: <>{props.location}</> }}
+components={{"0": <span />, "1": 
       <a
         href={
           props.eventTypeId ? `${WEBAPP_URL}/event-types/${props.eventTypeId}` : `${WEBAPP_URL}/event-types`
-        }>
-        change your location on the event type
-      </a>
-      &nbsp;or try&nbsp;
-      <a href={`${WEBAPP_URL}/apps/installed`}>removing and adding the app again.</a>
+        } />, "2": 
+      <a href={`${WEBAPP_URL}/apps/installed`} />}}
+/>
     </Trans>
   );
 };
@@ -37,14 +40,17 @@ const BrokenCalendarIntegration = (props: {
   eventTypeId?: number | null;
   t: TFunction;
 }) => {
+const { t } = useTranslation("../templates");
+
   const { t } = props;
 
   return (
-    <Trans i18nKey="broken_calendar_action" t={props.t}>
-      We could not update your <span>{props.calendar}</span>.{" "}
-      <a href={`${WEBAPP_URL}/apps/installed`}>
-        Please check your calendar settings or remove and add your calendar again
-      </a>
+    <Trans i18nKey="broken_calendar_action" t={props.t}><Trans
+i18nKey="could-not-update-calendar"
+values={{ _props_calendar_: <>{props.calendar}</> }}
+components={{"0": <span />, "1": 
+      <a href={`${WEBAPP_URL}/apps/installed`} />}}
+/>
     </Trans>
   );
 };

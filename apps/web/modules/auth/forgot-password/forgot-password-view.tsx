@@ -1,4 +1,6 @@
 "use client";
+import { useTranslation } from "react-i18next";
+
 
 // eslint-disable-next-line no-restricted-imports
 import { debounce } from "lodash";
@@ -18,6 +20,8 @@ import type { getServerSideProps } from "@server/lib/auth/forgot-password/getSer
 export type PageProps = inferSSRProps<typeof getServerSideProps>;
 
 export default function ForgotPassword(props: PageProps) {
+const { t } = useTranslation("../modules/auth/forgot-password");
+
   const csrfToken = "csrfToken" in props ? (props.csrfToken as string) : undefined;
   const { t } = useLocale();
   const [loading, setLoading] = React.useState(false);
@@ -125,7 +129,7 @@ export default function ForgotPassword(props: PageProps) {
               id="email"
               name="email"
               label={t("email_address")}
-              placeholder="john.doe@example.com"
+              placeholder={t('john-doe-example-com')}
               required
             />
             <div className="space-y-2">

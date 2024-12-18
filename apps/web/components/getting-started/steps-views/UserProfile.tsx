@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { useRouter } from "next/navigation";
 import type { FormEvent } from "react";
 import { useRef, useState } from "react";
@@ -16,6 +17,8 @@ type FormData = {
 };
 
 const UserProfile = () => {
+const { t } = useTranslation("../components/getting-started/steps-views");
+
   const [user] = trpc.viewer.me.useSuspenseQuery();
   const { t } = useLocale();
   const avatarRef = useRef<HTMLInputElement>(null);
@@ -106,7 +109,7 @@ const UserProfile = () => {
           type="hidden"
           name="avatar"
           id="avatar"
-          placeholder="URL"
+          placeholder={t('url')}
           className="border-default focus:ring-empthasis mt-1 block w-full rounded-sm border px-3 py-2 text-sm focus:border-gray-800 focus:outline-none"
           defaultValue={imageSrc}
         />

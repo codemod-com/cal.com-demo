@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { WEBAPP_URL } from "@calcom/lib/constants";
 
 import RawHtml from "./RawHtml";
@@ -6,6 +7,8 @@ import Row from "./Row";
 const CommentIE = ({ html = "" }) => <RawHtml html={`<!--[if mso | IE]>${html}<![endif]-->`} />;
 
 const EmailBodyLogo = () => {
+const { t } = useTranslation("");
+
   const image = `${WEBAPP_URL}/emails/logo.png`;
 
   return (
@@ -60,7 +63,7 @@ const EmailBodyLogo = () => {
                             fontSize: "13px",
                           }}
                           width="89"
-                          alt=""
+                          alt={t('empty-string')}
                         />
                       </a>
                     </td>
