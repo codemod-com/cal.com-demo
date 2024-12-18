@@ -1,3 +1,5 @@
+import { I18nextProvider } from "react-i18next";
+import { i18n } from "./i18n";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -43,7 +45,8 @@ export default function Index() {
   }
 
   return (
-    <div>
+    <I18nextProvider i18n={i18n}>
+<div>
       <h1>Welcome to Credential Sync Playground</h1>
       <p>
         You are managing credentials for cal.com <strong>userId={userId}</strong> for{" "}
@@ -53,5 +56,6 @@ export default function Index() {
       <button onClick={() => updateToken()}>Give a valid token to Cal.com</button>
       <div>{data}</div>
     </div>
+</I18nextProvider>
   );
 }
